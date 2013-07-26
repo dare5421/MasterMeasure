@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+//#include <QGraphicsView>
 namespace Ui {
 class MainWindow;
 }
@@ -18,10 +19,19 @@ public:
 private slots:
     void on_actionOpen_triggered();
 
+//    void on_actionExit_triggered();
+
+//    void on_actionOpen_in_new_tab_triggered();
+
+    void on_tabWidget_tabCloseRequested(int index);
+
 private:
     Ui::MainWindow *ui;
-
+    QGraphicsView *view;
     QGraphicsScene *scene;
+
+protected:
+    void closeEvent(QCloseEvent *event);
 
 
 
