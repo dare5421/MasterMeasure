@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include <QGraphicsLineItem>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->removeTab(1);
     ui->tabWidget->removeTab(0);
 
+    isMousePressed = false;
 
 //    ui->graphicsView->setScene(scene);
 //    ui->graphicsView->setVisible(false);
@@ -49,6 +51,7 @@ void MainWindow::on_actionOpen_triggered()
 
         QFileInfo fileInfo = fileName;
         ui->tabWidget->setTabText(ui->tabWidget->count()-1,fileInfo.baseName());
+        ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
 
 
      }
@@ -104,4 +107,59 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 //    }
 //    else
         ui->tabWidget->removeTab(index);
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+
+        isMousePressed = true;
+        startPoint=event->pos();
+
+//        lastPoint = event->pos();
+//        scribbling = true;
+    }
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+//    if ((event->buttons() & Qt::LeftButton) && isMousePressed)
+//        drawLineTo(event->pos());
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+//    if (event->button() == Qt::LeftButton &&  isMousePressed) {
+
+//        scene->addLine(startPoint.x(),startPoint.y(),100,250);
+////        scribbling = false;
+//        isMousePressed = false;
+////        scene->addLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
+
+//    }
+}
+
+void MainWindow::paintEvent(QGraphicsSceneEvent *event)
+{
+
+//    QGraphicsScene scene(this);
+//    QRect dirtyRect = event->rect();
+
+//    scene.drawImage(dirtyRect, image, dirtyRect);
+}
+
+void MainWindow::drawLineTo(const QPoint &endPoint)
+{
+//    QGraphicsScene scene(&view);
+//    scene->addLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
+//    QPainter painter(&image);
+//    painter.setPen(QPen(myPenColor, myPenWidth, Qt::SolidLine, Qt::RoundCap,
+//                        Qt::RoundJoin));
+//    painter.drawLine(lastPoint, endPoint);
+//    modified = true;
+
+//    int rad = (myPenWidth / 2) + 2;
+//    update(QRect(lastPoint, endPoint).normalized()
+//                                     .adjusted(-rad, -rad, +rad, +rad));
+//    lastPoint = endPoint;
 }

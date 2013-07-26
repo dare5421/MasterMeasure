@@ -30,8 +30,19 @@ private:
     QGraphicsView *view;
     QGraphicsScene *scene;
 
+    bool isMousePressed;
+    QPoint startPoint,endPoint;
+
+    void drawLineTo(const QPoint &endPoint);
+
+
 protected:
     void closeEvent(QCloseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void paintEvent(QGraphicsSceneEvent *event);
+//    void resizeEvent(QResizeEvent *event);
 
 
 
