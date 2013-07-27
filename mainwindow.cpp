@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->removeTab(1);
     ui->tabWidget->removeTab(0);
 
-    isMousePressed = false;
+//    isMousePressed = false;
 
 //    ui->graphicsView->setScene(scene);
 //    ui->graphicsView->setVisible(false);
@@ -42,8 +42,12 @@ void MainWindow::on_actionOpen_triggered()
            return;
         }
 
+//        QVBoxLayout* main_layout = new QVBoxLayout;
+
         scene = new QGraphicsScene;
         view = new QGraphicsView;
+//        ui->tabWidget->layout()->addWidget(view);
+//        main_layout->addWidget(view);
         view->setScene(scene);
         ui->tabWidget->addTab(view,"someTab");
 
@@ -54,32 +58,10 @@ void MainWindow::on_actionOpen_triggered()
         ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
 
 
+
      }
 }
 
-//void MainWindow::on_actionOpen_in_new_tab_triggered()
-//{
-//    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::currentPath());
-//    if (!fileName.isEmpty()) {
-//        QImage image(fileName);
-//        if (image.isNull()) {
-//           QMessageBox::information(this, tr("Master Measure"),
-//                                    tr("Cannot load %1.").arg(fileName));
-//           return;
-//        }
-
-//        scene = new QGraphicsScene;
-//        view = new QGraphicsView;
-//        view->setScene(scene);
-//        ui->tabWidget->addTab(view,"someTab");
-
-//        scene->addPixmap(QPixmap::fromImage(image));
-//        QFileInfo fileInfo = fileName;
-//        ui->tabWidget->setTabText(ui->tabWidget->count()-1,fileInfo.baseName());
-
-
-//        }
-//}
 
 //closeEvent overrided to show a properiate message before close
 void MainWindow::closeEvent(QCloseEvent *event){
@@ -93,32 +75,35 @@ void MainWindow::closeEvent(QCloseEvent *event){
 
 }
 
-//void MainWindow::on_actionExit_triggered()
-//{
-//}
-
-
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
-//    if(ui->tabWidget->count()==1){
-//        ui->tabWidget->addTab(this,"empty");
-//        ui->tabWidget->removeTab(index);
-//    }
-//    else
-        ui->tabWidget->removeTab(index);
+    ui->tabWidget->removeTab(index);
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton) {
+//    scene = new QGraphicsScene;
+//    view = new QGraphicsView;
+//    view->setScene(scene);
+    /*ui->tabWidget->currentIndex()*/;
+//    QMessageBox::information(this,"title",QString::number(ui->tabWidget->currentIndex()));
+//    ui->tabWidget->widget(ui->tabWidget->currentIndex())->setFocus();
+//    ui->tabWidget->activateWindow();
 
-        isMousePressed = true;
-        startPoint=event->pos();
+    QPen pen(Qt::black);
+    QBrush brush(Qt::red);
+    pen.setWidth(6);
+    scene->addEllipse(-150,-150,1000,500,pen,brush);
+//    ui->tabWidget->
 
-//        lastPoint = event->pos();
-//        scribbling = true;
-    }
+//    QMessageBox::information(this,"title","wow you work");
+//    if (event->button() == Qt::LeftButton) {
+
+//        isMousePressed = true;
+//        startPoint=event->pos();
+
+//    }
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event)
@@ -127,14 +112,14 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 //        drawLineTo(event->pos());
 }
 
-void MainWindow::mouseReleaseEvent(QMouseEvent *event)
+void MainWindow::mouseReleaseEvent(QGraphicsSceneEvent *event)
 {
 //    if (event->button() == Qt::LeftButton &&  isMousePressed) {
 
 //        scene->addLine(startPoint.x(),startPoint.y(),100,250);
-////        scribbling = false;
+//        scribbling = false;
 //        isMousePressed = false;
-////        scene->addLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
+//        scene->addLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
 
 //    }
 }

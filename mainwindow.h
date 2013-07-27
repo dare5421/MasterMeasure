@@ -38,9 +38,10 @@ private:
 
 protected:
     void closeEvent(QCloseEvent *event);
+
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneEvent *event);
     void paintEvent(QGraphicsSceneEvent *event);
 //    void resizeEvent(QResizeEvent *event);
 
