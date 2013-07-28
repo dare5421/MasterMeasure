@@ -11,9 +11,17 @@ public:
 
 private:
     QGraphicsScene *scene;
+    QPointF startPoint;
+    QPointF endPoint;
+    QPointF lastPoint;
+
+    bool isEndPoint;
+    bool isDraw;
+
 
 protected:
      void mousePressEvent(QMouseEvent *event);
+     void keyPressEvent(QKeyEvent * event);
 };
 
 #endif // MYVIEW_H

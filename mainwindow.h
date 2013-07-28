@@ -18,11 +18,6 @@ public:
     
 private slots:
     void on_actionOpen_triggered();
-
-//    void on_actionExit_triggered();
-
-//    void on_actionOpen_in_new_tab_triggered();
-
     void on_tabWidget_tabCloseRequested(int index);
 
 private:
