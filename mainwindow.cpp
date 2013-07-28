@@ -6,6 +6,8 @@
 #include <QCloseEvent>
 #include <QGraphicsLineItem>
 
+#include "tabview.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -35,23 +37,22 @@ void MainWindow::on_actionOpen_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::currentPath());
     if (!fileName.isEmpty()) {
-        QImage image(fileName);
-        if (image.isNull()) {
-           QMessageBox::information(this, tr("Master Measure"),
-                                    tr("Cannot load %1.").arg(fileName));
-           return;
-        }
+//        QImage image(fileName);
+//        if (image.isNull()) {
+//           QMessageBox::information(this, tr("Master Measure"),
+//                                    tr("Cannot load %1.").arg(fileName));
+//           return;
+//        }
 
-//        QVBoxLayout* main_layout = new QVBoxLayout;
+//        scene = new QGraphicsScene;
+//        view = new QGraphicsView;
+        TabView *view = new TabView(fileName);
 
-        scene = new QGraphicsScene;
-        view = new QGraphicsView;
-//        ui->tabWidget->layout()->addWidget(view);
-//        main_layout->addWidget(view);
-        view->setScene(scene);
+
+//        view->setScene(scene);
         ui->tabWidget->addTab(view,"someTab");
 
-        scene->addPixmap(QPixmap::fromImage(image));
+//        scene->addPixmap(QPixmap::fromImage(image));
 
         QFileInfo fileInfo = fileName;
         ui->tabWidget->setTabText(ui->tabWidget->count()-1,fileInfo.baseName());
@@ -81,70 +82,46 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     ui->tabWidget->removeTab(index);
 }
 
-void MainWindow::mousePressEvent(QMouseEvent *event)
-{
-//    scene = new QGraphicsScene;
-//    view = new QGraphicsView;
-//    view->setScene(scene);
-    /*ui->tabWidget->currentIndex()*/;
-//    QMessageBox::information(this,"title",QString::number(ui->tabWidget->currentIndex()));
-//    ui->tabWidget->widget(ui->tabWidget->currentIndex())->setFocus();
-//    ui->tabWidget->activateWindow();
 
-    QPen pen(Qt::black);
-    QBrush brush(Qt::red);
-    pen.setWidth(6);
-    scene->addEllipse(-150,-150,1000,500,pen,brush);
-//    ui->tabWidget->
+//void MainWindow::mouseMoveEvent(QMouseEvent *event)
+//{
+////    if ((event->buttons() & Qt::LeftButton) && isMousePressed)
+////        drawLineTo(event->pos());
+//}
 
-//    QMessageBox::information(this,"title","wow you work");
-//    if (event->button() == Qt::LeftButton) {
+//void MainWindow::mouseReleaseEvent(QGraphicsSceneEvent *event)
+//{
+////    if (event->button() == Qt::LeftButton &&  isMousePressed) {
 
-//        isMousePressed = true;
-//        startPoint=event->pos();
+////        scene->addLine(startPoint.x(),startPoint.y(),100,250);
+////        scribbling = false;
+////        isMousePressed = false;
+////        scene->addLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
 
-//    }
-}
+////    }
+//}
 
-void MainWindow::mouseMoveEvent(QMouseEvent *event)
-{
-//    if ((event->buttons() & Qt::LeftButton) && isMousePressed)
-//        drawLineTo(event->pos());
-}
+//void MainWindow::paintEvent(QGraphicsSceneEvent *event)
+//{
 
-void MainWindow::mouseReleaseEvent(QGraphicsSceneEvent *event)
-{
-//    if (event->button() == Qt::LeftButton &&  isMousePressed) {
+////    QGraphicsScene scene(this);
+////    QRect dirtyRect = event->rect();
 
-//        scene->addLine(startPoint.x(),startPoint.y(),100,250);
-//        scribbling = false;
-//        isMousePressed = false;
-//        scene->addLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
+////    scene.drawImage(dirtyRect, image, dirtyRect);
+//}
 
-//    }
-}
+//void MainWindow::drawLineTo(const QPoint &endPoint)
+//{
+////    QGraphicsScene scene(&view);
+////    scene->addLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
+////    QPainter painter(&image);
+////    painter.setPen(QPen(myPenColor, myPenWidth, Qt::SolidLine, Qt::RoundCap,
+////                        Qt::RoundJoin));
+////    painter.drawLine(lastPoint, endPoint);
+////    modified = true;
 
-void MainWindow::paintEvent(QGraphicsSceneEvent *event)
-{
-
-//    QGraphicsScene scene(this);
-//    QRect dirtyRect = event->rect();
-
-//    scene.drawImage(dirtyRect, image, dirtyRect);
-}
-
-void MainWindow::drawLineTo(const QPoint &endPoint)
-{
-//    QGraphicsScene scene(&view);
-//    scene->addLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
-//    QPainter painter(&image);
-//    painter.setPen(QPen(myPenColor, myPenWidth, Qt::SolidLine, Qt::RoundCap,
-//                        Qt::RoundJoin));
-//    painter.drawLine(lastPoint, endPoint);
-//    modified = true;
-
-//    int rad = (myPenWidth / 2) + 2;
-//    update(QRect(lastPoint, endPoint).normalized()
-//                                     .adjusted(-rad, -rad, +rad, +rad));
-//    lastPoint = endPoint;
-}
+////    int rad = (myPenWidth / 2) + 2;
+////    update(QRect(lastPoint, endPoint).normalized()
+////                                     .adjusted(-rad, -rad, +rad, +rad));
+////    lastPoint = endPoint;
+//}
