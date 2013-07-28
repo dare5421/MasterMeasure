@@ -61,7 +61,7 @@ void TabView::keyPressEvent(QKeyEvent * event){
 
     QBrush brushCenter(Qt::blue);
     QBrush brushHead(Qt::green);
-    QBrush brushTail(Qt::cyan);
+    QBrush brushTail(Qt::yellow);
 
 
     int key = event->key();
