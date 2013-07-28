@@ -1,0 +1,8 @@
+#QtCreator project files
+
+*.pro.user	
+=======
+	
+*.pro.user*
+
+*~
