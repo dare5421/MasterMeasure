@@ -4,6 +4,7 @@
 #include <QPixmap>
 
 #include <QMouseEvent>
+#include <qmath.h>
 
 TabView::TabView(QString fileName)
 {
@@ -17,12 +18,17 @@ TabView::TabView(QString fileName)
        return;
     }
 
+    scene->setBackgroundBrush(QBrush(Qt::lightGray));
     scene->addPixmap(QPixmap::fromImage(image));
     this->setScene(scene);
 
     isEndPoint = false;
     isDraw = true;
 
+    maxNumberOfChromosomes = 100; //danger
+    numberOfChromosomes = 0;
+
+    chromosomes = new chromosome[maxNumberOfChromosomes];
 }
 
 void TabView::mousePressEvent(QMouseEvent *event)
@@ -38,6 +44,10 @@ void TabView::mousePressEvent(QMouseEvent *event)
             endPoint = mapToScene(endPoint.x(),endPoint.y());
             scene->addEllipse(endPoint.x(),endPoint.y(),2,2,penDot,brush);
             scene->addLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y(),penLine);
+
+            myChro.setChromosomeLength(myChro.getChromosomeLength()+lineLength(startPoint, endPoint));
+            QMessageBox::information(this, tr("Master Measure"), QString::number(numberOfChromosomes)+"\n"+QString::number(myChro.getChromosomeLength()));
+
             startPoint = endPoint;
             lastPoint = endPoint;
 
@@ -47,6 +57,8 @@ void TabView::mousePressEvent(QMouseEvent *event)
             scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush);
             isEndPoint = true;
             lastPoint = startPoint;
+            numberOfChromosomes++;
+            myChro = chromosomes[numberOfChromosomes-1];
         }
     }
 
@@ -83,5 +95,11 @@ void TabView::keyPressEvent(QKeyEvent * event){
         isDraw = true;
         break;
     }
+
+}
+
+double TabView::lineLength(QPointF startPoint, QPointF endPoint){
+
+    return sqrt(pow(startPoint.x()-endPoint.x(), 2) + pow(startPoint.y()-endPoint.y(), 2));
 
 }

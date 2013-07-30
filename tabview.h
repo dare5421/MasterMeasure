@@ -3,6 +3,8 @@
 
 #include <QGraphicsView>
 
+#include "chromosome.h"
+
 class TabView:public QGraphicsView
 {
 public:
@@ -17,6 +19,18 @@ private:
 
     bool isEndPoint;
     bool isDraw;
+
+    int numberOfChromosomes;
+    int maxNumberOfChromosomes;
+    chromosome *chromosomes;
+    chromosome myChro;
+//    double chromosomeLength;
+//    double chromosomeHeadLength;
+//    double chromosomeTailLength;
+//    double chromosomeWing1;
+//    double chromosomeWing2;
+
+    double lineLength(QPointF startPoint, QPointF endPoint);
 
 protected:
      void mousePressEvent(QMouseEvent *event);

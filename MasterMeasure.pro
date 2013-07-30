@@ -14,9 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    tabview.cpp
+    tabview.cpp \
+    chromosome.cpp
 
 HEADERS  += mainwindow.h \
-    tabview.h
+    tabview.h \
+    chromosome.h
 
 FORMS    += mainwindow.ui
