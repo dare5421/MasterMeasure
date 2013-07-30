@@ -24,6 +24,12 @@ private:
     int maxNumberOfChromosomes;
     chromosome *chromosomes;
     chromosome myChro;
+
+    bool flag_start;
+    bool flag_head;
+    bool flag_center;
+    bool flag_tail;
+    bool flag_end;
 //    double chromosomeLength;
 //    double chromosomeHeadLength;
 //    double chromosomeTailLength;

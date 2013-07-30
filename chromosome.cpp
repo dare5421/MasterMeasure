@@ -5,8 +5,8 @@ chromosome::chromosome()
     chromosomeLength = 0;
     chromosomeHeadLength = 0;
     chromosomeTailLength = 0;
-    chromosomeWing1 = 0;
-    chromosomeWing2 = 0;
+    chromosomeWing1Length = 0;
+    chromosomeWing2Length = 0;
 }
 
 
@@ -22,12 +22,12 @@ void chromosome::setChromosomeTailLength(double lenght){
     chromosomeTailLength = lenght;
 }
 
-void chromosome::setChromosomeWing1(double lenght){
-    chromosomeWing1 = lenght;
+void chromosome::setChromosomeWing1Length(double lenght){
+    chromosomeWing1Length = lenght;
 }
 
-void chromosome::setChromosomeWing2(double lenght){
-    chromosomeWing2 = lenght;
+void chromosome::setChromosomeWing2Length(double lenght){
+    chromosomeWing2Length = lenght;
 }
 
 double chromosome::getChromosomeLength(){
@@ -42,16 +42,16 @@ double chromosome::getChromosomeTailLength(){
     return chromosomeTailLength;
 }
 
-double chromosome::getChromosomeWing1(){
-    return chromosomeWing1;
+double chromosome::getChromosomeWing1Length(){
+    return chromosomeWing1Length;
 }
 
-double chromosome::getChromosomeWing2(){
-    return chromosomeWing2;
+double chromosome::getChromosomeWing2Length(){
+    return chromosomeWing2Length;
 }
 
-double chromosome::operator+ (double length){
-    chromosome temp;
-    temp.setChromosomeLength(temp.getChromosomeLength()+length);
-    return temp.getChromosomeLength();
-}
+//double chromosome::operator+ (double length){
+//    chromosome temp;
+//    temp.setChromosomeLength(temp.getChromosomeLength()+length);
+//    return temp.getChromosomeLength();
+//}
