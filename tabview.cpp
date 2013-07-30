@@ -41,7 +41,7 @@ void TabView::mousePressEvent(QMouseEvent *event)
             startPoint = endPoint;
             lastPoint = endPoint;
 
-        }else{
+        }else {
             startPoint = event->pos();
             startPoint = mapToScene(startPoint.x(),startPoint.y());
             scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush);
@@ -77,6 +77,7 @@ void TabView::keyPressEvent(QKeyEvent * event){
         break;
     case Qt::Key_E:
         isDraw = false;
+        isEndPoint = false;
         break;
     case Qt::Key_S:
         isDraw = true;
