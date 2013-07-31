@@ -6,9 +6,7 @@
 #include <QCloseEvent>
 #include <QGraphicsLineItem>
 
-//#include "chromosome.h"
 
-//#include "tabview.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -68,7 +66,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 void MainWindow::on_showButton_clicked()
 {
     chromosome * myChro;
-    myChro = tabView->getChromosomes();
+    myChro = tabView->getSortedChromosomes();
     int numberOfChromosomes = tabView->getNumberOfChromosomes();
 
     QString str="";

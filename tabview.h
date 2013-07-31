@@ -12,6 +12,7 @@ public:
 
     chromosome* getChromosomes();
     int getNumberOfChromosomes();
+    chromosome* getSortedChromosomes();
 
 private:
     QGraphicsScene *scene;

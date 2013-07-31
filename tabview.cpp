@@ -166,3 +166,22 @@ int TabView::getNumberOfChromosomes(){
     return numberOfChromosomes;
 }
 
+chromosome* TabView::getSortedChromosomes(){
+
+    chromosome *newChromosomes = new chromosome[maxNumberOfChromosomes];
+    for (int i=0; i<numberOfChromosomes; i++){
+        newChromosomes[i] = chromosomes[i];
+    }
+    for(int i=0; i<numberOfChromosomes; i++){
+        for(int j=0; j<i; j++){
+            if(newChromosomes[i].getChromosomeLength()>newChromosomes[j].getChromosomeLength()){
+                newChromosomes[maxNumberOfChromosomes-1] = newChromosomes[i];
+                newChromosomes[i] = newChromosomes[j];
+                newChromosomes[j] = newChromosomes[maxNumberOfChromosomes-1];
+            }
+        }
+    }
+
+    return newChromosomes;
+}
+

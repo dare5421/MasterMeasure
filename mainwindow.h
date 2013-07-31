@@ -3,8 +3,9 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
-//#include <QGraphicsView>
+
 #include "tabview.h"
+#include "chromosome.h"
 namespace Ui {
 class MainWindow;
 }
