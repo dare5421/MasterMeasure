@@ -11,6 +11,7 @@ public:
     TabView(QString fileName);
 
     chromosome* getChromosomes();
+    int getNumberOfChromosomes();
 
 private:
     QGraphicsScene *scene;

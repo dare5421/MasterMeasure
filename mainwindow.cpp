@@ -6,7 +6,9 @@
 #include <QCloseEvent>
 #include <QGraphicsLineItem>
 
-#include "tabview.h"
+//#include "chromosome.h"
+
+//#include "tabview.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -31,9 +33,9 @@ void MainWindow::on_actionOpen_triggered()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::currentPath());
     if (!fileName.isEmpty()) {
 
-        TabView *view = new TabView(fileName);
+        tabView = new TabView(fileName);
 
-        ui->tabWidget->addTab(view,"someTab");
+        ui->tabWidget->addTab(tabView,"someTab");
 
         QFileInfo fileInfo = fileName;
         ui->tabWidget->setTabText(ui->tabWidget->count()-1,fileInfo.baseName());
@@ -62,3 +64,17 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     ui->tabWidget->removeTab(index);
 }
 
+
+void MainWindow::on_showButton_clicked()
+{
+    chromosome * myChro;
+    myChro = tabView->getChromosomes();
+    int numberOfChromosomes = tabView->getNumberOfChromosomes();
+
+    QString str="";
+    for (int i=0; i<numberOfChromosomes;i++){
+        str += QString::number(i+1)+" "+
+               QString::number(myChro[i].getChromosomeLength())+"\n";
+    }
+    QMessageBox::information(this, tr("Master Measure"),str);
+}

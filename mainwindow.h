@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 //#include <QGraphicsView>
+#include "tabview.h"
 namespace Ui {
 class MainWindow;
 }
@@ -20,10 +21,13 @@ private slots:
     void on_actionOpen_triggered();
     void on_tabWidget_tabCloseRequested(int index);
 
+    void on_showButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 //    QGraphicsView *view;
 //    QGraphicsScene *scene;
+    TabView *tabView;
 
     bool isMousePressed;
     QPoint startPoint,endPoint;

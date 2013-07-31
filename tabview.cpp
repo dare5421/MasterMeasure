@@ -161,3 +161,8 @@ double TabView::lineLength(QPointF startPoint, QPointF endPoint){
 chromosome* TabView::getChromosomes(){
     return chromosomes;
 }
+
+int TabView::getNumberOfChromosomes(){
+    return numberOfChromosomes;
+}
+
