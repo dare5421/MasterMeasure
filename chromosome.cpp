@@ -50,8 +50,4 @@ double chromosome::getChromosomeWing2Length(){
     return chromosomeWing2Length;
 }
 
-//double chromosome::operator+ (double length){
-//    chromosome temp;
-//    temp.setChromosomeLength(temp.getChromosomeLength()+length);
-//    return temp.getChromosomeLength();
-//}
+

@@ -10,6 +10,7 @@ class TabView:public QGraphicsView
 public:
     TabView(QString fileName);
 
+    chromosome* getChromosomes();
 
 private:
     QGraphicsScene *scene;
@@ -28,13 +29,8 @@ private:
     bool flag_start;
     bool flag_head;
     bool flag_center;
-    bool flag_tail;
+    short flag_tail;
     bool flag_end;
-//    double chromosomeLength;
-//    double chromosomeHeadLength;
-//    double chromosomeTailLength;
-//    double chromosomeWing1;
-//    double chromosomeWing2;
 
     double lineLength(QPointF startPoint, QPointF endPoint);
 

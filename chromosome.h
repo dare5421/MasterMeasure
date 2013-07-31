@@ -18,7 +18,6 @@ public:
     double getChromosomeWing1Length();
     double getChromosomeWing2Length();
 
-//    double operator+ (double length);
 
 private:
     double chromosomeLength;

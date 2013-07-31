@@ -22,8 +22,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsView *view;
-    QGraphicsScene *scene;
+//    QGraphicsView *view;
+//    QGraphicsScene *scene;
 
     bool isMousePressed;
     QPoint startPoint,endPoint;
@@ -33,14 +33,6 @@ private:
 
 protected:
     void closeEvent(QCloseEvent *event);
-
-//    void mousePressEvent(QMouseEvent *event);
-//    void mouseMoveEvent(QMouseEvent *event);
-//    void mouseReleaseEvent(QGraphicsSceneEvent *event);
-//    void paintEvent(QGraphicsSceneEvent *event);
-//    void resizeEvent(QResizeEvent *event);
-
-
 
 };
 
