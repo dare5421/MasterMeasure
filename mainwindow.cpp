@@ -7,7 +7,6 @@
 #include <QGraphicsLineItem>
 
 
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -17,6 +16,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->tabWidget->removeTab(1);
     ui->tabWidget->removeTab(0);
+
+    maxTab = 100;
+    tabsChromosomes = new chromosome* [maxTab];
+
 }
 
 MainWindow::~MainWindow()
@@ -40,14 +43,16 @@ void MainWindow::on_actionOpen_triggered()
 
         ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
 
-     }
+
+    }
 }
 
 
 //closeEvent overrided to show a properiate message before close
 void MainWindow::closeEvent(QCloseEvent *event){
     QMessageBox::StandardButton msg;
-    msg = QMessageBox::warning(this,"Master Measure","Are you sure you want to close?",QMessageBox::Yes | QMessageBox::No);
+    msg = QMessageBox::warning(this,"Master Measure","Are you sure you want to close?"
+                               ,QMessageBox::Yes | QMessageBox::No);
     if (msg == QMessageBox::Yes){
         event->accept();
     }
@@ -65,14 +70,41 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 
 void MainWindow::on_showButton_clicked()
 {
-    chromosome * myChro;
-    myChro = tabView->getSortedChromosomes();
-    int numberOfChromosomes = tabView->getNumberOfChromosomes();
+
+//    chromosome * myChro;
+////    myChro = tabView->getSortedChromosomes();
+//    myChro = ((TabView*)ui->tabWidget->currentWidget())->getChromosomes();
+//    int numberOfChromosomes = ((TabView*)ui->tabWidget->currentWidget())->getNumberOfChromosomes();
+
+//    QString str="";
+//    for (int i=0; i<numberOfChromosomes;i++){
+//        str += "chromosome "+QString::number(i)+": "+
+//                QString::number(myChro[i].getChromosomeLength())+"\n";
+//    }
+//    QMessageBox::information(this, tr("Master Measure"),str);
+//=======================
+//    QString str="";
+//    for (int i=0; i<=numberOfTabs;i++){
+//        str += "tab "+QString::number(i)+": "+
+//                QString::number(tabsChromosomes[i][0].getChromosomeLength())+"\n";
+//    }
+//    QMessageBox::information(this, tr("Master Measure"),str);
+//    =====================
+
+
+    for (int i=0; i< ui->tabWidget->count();i++){
+        tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes();
+    }
 
     QString str="";
-    for (int i=0; i<numberOfChromosomes;i++){
-        str += QString::number(i+1)+" "+
-               QString::number(myChro[i].getChromosomeLength())+"\n";
+    int numberOfChromosomes = ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
+    for (int i=0; i< ui->tabWidget->count();i++){
+        str += "\n--------\ntab "+ QString::number(i)+"\n";
+        for(int j=0; j< numberOfChromosomes; j++){
+            str += "chromosome length"+QString::number(j)+": "+
+                    QString::number(tabsChromosomes[i][j].getChromosomeLength())+"\n";
+        }
     }
     QMessageBox::information(this, tr("Master Measure"),str);
+
 }

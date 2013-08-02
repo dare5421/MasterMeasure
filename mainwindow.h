@@ -24,14 +24,17 @@ private slots:
 
     void on_showButton_clicked();
 
+
 private:
     Ui::MainWindow *ui;
-//    QGraphicsView *view;
-//    QGraphicsScene *scene;
+
     TabView *tabView;
 
     bool isMousePressed;
     QPoint startPoint,endPoint;
+
+    chromosome **tabsChromosomes;
+    int maxTab;
 
     void drawLineTo(const QPoint &endPoint);
 

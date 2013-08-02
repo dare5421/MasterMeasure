@@ -39,6 +39,7 @@ private:
 protected:
      void mousePressEvent(QMouseEvent *event);
      void keyPressEvent(QKeyEvent * event);
+
 };
 
 #endif // MYVIEW_H
