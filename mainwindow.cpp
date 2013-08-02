@@ -7,12 +7,16 @@
 #include <QGraphicsLineItem>
 
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
+    scaleDialog = new ScaleDialog(this);
+
+    scaleDialog->show();
 
     ui->tabWidget->removeTab(1);
     ui->tabWidget->removeTab(0);
@@ -27,11 +31,13 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->addLine(0, -500, 0,500);
     ui->graphicsView->setScene(scene);
 
+
+
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    delete ui;    
 }
 
 
@@ -77,6 +83,10 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 
 void MainWindow::on_showButton_clicked()
 {
+    scale = scaleDialog->getScale();
+
+
+
     if((ui->tabWidget->currentIndex())>=0){
         for (int i=0; i< ui->tabWidget->count();i++){
             tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes();
@@ -88,7 +98,8 @@ void MainWindow::on_showButton_clicked()
             str += "\n--------\ntab "+ QString::number(i)+"\n";
             for(int j=0; j< numberOfChromosomes; j++){
                 str += "chromosome length"+QString::number(j)+": "+
-                        QString::number(tabsChromosomes[i][j].getChromosomeLength())+"\n";
+                        QString::number(pixToMicro(tabsChromosomes[i][j].getChromosomeLength()))+"\n"+
+                        QString::number((tabsChromosomes[i][j].getChromosomeLength()))+"\n";
 
                 scene->addRect(j*40,0,20,tabsChromosomes[i][j].getChromosomeLength(),QPen(Qt::blue));
             }
@@ -98,4 +109,8 @@ void MainWindow::on_showButton_clicked()
 //        scene->addRect(0,0,20,tabsChromosomes[0][0].getChromosomeLength(),QPen(Qt::blue));
     }
 
+}
+
+double MainWindow::pixToMicro(double pix){
+    return pix / (scale*3);
 }

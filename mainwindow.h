@@ -6,6 +6,8 @@
 
 #include "tabview.h"
 #include "chromosome.h"
+#include "scaledialog.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -17,6 +19,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    double pixToMicro(double pix);
     
 private slots:
     void on_actionOpen_triggered();
@@ -39,7 +43,8 @@ private:
     chromosome **tabsChromosomes;
     int maxTab;
 
-    void drawLineTo(const QPoint &endPoint);
+    ScaleDialog *scaleDialog;
+    int scale;
 
 
 protected:

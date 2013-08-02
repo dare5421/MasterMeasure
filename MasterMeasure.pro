@@ -15,10 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     tabview.cpp \
-    chromosome.cpp
+    chromosome.cpp \
+    scaledialog.cpp
 
 HEADERS  += mainwindow.h \
     tabview.h \
-    chromosome.h
+    chromosome.h \
+    scaledialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    scaledialog.ui
