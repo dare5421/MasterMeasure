@@ -85,8 +85,6 @@ void MainWindow::on_showButton_clicked()
 {
     scale = scaleDialog->getScale();
 
-
-
     if((ui->tabWidget->currentIndex())>=0){
         for (int i=0; i< ui->tabWidget->count();i++){
             tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes();
