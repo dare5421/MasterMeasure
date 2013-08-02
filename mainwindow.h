@@ -28,6 +28,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
+//    QGraphicsView *view;
+    QGraphicsScene *scene;
+
     TabView *tabView;
 
     bool isMousePressed;
