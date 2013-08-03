@@ -110,5 +110,5 @@ void MainWindow::on_showButton_clicked()
 }
 
 double MainWindow::pixToMicro(double pix){
-    return pix / (scale*3);
+    return pix / (scale*119/40);
 }
