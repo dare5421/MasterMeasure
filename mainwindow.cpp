@@ -6,7 +6,7 @@
 #include <QCloseEvent>
 #include <QGraphicsLineItem>
 
-
+#include <QDesktopWidget>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -27,8 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
     scene = new QGraphicsScene(this);
 //    scene->addRect(0,0,10,10,QPen(Qt::blue));
 //    scene->addRect(0,-20,10,20,QPen(Qt::red));
-    scene->addLine(-500, 0, 500,0);
-    scene->addLine(0, -500, 0,500);
+//    scene->addLine(-500, 0, 500,0);
+//    scene->addLine(0, -500, 0,500);
     ui->graphicsView->setScene(scene);
 
 //    dialogFlag = false;
@@ -87,6 +87,12 @@ void MainWindow::on_showButton_clicked()
 {
     scale = scaleDialog->getScale();
 
+    scene->clear();
+    QDesktopWidget desktop;
+
+    scene->addLine(-(desktop.width())/2+25, 0, (desktop.width())/2-25,0);
+
+
     if((ui->tabWidget->currentIndex())>=0){
         for (int i=0; i< ui->tabWidget->count();i++){
             tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes();
@@ -101,9 +107,9 @@ void MainWindow::on_showButton_clicked()
                 str += "chromosome length"+QString::number(j)+": "+
                         QString::number(pixToMicro(tabsChromosomes[i][j].getChromosomeLength()))+"\n"+
                         QString::number((tabsChromosomes[i][j].getChromosomeLength()))+"\n";
-
-                scene->addRect(j*40,0,20,tabsChromosomes[i][j].getChromosomeLength(),QPen(Qt::blue));
+                drawChromosome(j*40,0,tabsChromosomes[i][j]);
             }
+//            scene->addRect(i*40,0,20,tabsChromosomes[i]->getChromosomeLength(),QPen(Qt::blue));
         }
         QMessageBox::information(this, tr("Master Measure"),str);
 
@@ -112,17 +118,30 @@ void MainWindow::on_showButton_clicked()
 
 }
 
+void MainWindow::drawChromosome(int x, int y, chromosome myChromosome){
+
+    //add wing 1
+    scene->addRect(x, y-myChromosome.getChromosomeWing1Length()
+                   , 20 , myChromosome.getChromosomeWing1Length());
+
+    //add head
+    scene->addRect(x, y-myChromosome.getChromosomeWing1Length()
+                   , 20 , myChromosome.getChromosomeHeadLength());
+
+    //add wing 2
+    scene->addRect(x, y
+                   ,20, myChromosome.getChromosomeWing2Length());
+
+    //add tail
+    scene->addRect(x,y+myChromosome.getChromosomeWing2Length()-myChromosome.getChromosomeTailLength()
+                   , 20, myChromosome.getChromosomeTailLength());
+
+}
+
 double MainWindow::pixToMicro(double pix){
     return pix / (scale*micro/40);
 }
 
-//void MainWindow::setDialogFlag(bool flag){
-//    dialogFlag = flag;
-//}
-
-//bool MainWindow::getDialogFlag(){
-//    return dialogFlag;
-//}
 
 void MainWindow::on_calibrateButton_clicked()
 {

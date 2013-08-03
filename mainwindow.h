@@ -54,7 +54,7 @@ private:
 
     double micro;
 
-//    bool dialogFlag;
+    void drawChromosome(int x, int y, chromosome myChromosome);
 
 
 protected:
