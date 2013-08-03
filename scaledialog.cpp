@@ -2,15 +2,19 @@
 #include "ui_scaledialog.h"
 #include <QCloseEvent>
 //#include <QMessageBox>
+#include "tabview.h"
+#include "mainwindow.h"
+
 
 ScaleDialog::ScaleDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ScaleDialog)
 {
     ui->setupUi(this);
-//    scale = 100;
+    scale = 40;
 //    this->setWindowFlags(Qt::WindowTitleHint);
 //    this->setWindowFlags(Qt::WindowCloseButtonHint);
+    flag = false;
 }
 
 ScaleDialog::~ScaleDialog()
@@ -22,13 +26,13 @@ void ScaleDialog::on_pushButton_clicked()
 {
     this->close();
     setScale((ui->comboBox->currentText()).toInt());
-//    QMessageBox::information(this, tr("Master Measure"),QString::number(scale));
-
 }
 
 void ScaleDialog::on_browseButton_clicked()
 {
-//    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::currentPath());
+
+//    ((MainWindow*)this->parent())->setDialogFlag(true);
+    this->close();
 
 }
 

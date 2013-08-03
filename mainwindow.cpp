@@ -31,7 +31,9 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->addLine(0, -500, 0,500);
     ui->graphicsView->setScene(scene);
 
+//    dialogFlag = false;
 
+    micro = 119;
 
 }
 
@@ -91,7 +93,8 @@ void MainWindow::on_showButton_clicked()
         }
 
         QString str="";
-        int numberOfChromosomes = ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
+        int numberOfChromosomes =
+                ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
         for (int i=0; i< ui->tabWidget->count();i++){
             str += "\n--------\ntab "+ QString::number(i)+"\n";
             for(int j=0; j< numberOfChromosomes; j++){
@@ -110,5 +113,49 @@ void MainWindow::on_showButton_clicked()
 }
 
 double MainWindow::pixToMicro(double pix){
-    return pix / (scale*119/40);
+    return pix / (scale*micro/40);
+}
+
+//void MainWindow::setDialogFlag(bool flag){
+//    dialogFlag = flag;
+//}
+
+//bool MainWindow::getDialogFlag(){
+//    return dialogFlag;
+//}
+
+void MainWindow::on_calibrateButton_clicked()
+{
+    bool flag = false;
+    double temp = 0;
+    if (ui->tabWidget->count()== 0){
+        this->on_actionOpen_triggered();
+        flag = true;
+    }
+
+    if((ui->tabWidget->currentIndex())>=0){
+        for (int i=0; i< ui->tabWidget->count();i++){
+            tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes();
+        }
+
+        QString str="";
+        int numberOfChromosomes =
+                ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
+
+        for(int j=0; j< numberOfChromosomes; j++){
+            str += "chromosome length"+QString::number(j)+": \n"+
+                    QString::number((tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength()))+"\n";
+
+            temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
+        }
+        micro = temp/numberOfChromosomes;
+        if (!flag)
+            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
+
+    }
+
+
+
+//    ui->calibrateButton->setVisible(false);
+
 }

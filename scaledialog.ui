@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>361</width>
-    <height>131</height>
+    <width>317</width>
+    <height>99</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -58,10 +58,17 @@
        </item>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string> Apply Scale</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
@@ -72,48 +79,17 @@
      <item>
       <widget class="QPushButton" name="browseButton">
        <property name="text">
-        <string>Browse ...</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string> Apply Scale</string>
+        <string>OK</string>
        </property>
       </widget>
      </item>
     </layout>
    </item>
   </layout>
-  <zorder>label</zorder>
-  <zorder>pushButton</zorder>
-  <zorder>comboBox</zorder>
-  <zorder>label_2</zorder>
-  <zorder>textBrowser</zorder>
-  <zorder>browseButton</zorder>
-  <zorder>horizontalSpacer</zorder>
  </widget>
  <tabstops>
-  <tabstop>pushButton</tabstop>
   <tabstop>comboBox</tabstop>
+  <tabstop>pushButton</tabstop>
   <tabstop>browseButton</tabstop>
  </tabstops>
  <resources/>

@@ -16,6 +16,8 @@ public:
     ~ScaleDialog();
     int getScale();
     void setScale(int scl);
+
+    bool flag;
     
 private:
     Ui::ScaleDialog *ui;

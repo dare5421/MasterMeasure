@@ -21,6 +21,10 @@ public:
     ~MainWindow();
 
     double pixToMicro(double pix);
+
+//    void setDialogFlag(bool flag);
+
+//    bool getDialogFlag();
     
 private slots:
     void on_actionOpen_triggered();
@@ -28,6 +32,8 @@ private slots:
 
     void on_showButton_clicked();
 
+
+    void on_calibrateButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -45,6 +51,10 @@ private:
 
     ScaleDialog *scaleDialog;
     int scale;
+
+    double micro;
+
+//    bool dialogFlag;
 
 
 protected:
