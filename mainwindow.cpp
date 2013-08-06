@@ -7,6 +7,7 @@
 #include <QGraphicsLineItem>
 
 #include <QDesktopWidget>
+#include <QPolygonF>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -85,12 +86,16 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 
 void MainWindow::on_showButton_clicked()
 {
+
+
+
     scale = scaleDialog->getScale();
 
     scene->clear();
+
     QDesktopWidget desktop;
 
-    scene->addLine(-(desktop.width())/2+25, 0, (desktop.width())/2-25,0);
+//    scene->addLine(-(desktop.width())/2+25, 0, (desktop.width())/2-25,0);
 
 
     if((ui->tabWidget->currentIndex())>=0){
@@ -107,6 +112,8 @@ void MainWindow::on_showButton_clicked()
                 str += "chromosome length"+QString::number(j)+": "+
                         QString::number(pixToMicro(tabsChromosomes[i][j].getChromosomeLength()))+"\n"+
                         QString::number((tabsChromosomes[i][j].getChromosomeLength()))+"\n";
+                if (j>0)
+                    scene->addLine((j-1)*40+15,0,j*40+5,0);
                 drawChromosome(j*40,0,tabsChromosomes[i][j]);
             }
 //            scene->addRect(i*40,0,20,tabsChromosomes[i]->getChromosomeLength(),QPen(Qt::blue));
@@ -120,21 +127,45 @@ void MainWindow::on_showButton_clicked()
 
 void MainWindow::drawChromosome(int x, int y, chromosome myChromosome){
 
-    //add wing 1
-    scene->addRect(x, y-myChromosome.getChromosomeWing1Length()
-                   , 20 , myChromosome.getChromosomeWing1Length());
+    QPolygonF *polygon = new QPolygonF();
+    polygon->append((QPoint(x+0,-5)));
+    polygon->append((QPoint(x+20,-5)));
+    polygon->append((QPoint(x+10,0)));
+    polygon->append((QPoint(x+0,5)));
+    polygon->append((QPoint(x+20,5)));
 
-    //add head
-    scene->addRect(x, y-myChromosome.getChromosomeWing1Length()
-                   , 20 , myChromosome.getChromosomeHeadLength());
+    scene->addPolygon(*polygon,QPen(Qt::black),QBrush(Qt::black));
 
-    //add wing 2
-    scene->addRect(x, y
-                   ,20, myChromosome.getChromosomeWing2Length());
+    //wing1 should be the shorter one
+    if (myChromosome.getChromosomeWing2Length()>myChromosome.getChromosomeWing1Length()){
 
-    //add tail
-    scene->addRect(x,y+myChromosome.getChromosomeWing2Length()-myChromosome.getChromosomeTailLength()
-                   , 20, myChromosome.getChromosomeTailLength());
+        //add wing 1 is up
+        scene->addRect(x, y-myChromosome.getChromosomeWing1Length()-5
+                       , 20 , myChromosome.getChromosomeWing1Length());
+
+        //add wing 2 is down
+        scene->addRect(x, y+5
+                       ,20, myChromosome.getChromosomeWing2Length());
+
+    }else{
+        //add wing 1 is down
+        scene->addRect(x, y+5
+                       , 20 , myChromosome.getChromosomeWing1Length());
+
+        //add wing 2 is up
+        scene->addRect(x, y-5-myChromosome.getChromosomeWing2Length()
+                       ,20, myChromosome.getChromosomeWing2Length());
+    }
+
+//    //add head
+//    scene->addRect(x, y-myChromosome.getChromosomeWing1Length()
+//                   , 20 , myChromosome.getChromosomeHeadLength());
+
+
+
+//    //add tail
+//    scene->addRect(x,y+myChromosome.getChromosomeWing2Length()-myChromosome.getChromosomeTailLength()
+//                   , 20, myChromosome.getChromosomeTailLength());
 
 }
 
