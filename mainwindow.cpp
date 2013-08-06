@@ -8,6 +8,8 @@
 
 #include <QDesktopWidget>
 #include <QPolygonF>
+#include <QGraphicsTextItem>
+#include <QPointF>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -31,10 +33,11 @@ MainWindow::MainWindow(QWidget *parent) :
 //    scene->addLine(-500, 0, 500,0);
 //    scene->addLine(0, -500, 0,500);
     ui->graphicsView->setScene(scene);
+//    ui->graphicsView->setSceneRect(0,0,1000,1000);
 
 //    dialogFlag = false;
 
-    micro = 119;
+    micro = 11.9;
 
 }
 
@@ -93,10 +96,6 @@ void MainWindow::on_showButton_clicked()
 
     scene->clear();
 
-    QDesktopWidget desktop;
-
-//    scene->addLine(-(desktop.width())/2+25, 0, (desktop.width())/2-25,0);
-
 
     if((ui->tabWidget->currentIndex())>=0){
         for (int i=0; i< ui->tabWidget->count();i++){
@@ -112,9 +111,14 @@ void MainWindow::on_showButton_clicked()
                 str += "chromosome length"+QString::number(j)+": "+
                         QString::number(pixToMicro(tabsChromosomes[i][j].getChromosomeLength()))+"\n"+
                         QString::number((tabsChromosomes[i][j].getChromosomeLength()))+"\n";
+
+
+                //draw in bottom
                 if (j>0)
-                    scene->addLine((j-1)*40+15,0,j*40+5,0);
-                drawChromosome(j*40,0,tabsChromosomes[i][j]);
+                    scene->addLine((j-1)*70+15,0,j*70+5,0);
+                drawChromosome(j*70,0,tabsChromosomes[i][j]);
+
+
             }
 //            scene->addRect(i*40,0,20,tabsChromosomes[i]->getChromosomeLength(),QPen(Qt::blue));
         }
@@ -136,25 +140,48 @@ void MainWindow::drawChromosome(int x, int y, chromosome myChromosome){
 
     scene->addPolygon(*polygon,QPen(Qt::black),QBrush(Qt::black));
 
+    QGraphicsTextItem *textWing1 = new QGraphicsTextItem;
+    QGraphicsTextItem *textWing2 = new QGraphicsTextItem;
+    textWing1->setPlainText(QString::number(pixToMicro(myChromosome.getChromosomeWing1Length())));
+    textWing2->setPlainText(QString::number(pixToMicro(myChromosome.getChromosomeWing2Length())));
+
+    QPointF wing1Pos= QPointF(x+20,-30);
+    QPointF wing2Pos= QPointF(x+20,10);
+
+    double wing1 = myChromosome.getChromosomeWing1Length();
+    double wing2 = myChromosome.getChromosomeWing2Length();
+
     //wing1 should be the shorter one
-    if (myChromosome.getChromosomeWing2Length()>myChromosome.getChromosomeWing1Length()){
+    if (wing2 > wing1){
 
         //add wing 1 is up
-        scene->addRect(x, y-myChromosome.getChromosomeWing1Length()-5
-                       , 20 , myChromosome.getChromosomeWing1Length());
+        scene->addRect(x, y-wing1-5
+                       , 20 , wing1);
+
+        textWing1->setPos(wing1Pos);
+        scene->addItem(textWing1);
 
         //add wing 2 is down
         scene->addRect(x, y+5
-                       ,20, myChromosome.getChromosomeWing2Length());
+                       ,20, wing2);
+
+        textWing2->setPos(wing2Pos);
+        scene->addItem(textWing2);
 
     }else{
         //add wing 1 is down
         scene->addRect(x, y+5
-                       , 20 , myChromosome.getChromosomeWing1Length());
+                       , 20 , wing1);
+
+        textWing1->setPos(wing2Pos);
+        scene->addItem(textWing1);
 
         //add wing 2 is up
-        scene->addRect(x, y-5-myChromosome.getChromosomeWing2Length()
-                       ,20, myChromosome.getChromosomeWing2Length());
+        scene->addRect(x, y-5-wing2
+                       ,20, wing2);
+
+        textWing2->setPos(wing1Pos);
+        scene->addItem(textWing2);
     }
 
 //    //add head
@@ -199,6 +226,7 @@ void MainWindow::on_calibrateButton_clicked()
             temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
         }
         micro = temp/numberOfChromosomes;
+        micro /= 10;
         if (!flag)
             QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
 
