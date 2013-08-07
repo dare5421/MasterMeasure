@@ -54,7 +54,11 @@ private:
 
     double micro;
 
-    void drawChromosome(int x, int y, chromosome myChromosome);
+    void drawChromosome(int x, int y, double wing1, double wing2,double errorWing1,double errorWing2);
+
+    double calculateErrorBar();
+    double* errorBarWing1;
+    double* errorBarWing2;
 
 
 protected:

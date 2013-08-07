@@ -159,6 +159,14 @@ double TabView::lineLength(QPointF startPoint, QPointF endPoint){
 }
 
 chromosome* TabView::getChromosomes(){
+    double temp =0;
+    for(int i=0; i<numberOfChromosomes; i++){
+        if(chromosomes[i].getChromosomeWing1Length() > chromosomes[i].getChromosomeWing2Length()){
+            temp = chromosomes[i].getChromosomeWing2Length();
+            chromosomes[i].setChromosomeWing2Length(chromosomes[i].getChromosomeWing1Length());
+            chromosomes[i].setChromosomeWing1Length(temp);
+        }
+    }
     return chromosomes;
 }
 
@@ -179,6 +187,15 @@ chromosome* TabView::getSortedChromosomes(){
                 newChromosomes[i] = newChromosomes[j];
                 newChromosomes[j] = newChromosomes[maxNumberOfChromosomes-1];
             }
+        }
+    }
+
+    double temp =0;
+    for(int i=0; i<numberOfChromosomes; i++){
+        if(newChromosomes[i].getChromosomeWing1Length() > newChromosomes[i].getChromosomeWing2Length()){
+            temp = newChromosomes[i].getChromosomeWing2Length();
+            newChromosomes[i].setChromosomeWing2Length(newChromosomes[i].getChromosomeWing1Length());
+            newChromosomes[i].setChromosomeWing1Length(temp);
         }
     }
 
