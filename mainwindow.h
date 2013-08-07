@@ -35,6 +35,8 @@ private slots:
 
     void on_calibrateButton_clicked();
 
+    void on_actionSave_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -56,7 +58,6 @@ private:
 
     void drawChromosome(int x, int y, double wing1, double wing2,double errorWing1,double errorWing2);
 
-    double calculateErrorBar();
     double* errorBarWing1;
     double* errorBarWing2;
 

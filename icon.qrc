@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/image">
+        <file>floppy.png</file>
+        <file>open.png</file>
+        <file>delete.png</file>
+    </qresource>
+</RCC>

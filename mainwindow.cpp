@@ -12,6 +12,9 @@
 #include <QPointF>
 
 #include <QtMath>
+#include <QPixmap>
+#include <QImage>
+#include <QSvgGenerator>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -164,7 +167,7 @@ void MainWindow::on_showButton_clicked()
                 scene->addLine((j-1)*70+15,0,j*70+5,0);
             drawChromosome(j*70,0, avgWing1[j],avgWing2[j], errorBarWing1[j], errorBarWing2[j]);
 
-            QMessageBox::information(this, tr("Master Measure"),QString::number(errorBarWing1[j]));
+//            QMessageBox::information(this, tr("Master Measure"),QString::number(errorBarWing1[j]));
 
         }
 
@@ -235,10 +238,6 @@ void MainWindow::drawChromosome(int x, int y, double wing1, double wing2,double 
 
 }
 
-double MainWindow::calculateErrorBar()
-{
-
-}
 
 double MainWindow::pixToMicro(double pix){
     return pix / (scale*micro/40);
@@ -279,5 +278,36 @@ void MainWindow::on_calibrateButton_clicked()
 
 
 //    ui->calibrateButton->setVisible(false);
+
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Save Scene", "", "vector image (*.svg)");
+//    QPixmap pixMap = QPixmap::grabWidget(ui->graphicsView);
+//    pixMap.save(fileName);
+
+//===========================
+//    scene->clearSelection();
+//    scene->setSceneRect(scene->itemsBoundingRect());
+//    QImage image(scene->sceneRect().size().toSize(), QImage::Format_ARGB32);
+//    image.fill(Qt::transparent);
+
+//    QPainter painter(&image);
+//    scene->render(&painter);
+//    image.save(fileName);
+//===========================
+
+    QSvgGenerator generator;
+    generator.setFileName(fileName );
+    generator.setSize(QSize(200, 200));
+    generator.setViewBox(QRect(0, 0, 200, 200));
+    generator.setTitle(tr("SVG Generator Drawing"));
+    generator.setDescription(tr("An SVG drawing created by the SVG Generator "
+                               "Chromosome Drawing."));
+    QPainter painter(&generator);
+
+    scene->render(&painter);
+
 
 }
