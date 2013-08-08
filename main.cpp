@@ -7,6 +7,6 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.showMaximized();
 //    w.show();
-    
+    w.setWindowIcon(QIcon(":/image/measure.png"));
     return a.exec();
 }

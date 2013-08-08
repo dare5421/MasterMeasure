@@ -3,5 +3,6 @@
         <file>floppy.png</file>
         <file>open.png</file>
         <file>delete.png</file>
+        <file>measure.png</file>
     </qresource>
 </RCC>
