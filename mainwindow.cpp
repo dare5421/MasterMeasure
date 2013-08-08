@@ -321,3 +321,17 @@ void MainWindow::setMicro(double value)
 {
     micro = value;
 }
+
+void MainWindow::on_actionAbout_triggered()
+{
+//    QMessageBox::about(this,"About MasterMeasure", "MasterMeasure v0.9\n\n(c) 2013 Dariush Zandi");
+    QMessageBox::about(this, tr("About Master Measure"),
+              tr("<p><b>Master Measure</b> v0.9 </p>"
+                 "<p>(C) 2013 Dariush Zandi </p>"
+                 "<p>"
+                    "<a href=\"mailto:dariush.zandi.n@gmail.com\"><img src=\":/about/email.png\"></a>"
+                    "<a href=\"http://twitter.com/dariushzandi\"><img src=\":/about/twitter.png\"></a>"
+                    "<a href=\"http://ir.linkedin.com/pub/dariush-zandi/19/789/31b\"><img src=\":/about/linkedin.png\"></a>"
+
+                 "</p>"));
+}

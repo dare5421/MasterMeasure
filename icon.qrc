@@ -5,4 +5,9 @@
         <file>delete.png</file>
         <file>measure.png</file>
     </qresource>
+    <qresource prefix="/about">
+        <file>email.png</file>
+        <file>linkedin.png</file>
+        <file>twitter.png</file>
+    </qresource>
 </RCC>
