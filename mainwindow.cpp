@@ -4,7 +4,8 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QCloseEvent>
-#include <QGraphicsLineItem>
+
+
 
 #include <QDesktopWidget>
 #include <QPolygonF>
@@ -12,8 +13,8 @@
 #include <QPointF>
 
 #include <QtMath>
-#include <QPixmap>
-#include <QImage>
+//#include <QPixmap>
+//#include <QImage>
 #include <QSvgGenerator>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -33,14 +34,14 @@ MainWindow::MainWindow(QWidget *parent) :
     tabsChromosomes = new chromosome* [maxTab];
 
     scene = new QGraphicsScene(this);
-//    scene->addRect(0,0,10,10,QPen(Qt::blue));
-//    scene->addRect(0,-20,10,20,QPen(Qt::red));
-//    scene->addLine(-500, 0, 500,0);
-//    scene->addLine(0, -500, 0,500);
+    //    scene->addRect(0,0,10,10,QPen(Qt::blue));
+    //    scene->addRect(0,-20,10,20,QPen(Qt::red));
+    //    scene->addLine(-500, 0, 500,0);
+    //    scene->addLine(0, -500, 0,500);
     ui->graphicsView->setScene(scene);
-//    ui->graphicsView->setSceneRect(0,0,1000,1000);
+    //    ui->graphicsView->setSceneRect(0,0,1000,1000);
 
-//    dialogFlag = false;
+    //    dialogFlag = false;
 
     micro = 11.9;
 
@@ -52,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;    
+    delete ui;
 }
 
 
@@ -62,7 +63,7 @@ void MainWindow::on_actionOpen_triggered()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::currentPath());
     if (!fileName.isEmpty()) {
 
-        tabView = new TabView(fileName);
+        tabView = new TabView(fileName, micro);
 
         ui->tabWidget->addTab(tabView,"someTab");
 
@@ -70,7 +71,6 @@ void MainWindow::on_actionOpen_triggered()
         ui->tabWidget->setTabText(ui->tabWidget->count()-1,fileInfo.baseName());
 
         ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
-
 
     }
 }
@@ -167,14 +167,14 @@ void MainWindow::on_showButton_clicked()
                 scene->addLine((j-1)*70+15,0,j*70+5,0);
             drawChromosome(j*70,0, avgWing1[j],avgWing2[j], errorBarWing1[j], errorBarWing2[j]);
 
-//            QMessageBox::information(this, tr("Master Measure"),QString::number(errorBarWing1[j]));
+            //            QMessageBox::information(this, tr("Master Measure"),QString::number(errorBarWing1[j]));
 
         }
 
 
-//        QMessageBox::information(this, tr("Master Measure"),str);
+        //        QMessageBox::information(this, tr("Master Measure"),str);
 
-//        scene->addRect(0,0,20,tabsChromosomes[0][0].getChromosomeLength(),QPen(Qt::blue));
+        //        scene->addRect(0,0,20,tabsChromosomes[0][0].getChromosomeLength(),QPen(Qt::blue));
     }
 
 }
@@ -194,8 +194,8 @@ void MainWindow::drawChromosome(int x, int y, double wing1, double wing2,double 
     QGraphicsTextItem *textWing2 = new QGraphicsTextItem;
     textWing1->setPlainText(QString::number(pixToMicro(wing1)));
     textWing2->setPlainText(QString::number(pixToMicro(wing2)));
-//    textWing1->setPlainText(QString::number((wing1)));
-//    textWing2->setPlainText(QString::number((wing2)));
+    //    textWing1->setPlainText(QString::number((wing1)));
+    //    textWing2->setPlainText(QString::number((wing2)));
 
     QPointF wing1Pos= QPointF(x+20,-30);
     QPointF wing2Pos= QPointF(x+20,10);
@@ -226,15 +226,15 @@ void MainWindow::drawChromosome(int x, int y, double wing1, double wing2,double 
 
 
 
-//    //add head
-//    scene->addRect(x, y-myChromosome.getChromosomeWing1Length()
-//                   , 20 , myChromosome.getChromosomeHeadLength());
+    //    //add head
+    //    scene->addRect(x, y-myChromosome.getChromosomeWing1Length()
+    //                   , 20 , myChromosome.getChromosomeHeadLength());
 
 
 
-//    //add tail
-//    scene->addRect(x,y+myChromosome.getChromosomeWing2Length()-myChromosome.getChromosomeTailLength()
-//                   , 20, myChromosome.getChromosomeTailLength());
+    //    //add tail
+    //    scene->addRect(x,y+myChromosome.getChromosomeWing2Length()-myChromosome.getChromosomeTailLength()
+    //                   , 20, myChromosome.getChromosomeTailLength());
 
 }
 
@@ -277,26 +277,26 @@ void MainWindow::on_calibrateButton_clicked()
 
 
 
-//    ui->calibrateButton->setVisible(false);
+    //    ui->calibrateButton->setVisible(false);
 
 }
 
 void MainWindow::on_actionSave_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Save Scene", "", "vector image (*.svg)");
-//    QPixmap pixMap = QPixmap::grabWidget(ui->graphicsView);
-//    pixMap.save(fileName);
+    //    QPixmap pixMap = QPixmap::grabWidget(ui->graphicsView);
+    //    pixMap.save(fileName);
 
-//===========================
-//    scene->clearSelection();
-//    scene->setSceneRect(scene->itemsBoundingRect());
-//    QImage image(scene->sceneRect().size().toSize(), QImage::Format_ARGB32);
-//    image.fill(Qt::transparent);
+    //===========================
+    //    scene->clearSelection();
+    //    scene->setSceneRect(scene->itemsBoundingRect());
+    //    QImage image(scene->sceneRect().size().toSize(), QImage::Format_ARGB32);
+    //    image.fill(Qt::transparent);
 
-//    QPainter painter(&image);
-//    scene->render(&painter);
-//    image.save(fileName);
-//===========================
+    //    QPainter painter(&image);
+    //    scene->render(&painter);
+    //    image.save(fileName);
+    //===========================
 
     QSvgGenerator generator;
     generator.setFileName(fileName );
@@ -304,10 +304,20 @@ void MainWindow::on_actionSave_triggered()
     generator.setViewBox(QRect(0, 0, 200, 200));
     generator.setTitle(tr("SVG Generator Drawing"));
     generator.setDescription(tr("An SVG drawing created by the SVG Generator "
-                               "Chromosome Drawing."));
+                                "Chromosome Drawing."));
     QPainter painter(&generator);
 
     scene->render(&painter);
 
 
+}
+
+double MainWindow::getMicro() const
+{
+    return micro;
+}
+
+void MainWindow::setMicro(double value)
+{
+    micro = value;
 }

@@ -37,7 +37,7 @@
         <item>
          <widget class="QTabWidget" name="tabWidget">
           <property name="tabShape">
-           <enum>QTabWidget::Rounded</enum>
+           <enum>QTabWidget::Triangular</enum>
           </property>
           <property name="currentIndex">
            <number>1</number>
@@ -153,10 +153,11 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
+   <addaction name="separator"/>
   </widget>
   <action name="actionOpen">
    <property name="icon">

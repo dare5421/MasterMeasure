@@ -6,7 +6,9 @@
 #include <QMouseEvent>
 #include <qmath.h>
 
-TabView::TabView(QString fileName)
+#include <QGraphicsLineItem>
+
+TabView::TabView(QString fileName, double micro)
 {
     scene = new QGraphicsScene;
 
@@ -20,10 +22,43 @@ TabView::TabView(QString fileName)
 
     scene->setBackgroundBrush(QBrush(Qt::lightGray));
     scene->addPixmap(QPixmap::fromImage(image));
+
+    QPen pen;
+    pen.setWidth(4);
+    pen.setColor(Qt::yellow);
+
+    QGraphicsLineItem *hLine;
+    QGraphicsLineItem *vLine1;
+    QGraphicsLineItem *vLine2;
+    QGraphicsTextItem *text;
+    text = scene->addText("10 micrometer");
+    text->setPos(10,5);
+    text->setDefaultTextColor(Qt::yellow);
+//    text->setFont(QFont::);
+    hLine = scene->addLine(10,25,micro*10,25,pen);
+    vLine1 = scene->addLine(10,23,10,27,pen);
+    vLine2 = scene->addLine(micro*10,23,micro*10,27,pen);
+
+
+
+    QList<QGraphicsItem*> groupItems;
+    groupItems.append(hLine); // add more items if you want
+    groupItems.append(vLine1);
+    groupItems.append(vLine2);
+    groupItems.append(text);
+    // Finally  construct the group
+    QGraphicsItemGroup * cliGroup;
+    cliGroup = scene->createItemGroup(groupItems);
+    cliGroup->setFlag(QGraphicsItem::ItemIsMovable, true);
+
+//    scene->addLine(10,-10,micro*10,-10,pen)->setFlag(QGraphicsItem::ItemIsMovable, true);
+
+
+
     this->setScene(scene);
 
     isEndPoint = false;
-    isDraw = true;
+    isDraw = false;
 
     maxNumberOfChromosomes = 100; //danger
     numberOfChromosomes = 0;

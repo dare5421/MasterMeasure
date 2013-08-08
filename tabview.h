@@ -8,7 +8,7 @@
 class TabView:public QGraphicsView
 {
 public:
-    TabView(QString fileName);
+    TabView(QString fileName, double micro);
 
     chromosome* getChromosomes();
     int getNumberOfChromosomes();

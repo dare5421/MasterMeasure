@@ -26,6 +26,9 @@ public:
 
 //    bool getDialogFlag();
     
+    double getMicro() const;
+    void setMicro(double value);
+
 private slots:
     void on_actionOpen_triggered();
     void on_tabWidget_tabCloseRequested(int index);
