@@ -4,6 +4,12 @@
         <file>open.png</file>
         <file>delete.png</file>
         <file>measure.png</file>
+        <file>color-line.png</file>
+        <file>line_width.png</file>
+        <file>about.png</file>
+        <file>stop.png</file>
+        <file>pencil.png</file>
+        <file>center.png</file>
     </qresource>
     <qresource prefix="/about">
         <file>email.png</file>

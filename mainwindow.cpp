@@ -257,6 +257,7 @@ void MainWindow::drawChromosome(int x, int y, double wing1, double wing2,double 
 void MainWindow::createActions()
 {
     saveAction = new QAction(tr("&Save Idiogram"), this);
+    saveAction->setIcon(QIcon(":/image/floppy.png"));
     connect(saveAction, SIGNAL(triggered()),this, SLOT(on_actionSave_triggered()));
 }
 

@@ -209,14 +209,17 @@ void TabView::contextMenuEvent(QContextMenuEvent *event)
 void TabView::createActions()
 {
     startAction = new QAction(tr("&Start drawing"), this);
+    startAction->setIcon(QIcon(":/image/pencil.png"));
     //    newAct->setShortcuts(QKeySequence::New);
     //    newAct->setStatusTip(tr("Create a new drawing"));
     connect(startAction, SIGNAL(triggered()),this, SLOT(start()));
 
     endAction = new QAction(tr("&End drawing"), this);
+    endAction->setIcon(QIcon(":/image/stop.png"));
     connect(endAction, SIGNAL(triggered()),this, SLOT(end()));
 
     centerAction = new QAction(tr("&Set Centromere"), this);
+    centerAction->setIcon(QIcon(":/image/center.png"));
     connect(centerAction, SIGNAL(triggered()),this, SLOT(center()));
 }
 

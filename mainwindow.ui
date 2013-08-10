@@ -71,7 +71,7 @@
           <item>
            <widget class="QPushButton" name="calibrateButton">
             <property name="text">
-             <string>Calibrate 1 Micro</string>
+             <string>Calibrate 10 Microns</string>
             </property>
            </widget>
           </item>
@@ -158,6 +158,9 @@
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
    <addaction name="separator"/>
+   <addaction name="actionLine_Color"/>
+   <addaction name="actionLine_Width"/>
+   <addaction name="separator"/>
    <addaction name="actionExit"/>
   </widget>
   <action name="actionOpen">
@@ -182,11 +185,19 @@
    </property>
   </action>
   <action name="actionLine_Color">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/image/color-line.png</normaloff>:/image/color-line.png</iconset>
+   </property>
    <property name="text">
     <string>Line Color</string>
    </property>
   </action>
   <action name="actionLine_Width">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/image/line_width.png</normaloff>:/image/line_width.png</iconset>
+   </property>
    <property name="text">
     <string>Line Width</string>
    </property>
@@ -197,6 +208,10 @@
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="icon.qrc">
+     <normaloff>:/image/about.png</normaloff>:/image/about.png</iconset>
+   </property>
    <property name="text">
     <string>About</string>
    </property>
