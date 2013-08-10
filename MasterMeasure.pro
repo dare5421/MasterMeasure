@@ -31,3 +31,5 @@ RESOURCES += \
     icon.qrc
 
 RC_FILE = myapp.rc
+
+HEADERS += tabview.h

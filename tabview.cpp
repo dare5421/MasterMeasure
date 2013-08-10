@@ -7,6 +7,7 @@
 #include <qmath.h>
 
 #include <QGraphicsLineItem>
+#include <QMenu>
 
 TabView::TabView(QString fileName, double micro)
 {
@@ -39,8 +40,6 @@ TabView::TabView(QString fileName, double micro)
     vLine1 = scene->addLine(10,23,10,27,pen);
     vLine2 = scene->addLine(micro*10,23,micro*10,27,pen);
 
-
-
     QList<QGraphicsItem*> groupItems;
     groupItems.append(hLine); // add more items if you want
     groupItems.append(vLine1);
@@ -54,11 +53,12 @@ TabView::TabView(QString fileName, double micro)
 //    scene->addLine(10,-10,micro*10,-10,pen)->setFlag(QGraphicsItem::ItemIsMovable, true);
 
 
-
     this->setScene(scene);
 
     isEndPoint = false;
     isDraw = false;
+
+    createActions();
 
     maxNumberOfChromosomes = 100; //danger
     numberOfChromosomes = 0;
@@ -74,49 +74,51 @@ TabView::TabView(QString fileName, double micro)
 
 void TabView::mousePressEvent(QMouseEvent *event)
 {
-    QPen penDot(Qt::black);
-    QPen penLine(Qt::red);
-    QBrush brush(Qt::red);
-    penDot.setWidth(6);
-    penLine.setWidth(2);
-    if(isDraw){
-        if(isEndPoint){
-            endPoint = event->pos();
-            endPoint = mapToScene(endPoint.x(),endPoint.y());
-            scene->addEllipse(endPoint.x(),endPoint.y(),2,2,penDot,brush);
-            scene->addLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y(),penLine);
+    if (event->button() == Qt::LeftButton) {
+        QPen penDot(Qt::black);
+        QPen penLine(Qt::red);
+        QBrush brush(Qt::red);
+        penDot.setWidth(6);
+        penLine.setWidth(2);
+        if(isDraw){
+            if(isEndPoint){
+                endPoint = event->pos();
+                endPoint = mapToScene(endPoint.x(),endPoint.y());
+                scene->addEllipse(endPoint.x(),endPoint.y(),2,2,penDot,brush);
+                scene->addLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y(),penLine);
 
-            chromosomes[numberOfChromosomes-1].setChromosomeLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()+lineLength(startPoint, endPoint));
+                chromosomes[numberOfChromosomes-1].setChromosomeLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()+lineLength(startPoint, endPoint));
 
-            if(flag_center){
-                chromosomes[numberOfChromosomes-1].setChromosomeWing1Length(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
-                flag_center = false;
-            }
-            if(flag_head){
-                chromosomes[numberOfChromosomes-1].setChromosomeHeadLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
+                if(flag_center){
+                    chromosomes[numberOfChromosomes-1].setChromosomeWing1Length(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
+                    flag_center = false;
+                }
+                if(flag_head){
+                    chromosomes[numberOfChromosomes-1].setChromosomeHeadLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
+                    flag_head = false;
+                }
+                if(flag_tail == 1){
+                    chromosomes[numberOfChromosomes-1].setChromosomeTailLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
+                    flag_tail = 2;
+                }
+
+
+                startPoint = endPoint;
+                lastPoint = endPoint;
+
+            }else {
+                startPoint = event->pos();
+                startPoint = mapToScene(startPoint.x(),startPoint.y());
+                scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush);
+                isEndPoint = true;
+                lastPoint = startPoint;
+                numberOfChromosomes++;
+                flag_start = true;
                 flag_head = false;
+                flag_center = false;
+                flag_tail = 0;
+                flag_end = false;
             }
-            if(flag_tail == 1){
-                chromosomes[numberOfChromosomes-1].setChromosomeTailLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
-                flag_tail = 2;
-            }
-
-
-            startPoint = endPoint;
-            lastPoint = endPoint;
-
-        }else {
-            startPoint = event->pos();
-            startPoint = mapToScene(startPoint.x(),startPoint.y());
-            scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush);
-            isEndPoint = true;
-            lastPoint = startPoint;
-            numberOfChromosomes++;
-            flag_start = true;
-            flag_head = false;
-            flag_center = false;
-            flag_tail = 0;
-            flag_end = false;
         }
     }
 }
@@ -140,15 +142,15 @@ void TabView::keyPressEvent(QKeyEvent * event){
         flag_center = true;
         break;
 
-    case Qt::Key_H:
-        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penHead,brushHead);
-        flag_head = true;
-        break;
+//    case Qt::Key_H:
+//        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penHead,brushHead);
+//        flag_head = true;
+//        break;
 
-    case Qt::Key_T:
-        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penTail,brushTail);
-        flag_tail = 1;
-        break;
+//    case Qt::Key_T:
+//        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penTail,brushTail);
+//        flag_tail = 1;
+//        break;
 
     case Qt::Key_E:
         isDraw = false;
@@ -187,11 +189,68 @@ void TabView::keyPressEvent(QKeyEvent * event){
 
 }
 
+void TabView::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMenu menu(this);
+//    menu.addAction(cutAct);
+//    menu.addAction(copyAct);
+//    menu.addAction(pasteAct);
+//    menu.addAction("this is it");
+    menu.addAction(startAction);
+    menu.addAction(endAction);
+    menu.addAction(centerAction);
+
+    menu.exec(event->globalPos());
+}
+
+void TabView::createActions()
+{
+    startAction = new QAction(tr("&Start drawing"), this);
+//    newAct->setShortcuts(QKeySequence::New);
+//    newAct->setStatusTip(tr("Create a new drawing"));
+    connect(startAction, SIGNAL(triggered()),this, SLOT(start()));
+
+    endAction = new QAction(tr("&End drawing"), this);
+    connect(endAction, SIGNAL(triggered()),this, SLOT(end()));
+
+    centerAction = new QAction(tr("&Set Centromere"), this);
+    connect(centerAction, SIGNAL(triggered()),this, SLOT(center()));
+}
+
+void TabView::start()
+{
+    isDraw = true;
+//    QMessageBox::information(this,"hi", "aha ");
+}
+
+void TabView::end()
+{
+    isDraw = false;
+    isEndPoint = false;
+    flag_end = true;
+    chromosomes[numberOfChromosomes-1].setChromosomeWing2Length(chromosomes[numberOfChromosomes-1].getChromosomeLength()-chromosomes[numberOfChromosomes-1].getChromosomeWing1Length());
+    if(flag_tail == 2){
+        chromosomes[numberOfChromosomes-1].setChromosomeTailLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-chromosomes[numberOfChromosomes-1].getChromosomeTailLength());
+        flag_tail = false;
+    }
+}
+
+void TabView::center()
+{
+    QPen penCenter(Qt::blue);
+
+    QBrush brushCenter(Qt::blue);
+
+    scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penCenter,brushCenter);
+    flag_center = true;
+}
+
 double TabView::lineLength(QPointF startPoint, QPointF endPoint){
 
     return sqrt(pow(startPoint.x()-endPoint.x(), 2) + pow(startPoint.y() - endPoint.y(), 2));
 
 }
+
 
 chromosome* TabView::getChromosomes(){
     double temp =0;

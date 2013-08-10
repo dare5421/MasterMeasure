@@ -7,6 +7,9 @@
 
 class TabView:public QGraphicsView
 {
+
+    Q_OBJECT
+
 public:
     TabView(QString fileName, double micro);
 
@@ -36,9 +39,22 @@ private:
 
     double lineLength(QPointF startPoint, QPointF endPoint);
 
+    //right click menu
+    void createActions();
+    QAction *startAction;
+    QAction *endAction;
+    QAction *centerAction;
+
+private slots:
+    void start();
+    void end();
+    void center();
+
 protected:
      void mousePressEvent(QMouseEvent *event);
      void keyPressEvent(QKeyEvent * event);
+
+     void contextMenuEvent(QContextMenuEvent *event);
 
 };
 
