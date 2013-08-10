@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     errorBarWing1 = new double [1000]();
     errorBarWing2 = new double [1000]();
 
-
+    createActions();
 }
 
 MainWindow::~MainWindow()
@@ -87,6 +87,19 @@ void MainWindow::closeEvent(QCloseEvent *event){
     else
         event->ignore();
 
+}
+
+void MainWindow::contextMenuEvent(QContextMenuEvent  *event)
+{
+    QMenu menu;
+
+//    menu.addAction("this is it");
+    menu.addAction(saveAction);
+//    menu.addAction(centerAction);
+//    menu.addAction(endAction);
+
+    menu.exec(event->globalPos());
+//    menu.
 }
 
 
@@ -238,6 +251,12 @@ void MainWindow::drawChromosome(int x, int y, double wing1, double wing2,double 
 
 }
 
+void MainWindow::createActions()
+{
+    saveAction = new QAction(tr("&Save Idiogram"), this);
+    connect(saveAction, SIGNAL(triggered()),this, SLOT(on_actionSave_triggered()));
+}
+
 
 double MainWindow::pixToMicro(double pix){
     return pix / (scale*micro/40);
@@ -335,3 +354,5 @@ void MainWindow::on_actionAbout_triggered()
 
                  "</p>"));
 }
+
+

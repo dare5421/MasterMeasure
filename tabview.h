@@ -39,7 +39,7 @@ private:
 
     double lineLength(QPointF startPoint, QPointF endPoint);
 
-    //right click menu
+    //right click menu stuff
     void createActions();
     QAction *startAction;
     QAction *endAction;
@@ -54,6 +54,7 @@ protected:
      void mousePressEvent(QMouseEvent *event);
      void keyPressEvent(QKeyEvent * event);
 
+     //right click menu
      void contextMenuEvent(QContextMenuEvent *event);
 
 };

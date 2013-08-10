@@ -42,6 +42,7 @@ private slots:
 
     void on_actionAbout_triggered();
 
+
 private:
     Ui::MainWindow *ui;
 
@@ -66,9 +67,14 @@ private:
     double* errorBarWing1;
     double* errorBarWing2;
 
+    void createActions();
+    QAction *saveAction;
+
 
 protected:
     void closeEvent(QCloseEvent *event);
+
+    void contextMenuEvent(QContextMenuEvent *event);
 
 };
 

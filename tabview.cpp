@@ -197,8 +197,8 @@ void TabView::contextMenuEvent(QContextMenuEvent *event)
 //    menu.addAction(pasteAct);
 //    menu.addAction("this is it");
     menu.addAction(startAction);
-    menu.addAction(endAction);
     menu.addAction(centerAction);
+    menu.addAction(endAction);
 
     menu.exec(event->globalPos());
 }
