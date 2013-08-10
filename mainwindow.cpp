@@ -17,6 +17,9 @@
 //#include <QImage>
 #include <QSvgGenerator>
 
+#include <QColorDialog>
+#include <QInputDialog>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -356,3 +359,21 @@ void MainWindow::on_actionAbout_triggered()
 }
 
 
+
+void MainWindow::on_actionLine_Color_triggered()
+{
+    QColor newColor = QColorDialog::getColor(tabView->getLinePenColor());
+    if (newColor.isValid())
+        tabView->setLinePenColor(newColor);
+}
+
+void MainWindow::on_actionLine_Width_triggered()
+{
+    bool ok;
+    int newWidth = QInputDialog::getInt(this, tr("Scribble"),
+                                        tr("Select pen width:"),
+                                        tabView->getLinePenWidth(),
+                                        1, 50, 1, &ok);
+    if (ok)
+        tabView->setLinePenWidth(newWidth);
+}

@@ -43,6 +43,10 @@ private slots:
     void on_actionAbout_triggered();
 
 
+    void on_actionLine_Color_triggered();
+
+    void on_actionLine_Width_triggered();
+
 private:
     Ui::MainWindow *ui;
 

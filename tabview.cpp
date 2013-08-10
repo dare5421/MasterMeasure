@@ -16,9 +16,9 @@ TabView::TabView(QString fileName, double micro)
     QImage image(fileName);
 
     if (image.isNull()) {
-       QMessageBox::information(this, tr("Master Measure"),
-                                tr("Cannot load %1.").arg(fileName));
-       return;
+        QMessageBox::information(this, tr("Master Measure"),
+                                 tr("Cannot load %1.").arg(fileName));
+        return;
     }
 
     scene->setBackgroundBrush(QBrush(Qt::lightGray));
@@ -35,7 +35,7 @@ TabView::TabView(QString fileName, double micro)
     text = scene->addText("10 micrometer");
     text->setPos(10,5);
     text->setDefaultTextColor(Qt::yellow);
-//    text->setFont(QFont::);
+    //    text->setFont(QFont::);
     hLine = scene->addLine(10,25,micro*10,25,pen);
     vLine1 = scene->addLine(10,23,10,27,pen);
     vLine2 = scene->addLine(micro*10,23,micro*10,27,pen);
@@ -50,7 +50,7 @@ TabView::TabView(QString fileName, double micro)
     cliGroup = scene->createItemGroup(groupItems);
     cliGroup->setFlag(QGraphicsItem::ItemIsMovable, true);
 
-//    scene->addLine(10,-10,micro*10,-10,pen)->setFlag(QGraphicsItem::ItemIsMovable, true);
+    //    scene->addLine(10,-10,micro*10,-10,pen)->setFlag(QGraphicsItem::ItemIsMovable, true);
 
 
     this->setScene(scene);
@@ -70,16 +70,19 @@ TabView::TabView(QString fileName, double micro)
     flag_center = false;
     flag_tail = 0;
     flag_end = false;
+
+    linePenColor = Qt::red;
+    linePenWidth = 2;
 }
 
 void TabView::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        QPen penDot(Qt::black);
-        QPen penLine(Qt::red);
-        QBrush brush(Qt::red);
+        QPen penDot(linePenColor.lighter(150));
+        QPen penLine(linePenColor);
+        QBrush brush(linePenColor.darker(200));
         penDot.setWidth(6);
-        penLine.setWidth(2);
+        penLine.setWidth(linePenWidth);
         if(isDraw){
             if(isEndPoint){
                 endPoint = event->pos();
@@ -142,15 +145,15 @@ void TabView::keyPressEvent(QKeyEvent * event){
         flag_center = true;
         break;
 
-//    case Qt::Key_H:
-//        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penHead,brushHead);
-//        flag_head = true;
-//        break;
+        //    case Qt::Key_H:
+        //        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penHead,brushHead);
+        //        flag_head = true;
+        //        break;
 
-//    case Qt::Key_T:
-//        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penTail,brushTail);
-//        flag_tail = 1;
-//        break;
+        //    case Qt::Key_T:
+        //        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penTail,brushTail);
+        //        flag_tail = 1;
+        //        break;
 
     case Qt::Key_E:
         isDraw = false;
@@ -171,18 +174,18 @@ void TabView::keyPressEvent(QKeyEvent * event){
         QMessageBox::information(this, tr("Master Measure"),
                                  QString::number(numberOfChromosomes)+"\nlenght:"+
                                  QString::number(chromosomes[numberOfChromosomes-1].getChromosomeLength())+"\nhead:"+
-                                 QString::number(chromosomes[numberOfChromosomes-1].getChromosomeHeadLength())+"\nwing1:"+
-                                 QString::number(chromosomes[numberOfChromosomes-1].getChromosomeWing1Length())+"\ntail:"+
-                                 QString::number(chromosomes[numberOfChromosomes-1].getChromosomeTailLength())+"\nwing2:"+
-                                 QString::number(chromosomes[numberOfChromosomes-1].getChromosomeWing2Length())
-                                 );
+                QString::number(chromosomes[numberOfChromosomes-1].getChromosomeHeadLength())+"\nwing1:"+
+                QString::number(chromosomes[numberOfChromosomes-1].getChromosomeWing1Length())+"\ntail:"+
+                QString::number(chromosomes[numberOfChromosomes-1].getChromosomeTailLength())+"\nwing2:"+
+                QString::number(chromosomes[numberOfChromosomes-1].getChromosomeWing2Length())
+                );
         break;
 
     case Qt::Key_Q:
         QString str="";
         for (int i=0; i<numberOfChromosomes;i++){
             str += QString::number(i)+" "+
-                   QString::number(chromosomes[i].getChromosomeLength())+"\n";
+                    QString::number(chromosomes[i].getChromosomeLength())+"\n";
         }
         QMessageBox::information(this, tr("Master Measure"),str);
     }
@@ -192,10 +195,10 @@ void TabView::keyPressEvent(QKeyEvent * event){
 void TabView::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu menu(this);
-//    menu.addAction(cutAct);
-//    menu.addAction(copyAct);
-//    menu.addAction(pasteAct);
-//    menu.addAction("this is it");
+    //    menu.addAction(cutAct);
+    //    menu.addAction(copyAct);
+    //    menu.addAction(pasteAct);
+    //    menu.addAction("this is it");
     menu.addAction(startAction);
     menu.addAction(centerAction);
     menu.addAction(endAction);
@@ -206,8 +209,8 @@ void TabView::contextMenuEvent(QContextMenuEvent *event)
 void TabView::createActions()
 {
     startAction = new QAction(tr("&Start drawing"), this);
-//    newAct->setShortcuts(QKeySequence::New);
-//    newAct->setStatusTip(tr("Create a new drawing"));
+    //    newAct->setShortcuts(QKeySequence::New);
+    //    newAct->setStatusTip(tr("Create a new drawing"));
     connect(startAction, SIGNAL(triggered()),this, SLOT(start()));
 
     endAction = new QAction(tr("&End drawing"), this);
@@ -220,7 +223,7 @@ void TabView::createActions()
 void TabView::start()
 {
     isDraw = true;
-//    QMessageBox::information(this,"hi", "aha ");
+    //    QMessageBox::information(this,"hi", "aha ");
 }
 
 void TabView::end()
@@ -295,4 +298,25 @@ chromosome* TabView::getSortedChromosomes(){
 
     return newChromosomes;
 }
+
+QColor TabView::getLinePenColor() const
+{
+    return linePenColor;
+}
+
+void TabView::setLinePenColor(const QColor &value)
+{
+    linePenColor = value;
+}
+
+int TabView::getLinePenWidth() const
+{
+    return linePenWidth;
+}
+
+void TabView::setLinePenWidth(int value)
+{
+    linePenWidth = value;
+}
+
 

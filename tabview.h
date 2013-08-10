@@ -17,6 +17,14 @@ public:
     int getNumberOfChromosomes();
     chromosome* getSortedChromosomes();
 
+
+
+    QColor getLinePenColor() const;
+    void setLinePenColor(const QColor &value);
+
+    int getLinePenWidth() const;
+    void setLinePenWidth(int value);
+
 private:
     QGraphicsScene *scene;
     QPointF startPoint;
@@ -44,6 +52,9 @@ private:
     QAction *startAction;
     QAction *endAction;
     QAction *centerAction;
+
+    QColor linePenColor;
+    int linePenWidth;
 
 private slots:
     void start();

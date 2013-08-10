@@ -213,6 +213,11 @@
     <string>Ctrl+S</string>
    </property>
   </action>
+  <action name="actionDot_Color">
+   <property name="text">
+    <string>Dot Color</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
