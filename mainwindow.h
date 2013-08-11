@@ -47,6 +47,10 @@ private slots:
 
     void on_actionLine_Width_triggered();
 
+    void on_actionScale_Bar_Color_triggered();
+
+    void on_tableWidget_cellClicked(int row, int column);
+
 private:
     Ui::MainWindow *ui;
 

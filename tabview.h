@@ -25,6 +25,14 @@ public:
     int getLinePenWidth() const;
     void setLinePenWidth(int value);
 
+
+
+    QColor getScaleBarPenColor() const;
+    void setScaleBarPenColor(const QColor &value);
+
+    void drawScaleBar(double micro);
+
+    void removeScaleBar();
 private:
     QGraphicsScene *scene;
     QPointF startPoint;
@@ -41,8 +49,8 @@ private:
 
     bool flag_start;
     bool flag_head;
-    bool flag_center;
-    short flag_tail;
+    short flag_center;
+    short flag_satellite;
     bool flag_end;
 
     double lineLength(QPointF startPoint, QPointF endPoint);
@@ -52,14 +60,20 @@ private:
     QAction *startAction;
     QAction *endAction;
     QAction *centerAction;
+    QAction *satelliteAction;
 
     QColor linePenColor;
     int linePenWidth;
+
+    QColor scaleBarPenColor;
+
+    QGraphicsItemGroup * cliGroup;
 
 private slots:
     void start();
     void end();
     void center();
+    void satellite();
 
 protected:
      void mousePressEvent(QMouseEvent *event);
