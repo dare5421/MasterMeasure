@@ -58,6 +58,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->insertColumn(0);
     ui->tableWidget->insertColumn(1);
     ui->tableWidget->insertColumn(2);
+    
 
 }
 
