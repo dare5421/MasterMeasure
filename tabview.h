@@ -25,6 +25,14 @@ public:
     int getLinePenWidth() const;
     void setLinePenWidth(int value);
 
+
+
+    QColor getScaleBarPenColor() const;
+    void setScaleBarPenColor(const QColor &value);
+
+    void drawScaleBar(double micro);
+
+    void removeScaleBar();
 private:
     QGraphicsScene *scene;
     QPointF startPoint;
@@ -55,6 +63,10 @@ private:
 
     QColor linePenColor;
     int linePenWidth;
+
+    QColor scaleBarPenColor;
+
+    QGraphicsItemGroup * cliGroup;
 
 private slots:
     void start();

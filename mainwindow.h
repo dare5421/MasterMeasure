@@ -47,6 +47,8 @@ private slots:
 
     void on_actionLine_Width_triggered();
 
+    void on_actionScale_Bar_Color_triggered();
+
 private:
     Ui::MainWindow *ui;
 

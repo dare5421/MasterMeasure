@@ -207,6 +207,7 @@ void MainWindow::on_showButton_clicked()
 
             myTable->setItem(j, 2, new QTableWidgetItem(QString::number(avgWing2[j])));
 
+
             myTable->setItem(j, 3, new QTableWidgetItem(QString::number(avgWing2[j]+avgWing1[j])));
 
         }
@@ -416,4 +417,13 @@ void MainWindow::on_actionLine_Width_triggered()
                                         1, 50, 1, &ok);
     if (ok)
         tabView->setLinePenWidth(newWidth);
+}
+
+void MainWindow::on_actionScale_Bar_Color_triggered()
+{
+    QColor newColor = QColorDialog::getColor(tabView->getScaleBarPenColor());
+    if (newColor.isValid())
+        tabView->setScaleBarPenColor(newColor);
+//    tabView->removeScaleBar();
+    tabView->drawScaleBar(micro);
 }

@@ -139,6 +139,9 @@
         <attribute name="horizontalHeaderCascadingSectionResizes">
          <bool>false</bool>
         </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
         <column>
          <property name="text">
           <string/>
@@ -285,6 +288,11 @@
   <action name="actionDot_Color">
    <property name="text">
     <string>Dot Color</string>
+   </property>
+  </action>
+  <action name="actionScale_Bar_Color">
+   <property name="text">
+    <string>Scale-Bar Color</string>
    </property>
   </action>
  </widget>
