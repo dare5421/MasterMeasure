@@ -20,6 +20,9 @@
 #include <QColorDialog>
 #include <QInputDialog>
 
+#include <QtCore/QTextStream>
+#include <QtCore/QFile>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -54,10 +57,9 @@ MainWindow::MainWindow(QWidget *parent) :
     createActions();
 
 //    ui->hSplitter->resize(500,500);
-    ui->tableWidget->insertRow(0);
-    ui->tableWidget->insertColumn(0);
-    ui->tableWidget->insertColumn(1);
-    ui->tableWidget->insertColumn(2);
+//    ui->tableWidget->insertRow(1);
+
+    
 
 }
 
@@ -183,6 +185,9 @@ void MainWindow::on_showButton_clicked()
             }
         }
 
+        QTableWidget *myTable = ui->tableWidget;
+        myTable->setRowCount(0);
+//        QTableWidgetItem* item = new QTableWidgetItem;
 
         //draw in bottom
         for(int j=0; j< numberOfChromosomes; j++){
@@ -190,14 +195,22 @@ void MainWindow::on_showButton_clicked()
                 scene->addLine((j-1)*70+15,0,j*70+5,0);
             drawChromosome(j*70,0, avgWing1[j],avgWing2[j], errorBarWing1[j], errorBarWing2[j]);
 
-            //            QMessageBox::information(this, tr("Master Measure"),QString::number(errorBarWing1[j]));
+            //add chromosomes to table
+            myTable->insertRow(myTable->rowCount());
+
+
+            myTable->setItem(j, 0,new QTableWidgetItem("Chromosome "+QString::number(j+1)) );
+
+
+            myTable->setItem(j, 1, new QTableWidgetItem(QString::number(avgWing1[j])));
+
+
+            myTable->setItem(j, 2, new QTableWidgetItem(QString::number(avgWing2[j])));
+
+            myTable->setItem(j, 3, new QTableWidgetItem(QString::number(avgWing2[j]+avgWing1[j])));
 
         }
 
-
-        //        QMessageBox::information(this, tr("Master Measure"),str);
-
-        //        scene->addRect(0,0,20,tabsChromosomes[0][0].getChromosomeLength(),QPen(Qt::blue));
     }
 
 }
@@ -313,6 +326,8 @@ void MainWindow::on_calibrateButton_clicked()
 
 void MainWindow::on_actionSave_triggered()
 {
+    QMessageBox::information(this, tr("Master Measure"),QString::number(ui->tableWidget->columnCount()));
+
     QString fileName = QFileDialog::getSaveFileName(this, "Save Scene", "", "vector image (*.svg)");
     //    QPixmap pixMap = QPixmap::grabWidget(ui->graphicsView);
     //    pixMap.save(fileName);
@@ -338,6 +353,23 @@ void MainWindow::on_actionSave_triggered()
     QPainter painter(&generator);
 
     scene->render(&painter);
+
+//    save table in a text file
+    QFile f( "table.csv" );  // #include <QtCore/QFile>
+
+    if( f.open( QIODevice::WriteOnly ) ){
+        QTextStream ts( &f );  // #include <QtCore/QTextStream>
+        QStringList strList;
+
+        for( int r = 0; r < ui->tableWidget->rowCount(); ++r ){
+            strList.clear();
+            for( int c = 0; c < ui->tableWidget->columnCount(); ++c ){
+                strList << "\""+ ui->tableWidget->item( r, c )->text()+"\"";
+            }
+            ts << strList.join( "," )+"\n";
+        }
+        f.close();
+    }
 
 
 }

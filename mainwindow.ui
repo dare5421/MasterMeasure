@@ -36,6 +36,9 @@
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QTabWidget" name="tabWidget">
+          <property name="cursor">
+           <cursorShape>CrossCursor</cursorShape>
+          </property>
           <property name="tabShape">
            <enum>QTabWidget::Triangular</enum>
           </property>
@@ -71,7 +74,7 @@
           <item>
            <widget class="QPushButton" name="calibrateButton">
             <property name="text">
-             <string>Calibrate 10 Microns</string>
+             <string>Calibrate 10 µ</string>
             </property>
            </widget>
           </item>
@@ -127,9 +130,35 @@
           <height>500</height>
          </size>
         </property>
+        <property name="cursor" stdset="0">
+         <cursorShape>ArrowCursor</cursorShape>
+        </property>
         <attribute name="horizontalHeaderVisible">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="horizontalHeaderCascadingSectionResizes">
          <bool>false</bool>
         </attribute>
+        <column>
+         <property name="text">
+          <string/>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>S ± SE</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>L ± SE</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>TL ± SE</string>
+         </property>
+        </column>
        </widget>
       </widget>
      </widget>
