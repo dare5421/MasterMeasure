@@ -77,8 +77,8 @@ TabView::TabView(QString fileName, double micro)
 
     flag_start = false;
     flag_head = false;
-    flag_center = false;
-    flag_tail = 0;
+    flag_center = 0;
+    flag_satellite = 0;
     flag_end = false;
 
     linePenColor = Qt::red;
@@ -102,22 +102,41 @@ void TabView::mousePressEvent(QMouseEvent *event)
 
                 chromosomes[numberOfChromosomes-1].setChromosomeLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()+lineLength(startPoint, endPoint));
 
-                if(flag_center){
+                if(flag_center == 1 ){
                     chromosomes[numberOfChromosomes-1].setChromosomeWing1Length(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
-                    flag_center = false;
+                    flag_center = 2;
                 }
                 if(flag_head){
                     chromosomes[numberOfChromosomes-1].setChromosomeHeadLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
                     flag_head = false;
                 }
-                if(flag_tail == 1){
+                if(flag_satellite == 1){
                     chromosomes[numberOfChromosomes-1].setChromosomeTailLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
-                    flag_tail = 2;
+                    flag_satellite = 2;
                 }
 
 
                 startPoint = endPoint;
                 lastPoint = endPoint;
+
+//                if(chromosomes[numberOfChromosomes-1].getTopLeft().x() > startPoint.x() ){
+//                    chromosomes[numberOfChromosomes-1].setTopLeft(QPoint(startPoint.x(),))
+//                }
+                if(chromosomes[numberOfChromosomes-1].getTopLeftX() > startPoint.x()){
+                    chromosomes[numberOfChromosomes-1].setTopLeftX(startPoint.x());
+                }
+
+                if(chromosomes[numberOfChromosomes-1].getTopLeftY() > startPoint.y()){
+                    chromosomes[numberOfChromosomes-1].setTopLeftY(startPoint.y());
+                }
+
+                if(chromosomes[numberOfChromosomes-1].getBottomRightX() < startPoint.x()){
+                    chromosomes[numberOfChromosomes-1].setBottomRightX(startPoint.x());
+                }
+
+                if(chromosomes[numberOfChromosomes-1].getBottomRightY() < startPoint.y()){
+                    chromosomes[numberOfChromosomes-1].setBottomRightY(startPoint.y());
+                }
 
             }else {
                 startPoint = event->pos();
@@ -128,9 +147,14 @@ void TabView::mousePressEvent(QMouseEvent *event)
                 numberOfChromosomes++;
                 flag_start = true;
                 flag_head = false;
-                flag_center = false;
-                flag_tail = 0;
+                flag_center = 0;
+                flag_satellite = 0;
                 flag_end = false;
+
+                chromosomes[numberOfChromosomes-1].setTopLeftX(startPoint.x());
+                chromosomes[numberOfChromosomes-1].setTopLeftY(startPoint.y());
+                chromosomes[numberOfChromosomes-1].setBottomRightX(startPoint.x());
+                chromosomes[numberOfChromosomes-1].setBottomRightY(startPoint.y());
             }
         }
     }
@@ -152,7 +176,7 @@ void TabView::keyPressEvent(QKeyEvent * event){
     switch(key){
     case Qt::Key_C:
         scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penCenter,brushCenter);
-        flag_center = true;
+        flag_center = 1;
         break;
 
         //    case Qt::Key_H:
@@ -160,20 +184,28 @@ void TabView::keyPressEvent(QKeyEvent * event){
         //        flag_head = true;
         //        break;
 
-        //    case Qt::Key_T:
-        //        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penTail,brushTail);
-        //        flag_tail = 1;
-        //        break;
+    case Qt::Key_T:
+        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penTail,brushTail);
+        if (flag_center != 2){
+            flag_head = true;
+        }else
+            flag_satellite = 1;
+        break;
 
     case Qt::Key_E:
         isDraw = false;
         isEndPoint = false;
         flag_end = true;
         chromosomes[numberOfChromosomes-1].setChromosomeWing2Length(chromosomes[numberOfChromosomes-1].getChromosomeLength()-chromosomes[numberOfChromosomes-1].getChromosomeWing1Length());
-        if(flag_tail == 2){
+        if(flag_satellite == 2){
             chromosomes[numberOfChromosomes-1].setChromosomeTailLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-chromosomes[numberOfChromosomes-1].getChromosomeTailLength());
-            flag_tail = false;
+            flag_satellite = false;
         }
+
+        scene->addRect(QRectF(QPointF(chromosomes[numberOfChromosomes-1].
+                              getTopLeftX(),chromosomes[numberOfChromosomes-1].getTopLeftY())
+                              ,QPointF(chromosomes[numberOfChromosomes-1].
+                              getBottomRightX(),chromosomes[numberOfChromosomes-1].getBottomRightY())));
         break;
 
     case Qt::Key_S:
@@ -211,6 +243,7 @@ void TabView::contextMenuEvent(QContextMenuEvent *event)
     //    menu.addAction("this is it");
     menu.addAction(startAction);
     menu.addAction(centerAction);
+    menu.addAction(satelliteAction);
     menu.addAction(endAction);
 
     menu.exec(event->globalPos());
@@ -231,7 +264,21 @@ void TabView::createActions()
     centerAction = new QAction(tr("&Set Centromere"), this);
     centerAction->setIcon(QIcon(":/image/center.png"));
     connect(centerAction, SIGNAL(triggered()),this, SLOT(center()));
+
+    satelliteAction = new QAction(tr("&Set Satellite"), this);
+    satelliteAction->setIcon(QIcon(":/image/satellite.png"));
+    connect(satelliteAction, SIGNAL(triggered()),this, SLOT(satellite()));
 }
+
+void TabView::satellite()
+{
+    scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,QPen(Qt::yellow),QBrush(Qt::cyan));
+    if (flag_center != 2){
+        flag_head = true;
+    }else
+        flag_satellite = 1;
+}
+
 
 void TabView::start()
 {
@@ -245,9 +292,9 @@ void TabView::end()
     isEndPoint = false;
     flag_end = true;
     chromosomes[numberOfChromosomes-1].setChromosomeWing2Length(chromosomes[numberOfChromosomes-1].getChromosomeLength()-chromosomes[numberOfChromosomes-1].getChromosomeWing1Length());
-    if(flag_tail == 2){
+    if(flag_satellite == 2){
         chromosomes[numberOfChromosomes-1].setChromosomeTailLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-chromosomes[numberOfChromosomes-1].getChromosomeTailLength());
-        flag_tail = false;
+        flag_satellite = false;
     }
 }
 
@@ -258,7 +305,7 @@ void TabView::center()
     QBrush brushCenter(Qt::blue);
 
     scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penCenter,brushCenter);
-    flag_center = true;
+    flag_center = 1;
 }
 
 double TabView::lineLength(QPointF startPoint, QPointF endPoint){

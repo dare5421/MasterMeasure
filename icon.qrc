@@ -10,6 +10,7 @@
         <file>stop.png</file>
         <file>pencil.png</file>
         <file>center.png</file>
+        <file>satellite.png</file>
     </qresource>
     <qresource prefix="/about">
         <file>email.png</file>

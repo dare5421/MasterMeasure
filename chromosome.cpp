@@ -1,5 +1,6 @@
 #include "chromosome.h"
 
+
 chromosome::chromosome()
 {
     chromosomeLength = 0;
@@ -7,8 +8,68 @@ chromosome::chromosome()
     chromosomeTailLength = 0;
     chromosomeWing1Length = 0;
     chromosomeWing2Length = 0;
+    index = 0;
+
+    topLeftX=0;
+    topLeftY=0;
+    bottomRightX=0;
+    bottomRightY=0;
+
+
 }
 
+
+int chromosome::getTopLeftX() const
+{
+    return topLeftX;
+}
+
+void chromosome::setTopLeftX(int value)
+{
+    topLeftX = value;
+}
+
+int chromosome::getTopLeftY() const
+{
+    return topLeftY;
+}
+
+void chromosome::setTopLeftY(int value)
+{
+    topLeftY = value;
+}
+
+int chromosome::getBottomRightX() const
+{
+    return bottomRightX;
+}
+
+void chromosome::setBottomRightX(int value)
+{
+    bottomRightX = value;
+}
+
+int chromosome::getBottomRightY() const
+{
+    return bottomRightY;
+}
+
+void chromosome::setBottomRightY(int value)
+{
+    bottomRightY = value;
+}
+
+
+
+int chromosome::getIndex() const
+{
+    return index;
+}
+
+void chromosome::setIndex(int value)
+{
+    index = value;
+}
 
 void chromosome::setChromosomeLength(double lenght){
     chromosomeLength = lenght;

@@ -327,7 +327,7 @@ void MainWindow::on_calibrateButton_clicked()
 
 void MainWindow::on_actionSave_triggered()
 {
-    QMessageBox::information(this, tr("Master Measure"),QString::number(ui->tableWidget->columnCount()));
+//    QMessageBox::information(this, tr("Master Measure"),QString::number(ui->tableWidget->columnCount()));
 
     QString fileName = QFileDialog::getSaveFileName(this, "Save Scene", "", "vector image (*.svg)");
     //    QPixmap pixMap = QPixmap::grabWidget(ui->graphicsView);
@@ -356,14 +356,21 @@ void MainWindow::on_actionSave_triggered()
     scene->render(&painter);
 
 //    save table in a text file
-    QFile f( "table.csv" );  // #include <QtCore/QFile>
+    QFile f( "table.csv" );
 
     if( f.open( QIODevice::WriteOnly ) ){
-        QTextStream ts( &f );  // #include <QtCore/QTextStream>
+        QTextStream ts( &f );
         QStringList strList;
+
+        strList.clear();
+        for(int i=0;i< ui->tableWidget->columnCount();i++){
+            strList<<"\""+ ui->tableWidget->horizontalHeaderItem(i)->text()+"\"";
+        }
+        ts<<strList.join( "," )+"\n";
 
         for( int r = 0; r < ui->tableWidget->rowCount(); ++r ){
             strList.clear();
+
             for( int c = 0; c < ui->tableWidget->columnCount(); ++c ){
                 strList << "\""+ ui->tableWidget->item( r, c )->text()+"\"";
             }
@@ -426,4 +433,9 @@ void MainWindow::on_actionScale_Bar_Color_triggered()
         tabView->setScaleBarPenColor(newColor);
 //    tabView->removeScaleBar();
     tabView->drawScaleBar(micro);
+}
+
+void MainWindow::on_tableWidget_cellClicked(int row, int column)
+{
+
 }

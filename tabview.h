@@ -49,8 +49,8 @@ private:
 
     bool flag_start;
     bool flag_head;
-    bool flag_center;
-    short flag_tail;
+    short flag_center;
+    short flag_satellite;
     bool flag_end;
 
     double lineLength(QPointF startPoint, QPointF endPoint);
@@ -60,6 +60,7 @@ private:
     QAction *startAction;
     QAction *endAction;
     QAction *centerAction;
+    QAction *satelliteAction;
 
     QColor linePenColor;
     int linePenWidth;
@@ -72,6 +73,7 @@ private slots:
     void start();
     void end();
     void center();
+    void satellite();
 
 protected:
      void mousePressEvent(QMouseEvent *event);
