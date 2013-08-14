@@ -202,10 +202,10 @@ void TabView::keyPressEvent(QKeyEvent * event){
             flag_satellite = false;
         }
 
-        scene->addRect(QRectF(QPointF(chromosomes[numberOfChromosomes-1].
-                              getTopLeftX(),chromosomes[numberOfChromosomes-1].getTopLeftY())
-                              ,QPointF(chromosomes[numberOfChromosomes-1].
-                              getBottomRightX(),chromosomes[numberOfChromosomes-1].getBottomRightY())));
+//        scene->addRect(QRectF(QPointF(chromosomes[numberOfChromosomes-1].
+//                              getTopLeftX(),chromosomes[numberOfChromosomes-1].getTopLeftY())
+//                              ,QPointF(chromosomes[numberOfChromosomes-1].
+//                              getBottomRightX(),chromosomes[numberOfChromosomes-1].getBottomRightY())));
         break;
 
     case Qt::Key_S:
@@ -344,6 +344,7 @@ chromosome* TabView::getSortedChromosomes(){
                 newChromosomes[i] = newChromosomes[j];
                 newChromosomes[j] = newChromosomes[maxNumberOfChromosomes-1];
             }
+
         }
     }
 
@@ -353,6 +354,10 @@ chromosome* TabView::getSortedChromosomes(){
             temp = newChromosomes[i].getChromosomeWing2Length();
             newChromosomes[i].setChromosomeWing2Length(newChromosomes[i].getChromosomeWing1Length());
             newChromosomes[i].setChromosomeWing1Length(temp);
+
+            temp = newChromosomes[i].getChromosomeHeadLength();
+            newChromosomes[i].setChromosomeHeadLength(newChromosomes[i].getChromosomeTailLength());
+            newChromosomes[i].setChromosomeTailLength(temp);
         }
     }
 

@@ -145,16 +145,28 @@ void MainWindow::on_showButton_clicked()
 
         double avgWing1[1000]={0};
         double avgWing2[1000]={0};
+        double satellite1[1000]={0};
+        double satellite2[1000]={0};
         for (int i=0; i< ui->tabWidget->count();i++){
             for(int j=0; j< numberOfChromosomes; j++){
                 avgWing1[j] += tabsChromosomes[i][j].getChromosomeWing1Length();
                 avgWing2[j] += tabsChromosomes[i][j].getChromosomeWing2Length();
+
+                if(tabsChromosomes[i][j].getChromosomeHeadLength()!= 0){
+                    satellite1[j] += tabsChromosomes[i][j].getChromosomeHeadLength();
+                }
+                if(tabsChromosomes[i][j].getChromosomeTailLength()!= 0){
+                    satellite2[j] += tabsChromosomes[i][j].getChromosomeTailLength();
+                }
             }
         }
 
         for(int j=0; j< numberOfChromosomes; j++){
             avgWing1[j]/= ui->tabWidget->count();
             avgWing2[j]/= ui->tabWidget->count();
+
+            satellite1[j]/= ui->tabWidget->count();
+            satellite2[j]/= ui->tabWidget->count();
         }
 
 
@@ -185,17 +197,19 @@ void MainWindow::on_showButton_clicked()
             }
         }
 
+
+
+
         QTableWidget *myTable = ui->tableWidget;
         myTable->setRowCount(0);
-//        QTableWidgetItem* item = new QTableWidgetItem;
 
         //draw in bottom
         for(int j=0; j< numberOfChromosomes; j++){
             if (j>0)
                 scene->addLine((j-1)*70+15,0,j*70+5,0);
-            drawChromosome(j*70,0, avgWing1[j],avgWing2[j], errorBarWing1[j], errorBarWing2[j]);
+            drawChromosome(j*70,0, avgWing1[j],avgWing2[j], errorBarWing1[j], errorBarWing2[j], satellite1[j], satellite2[j]);
 
-            //add chromosomes to table
+            //============ add chromosomes to table ================
             myTable->insertRow(myTable->rowCount());
 
 
@@ -216,7 +230,7 @@ void MainWindow::on_showButton_clicked()
 
 }
 
-void MainWindow::drawChromosome(int x, int y, double wing1, double wing2,double errorWing1,double errorWing2){
+void MainWindow::drawChromosome(int x, int y, double wing1, double wing2,double errorWing1,double errorWing2, double satellite1, double satellite2){
 
     QPolygonF *polygon = new QPolygonF();
     polygon->append((QPoint(x+0,-5)));
@@ -239,27 +253,67 @@ void MainWindow::drawChromosome(int x, int y, double wing1, double wing2,double 
 
 
     //add wing 1 is up
-    scene->addRect(x, y-wing1-5, 20 , wing1);
+    scene->addRect(x, y-wing1-5+satellite1, 20 , wing1-satellite1);
+
+    //add satellite wing1
+    if(satellite1 >0){
+        QPolygonF *polygon = new QPolygonF();
+        polygon->append((QPoint(x+0,-wing1+satellite1-15)));
+        polygon->append((QPoint(x+20,-wing1+satellite1-15)));
+        polygon->append((QPoint(x+10,-wing1+satellite1-10)));
+        polygon->append((QPoint(x+0,-wing1+satellite1-5)));
+        polygon->append((QPoint(x+20,-wing1+satellite1-5)));
+
+        scene->addPolygon(*polygon,QPen(Qt::black),QBrush(Qt::black));
+
+        scene->addRect(x, y-wing1-15, 20 , satellite1);
+    }
 
     textWing1->setPos(wing1Pos);
     scene->addItem(textWing1);
 
     // add error bar wing1
-    scene->addLine(x+8, y-wing1-5-errorWing1, x+12, y-wing1-5-errorWing1);
-    scene->addLine(x+10, y-wing1-5-errorWing1, x+10, y-wing1-5+errorWing1);
-    scene->addLine(x+8, y-wing1-5+errorWing1, x+12, y-wing1-5+errorWing1);
-
+    if(satellite1>0){
+        scene->addLine(x+8, y-wing1-15-errorWing1, x+12, y-wing1-15-errorWing1);
+        scene->addLine(x+10, y-wing1-15-errorWing1, x+10, y-wing1-15+errorWing1);
+        scene->addLine(x+8, y-wing1-15+errorWing1, x+12, y-wing1-15+errorWing1);
+    }else{
+        scene->addLine(x+8, y-wing1-5-errorWing1, x+12, y-wing1-5-errorWing1);
+        scene->addLine(x+10, y-wing1-5-errorWing1, x+10, y-wing1-5+errorWing1);
+        scene->addLine(x+8, y-wing1-5+errorWing1, x+12, y-wing1-5+errorWing1);
+    }
 
     //add wing 2 is down
-    scene->addRect(x, y+5, 20, wing2);
+    scene->addRect(x, y+5, 20, wing2-satellite2);
+
+    //add satellite wing1
+    if(satellite2 >0){
+        QPolygonF *polygon = new QPolygonF();
+        polygon->append((QPoint(x+0,wing2-satellite2+5)));
+        polygon->append((QPoint(x+20,wing2-satellite2+5)));
+        polygon->append((QPoint(x+10,wing2-satellite2+10)));
+        polygon->append((QPoint(x+0,wing2-satellite2+15)));
+        polygon->append((QPoint(x+20,wing2-satellite2+15)));
+
+        scene->addPolygon(*polygon,QPen(Qt::black),QBrush(Qt::black));
+
+        scene->addRect(x, y+wing2-satellite2+15, 20, satellite2);
+    }
+
 
     textWing2->setPos(wing2Pos);
     scene->addItem(textWing2);
 
     // add error bar wing2
-    scene->addLine(x+8, y+wing2+5-errorWing2, x+12, y+wing2+5-errorWing2);
-    scene->addLine(x+10, y+wing2+5-errorWing2, x+10, y+wing2+5+errorWing2);
-    scene->addLine(x+8, y+wing2+5+errorWing2, x+12, y+wing2+5+errorWing2);
+    if(satellite2>0){
+        scene->addLine(x+8, y+wing2+15-errorWing2, x+12, y+wing2+15-errorWing2);
+        scene->addLine(x+10, y+wing2+15-errorWing2, x+10, y+wing2+15+errorWing2);
+        scene->addLine(x+8, y+wing2+15+errorWing2, x+12, y+wing2+15+errorWing2);
+    }else{
+        scene->addLine(x+8, y+wing2+5-errorWing2, x+12, y+wing2+5-errorWing2);
+        scene->addLine(x+10, y+wing2+5-errorWing2, x+10, y+wing2+5+errorWing2);
+        scene->addLine(x+8, y+wing2+5+errorWing2, x+12, y+wing2+5+errorWing2);
+    }
 
 
 

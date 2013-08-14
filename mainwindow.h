@@ -29,6 +29,7 @@ public:
     double getMicro() const;
     void setMicro(double value);
 
+
 private slots:
     void on_actionOpen_triggered();
     void on_tabWidget_tabCloseRequested(int index);
@@ -70,7 +71,7 @@ private:
 
     double micro;
 
-    void drawChromosome(int x, int y, double wing1, double wing2,double errorWing1,double errorWing2);
+    void drawChromosome(int x, int y, double wing1, double wing2,double errorWing1,double errorWing2,double satellite1,double satellite2);
 
     double* errorBarWing1;
     double* errorBarWing2;
