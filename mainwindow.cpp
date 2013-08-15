@@ -145,10 +145,31 @@ void MainWindow::on_showButton_clicked()
         double avgWing2[1000]={0};
         double satellite1[1000]={0};
         double satellite2[1000]={0};
+        double avgTotalLength[1000]={0};
+
+        double minTotalLength[1000]={0};
+        double maxTotalLength[1000]={0};
+
         for (int i=0; i< ui->tabWidget->count();i++){
             for(int j=0; j< numberOfChromosomes; j++){
                 avgWing1[j/2] += tabsChromosomes[i][j].getChromosomeWing1Length();
                 avgWing2[j/2] += tabsChromosomes[i][j].getChromosomeWing2Length();
+
+                avgTotalLength[j/2] += tabsChromosomes[i][j].getChromosomeLength();
+
+                if(j%2 == 0)
+                    minTotalLength[j/2]= tabsChromosomes[i][j].getChromosomeLength();
+
+//                minTotalLength[j/2] = tabsChromosomes[i][j].getChromosomeLength() >
+
+
+                if(tabsChromosomes[i][j].getChromosomeLength() < minTotalLength[j/2]){
+                    minTotalLength[j/2]= tabsChromosomes[i][j].getChromosomeLength();
+                }
+
+                if(tabsChromosomes[i][j].getChromosomeLength() > maxTotalLength[j/2]){
+                    maxTotalLength[j/2]= tabsChromosomes[i][j].getChromosomeLength();
+                }
 
                 if(tabsChromosomes[i][j].getChromosomeHeadLength()!= 0){
                     satellite1[j/2] += tabsChromosomes[i][j].getChromosomeHeadLength();
@@ -159,9 +180,19 @@ void MainWindow::on_showButton_clicked()
             }
         }
 
+        double allTotalLength[1000]={0};
+        double allShortLength[1000]={0};
+
         for(int j=0; j< numberOfChromosomes/2; j++){
+
+            allShortLength[j] = avgWing1[j];
+
             avgWing1[j]/= (2*ui->tabWidget->count());
             avgWing2[j]/= (2*ui->tabWidget->count());
+
+            allTotalLength[j] = avgTotalLength[j];
+
+            avgTotalLength[j]/=(2*ui->tabWidget->count());
 
             satellite1[j]/= (2*ui->tabWidget->count());
             satellite2[j]/= (2*ui->tabWidget->count());
@@ -170,10 +201,14 @@ void MainWindow::on_showButton_clicked()
 
         double sigmaWing1[1000]={0};
         double sigmaWing2[1000]={0};
+        double sigmaTotalLength[1000]={0};
+
         for (int i=0; i< ui->tabWidget->count();i++){
             for(int j=0; j< numberOfChromosomes; j++){
                 sigmaWing1[j] += qPow((tabsChromosomes[i][j].getChromosomeWing1Length() - avgWing1[j]),2);
                 sigmaWing2[j] += qPow((tabsChromosomes[i][j].getChromosomeWing2Length() - avgWing2[j]),2);
+
+                sigmaTotalLength[j] += qPow((tabsChromosomes[i][j].getChromosomeLength() - avgTotalLength[j]),2);
             }
         }
 
@@ -181,17 +216,25 @@ void MainWindow::on_showButton_clicked()
             if(ui->tabWidget->count()<2){
                 sigmaWing1[j] = 0;
                 sigmaWing2[j] = 0;
+
+                sigmaTotalLength[j] = 0;
             }
             else{
                 sigmaWing1[j] /= ((2*ui->tabWidget->count())-1);
                 sigmaWing2[j] /= ((2*ui->tabWidget->count())-1);
+
+                sigmaTotalLength[j] /= ((2*ui->tabWidget->count())-1);
             }
         }
+
+        double errorBarTotalLength[1000]={0};
 
         for (int i=0; i< ui->tabWidget->count();i++){
             for(int j=0; j< numberOfChromosomes; j++){
                 errorBarWing1[j] = qSqrt(sigmaWing1[j]) / qSqrt((2*ui->tabWidget->count()));
                 errorBarWing2[j] = qSqrt(sigmaWing2[j]) / qSqrt((2*ui->tabWidget->count()));
+
+                errorBarTotalLength[j] = qSqrt(sigmaTotalLength[j]) / qSqrt((2*ui->tabWidget->count()));
             }
         }
 
@@ -213,15 +256,23 @@ void MainWindow::on_showButton_clicked()
 
             myTable->setItem(j, 0,new QTableWidgetItem("Chromosome "+QString::number(j+1)) );
 
+            myTable->setItem(j, 1, new QTableWidgetItem(QString::number(avgWing1[j])+" " +177+" " + QString::number(errorBarWing1[j])));
 
-            myTable->setItem(j, 1, new QTableWidgetItem(QString::number(avgWing1[j])));
+            myTable->setItem(j, 2, new QTableWidgetItem(QString::number(avgWing2[j])+" " +177+" " + QString::number(errorBarWing2[j])));
 
+            myTable->setItem(j, 3, new QTableWidgetItem(QString::number(avgWing2[j]+avgWing1[j])+" " +177+" " + QString::number(errorBarTotalLength[j])));
 
-            myTable->setItem(j, 2, new QTableWidgetItem(QString::number(avgWing2[j])));
+            myTable->setItem(j, 4, new QTableWidgetItem(QString::number(avgWing2[j] / avgWing1[j])));
 
+            myTable->setItem(j, 5, new QTableWidgetItem(QString::number(avgWing1[j] / avgWing2[j])));
 
-            myTable->setItem(j, 3, new QTableWidgetItem(QString::number(avgWing2[j]+avgWing1[j])));
+            myTable->setItem(j, 6, new QTableWidgetItem(QString::number(allTotalLength[j])));
 
+            myTable->setItem(j, 7, new QTableWidgetItem("% "+QString::number((avgWing2[j]+avgWing1[j])*100.0/allTotalLength[j])));
+
+            myTable->setItem(j, 8, new QTableWidgetItem("% "+QString::number(allShortLength[j]*100.0/allTotalLength[j])));
+
+            myTable->setItem(j, 9, new QTableWidgetItem("% "+QString::number(minTotalLength[j]*100.0/maxTotalLength[j])));
         }
 
     }
@@ -454,7 +505,16 @@ void MainWindow::on_actionAbout_triggered()
                     "<a href=\"mailto:dariush.zandi.n@gmail.com\"><img src=\":/about/email.png\"></a>"
                     "<a href=\"http://twitter.com/dariushzandi\"><img src=\":/about/twitter.png\"></a>"
                     "<a href=\"http://ir.linkedin.com/pub/dariush-zandi/19/789/31b\"><img src=\":/about/linkedin.png\"></a>"
-
+                 "</p>""<p>Ghader Mirzaghaderi </p>"
+                 "<p>"
+                    "<a href=\"mailto:dariush.zandi.n@gmail.com\"><img src=\":/about/email.png\"></a>"
+                    "<a href=\"http://twitter.com/dariushzandi\"><img src=\":/about/twitter.png\"></a>"
+                    "<a href=\"http://ir.linkedin.com/pub/dariush-zandi/19/789/31b\"><img src=\":/about/linkedin.png\"></a>"
+                 "</p>""<p> Khaled Mirzae</p>"
+                 "<p>"
+                    "<a href=\"mailto:dariush.zandi.n@gmail.com\"><img src=\":/about/email.png\"></a>"
+                    "<a href=\"http://twitter.com/dariushzandi\"><img src=\":/about/twitter.png\"></a>"
+                    "<a href=\"http://ir.linkedin.com/pub/dariush-zandi/19/789/31b\"><img src=\":/about/linkedin.png\"></a>"
                  "</p>"));
 }
 
