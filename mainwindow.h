@@ -52,6 +52,10 @@ private slots:
 
     void on_tableWidget_cellClicked(int row, int column);
 
+    void on_actionAuto_triggered();
+
+    void on_actionManual_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -78,6 +82,8 @@ private:
 
     void createActions();
     QAction *saveAction;
+
+    bool manualFlag;
 
 
 protected:

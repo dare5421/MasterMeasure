@@ -9,6 +9,8 @@
 #include <QGraphicsLineItem>
 #include <QMenu>
 
+//#include <QLineEdit>
+
 void TabView::drawScaleBar(double micro)
 {
     QPen pen;
@@ -42,8 +44,8 @@ void TabView::drawScaleBar(double micro)
 }
 
 void TabView::removeScaleBar(){
-//    scene->destroyItemGroup(cliGroup);
-//    scene->removeItem();
+    //    scene->destroyItemGroup(cliGroup);
+    //    scene->removeItem();
 }
 
 TabView::TabView(QString fileName, double micro)
@@ -83,6 +85,8 @@ TabView::TabView(QString fileName, double micro)
 
     linePenColor = Qt::red;
     linePenWidth = 2;
+
+    manualFlag = false;
 }
 
 void TabView::mousePressEvent(QMouseEvent *event)
@@ -119,9 +123,9 @@ void TabView::mousePressEvent(QMouseEvent *event)
                 startPoint = endPoint;
                 lastPoint = endPoint;
 
-//                if(chromosomes[numberOfChromosomes-1].getTopLeft().x() > startPoint.x() ){
-//                    chromosomes[numberOfChromosomes-1].setTopLeft(QPoint(startPoint.x(),))
-//                }
+                //                if(chromosomes[numberOfChromosomes-1].getTopLeft().x() > startPoint.x() ){
+                //                    chromosomes[numberOfChromosomes-1].setTopLeft(QPoint(startPoint.x(),))
+                //                }
                 if(chromosomes[numberOfChromosomes-1].getTopLeftX() > startPoint.x()){
                     chromosomes[numberOfChromosomes-1].setTopLeftX(startPoint.x());
                 }
@@ -155,6 +159,7 @@ void TabView::mousePressEvent(QMouseEvent *event)
                 chromosomes[numberOfChromosomes-1].setTopLeftY(startPoint.y());
                 chromosomes[numberOfChromosomes-1].setBottomRightX(startPoint.x());
                 chromosomes[numberOfChromosomes-1].setBottomRightY(startPoint.y());
+
             }
         }
     }
@@ -171,9 +176,20 @@ void TabView::keyPressEvent(QKeyEvent * event){
     QBrush brushHead(Qt::green);
     QBrush brushTail(Qt::yellow);
 
+    //    QLineEdit* textBox = new QLineEdit;
 
     int key = event->key();
     switch(key){
+
+    case Qt::Key_S:
+        isDraw = true;
+        if(manualFlag){
+            indexDialog = new ChromosomeIndexDialog(this);
+            indexDialog->show();
+        }
+
+        break;
+
     case Qt::Key_C:
         scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penCenter,brushCenter);
         flag_center = 1;
@@ -193,6 +209,21 @@ void TabView::keyPressEvent(QKeyEvent * event){
         break;
 
     case Qt::Key_E:
+
+        //        scene->addWidget(textBox);
+
+        //        QMessageBox::information(this, tr("Master Measure"),QString::number(indexDialog->getPairIndex()));
+
+        if(manualFlag){
+            QGraphicsTextItem *text;
+            text = scene->addText(QString::number(indexDialog->getPairIndex()));
+            text->setPos(lastPoint.x()-15,lastPoint.y()+15);
+            text->setDefaultTextColor(Qt::white);
+            text->setFlag(QGraphicsItem::ItemIsMovable, true);
+
+            chromosomes[numberOfChromosomes-1].setIndex(indexDialog->getPairIndex());
+        }
+
         isDraw = false;
         isEndPoint = false;
         flag_end = true;
@@ -202,15 +233,13 @@ void TabView::keyPressEvent(QKeyEvent * event){
             flag_satellite = false;
         }
 
-//        scene->addRect(QRectF(QPointF(chromosomes[numberOfChromosomes-1].
-//                              getTopLeftX(),chromosomes[numberOfChromosomes-1].getTopLeftY())
-//                              ,QPointF(chromosomes[numberOfChromosomes-1].
-//                              getBottomRightX(),chromosomes[numberOfChromosomes-1].getBottomRightY())));
+
+        //        scene->addRect(QRectF(QPointF(chromosomes[numberOfChromosomes-1].
+        //                              getTopLeftX(),chromosomes[numberOfChromosomes-1].getTopLeftY())
+        //                              ,QPointF(chromosomes[numberOfChromosomes-1].
+        //                              getBottomRightX(),chromosomes[numberOfChromosomes-1].getBottomRightY())));
         break;
 
-    case Qt::Key_S:
-        isDraw = true;
-        break;
 
     case Qt::Key_P:
         QMessageBox::information(this, tr("Master Measure"),
@@ -283,11 +312,26 @@ void TabView::satellite()
 void TabView::start()
 {
     isDraw = true;
+    if(manualFlag){
+        indexDialog = new ChromosomeIndexDialog(this);
+        indexDialog->show();
+    }
+
     //    QMessageBox::information(this,"hi", "aha ");
 }
 
 void TabView::end()
 {
+    if(manualFlag){
+        QGraphicsTextItem *text;
+        text = scene->addText(QString::number(indexDialog->getPairIndex()));
+        text->setPos(lastPoint.x()-15,lastPoint.y()+15);
+        text->setDefaultTextColor(Qt::white);
+        text->setFlag(QGraphicsItem::ItemIsMovable, true);
+
+        chromosomes[numberOfChromosomes-1].setIndex(indexDialog->getPairIndex());
+    }
+
     isDraw = false;
     isEndPoint = false;
     flag_end = true;
@@ -331,24 +375,42 @@ int TabView::getNumberOfChromosomes(){
     return numberOfChromosomes;
 }
 
-chromosome* TabView::getSortedChromosomes(){
+chromosome* TabView::getSortedChromosomes(bool manual){
 
     chromosome *newChromosomes = new chromosome[maxNumberOfChromosomes];
     for (int i=0; i<numberOfChromosomes; i++){
         newChromosomes[i] = chromosomes[i];
     }
-    for(int i=0; i<numberOfChromosomes; i++){
-        for(int j=0; j<i; j++){
-            if(newChromosomes[i].getChromosomeLength()>newChromosomes[j].getChromosomeLength()){
-                newChromosomes[maxNumberOfChromosomes-1] = newChromosomes[i];
-                newChromosomes[i] = newChromosomes[j];
-                newChromosomes[j] = newChromosomes[maxNumberOfChromosomes-1];
-            }
 
+    if(manual){
+
+        for(int i=0; i<numberOfChromosomes; i++){
+            for(int j=0; j<i; j++){
+                if(newChromosomes[i].getIndex() < newChromosomes[j].getIndex()){
+                    newChromosomes[maxNumberOfChromosomes-1] = newChromosomes[i];
+                    newChromosomes[i] = newChromosomes[j];
+                    newChromosomes[j] = newChromosomes[maxNumberOfChromosomes-1];
+                }
+
+            }
         }
+
+    }else{
+
+        for(int i=0; i<numberOfChromosomes; i++){
+            for(int j=0; j<i; j++){
+                if(newChromosomes[i].getChromosomeLength() > newChromosomes[j].getChromosomeLength()){
+                    newChromosomes[maxNumberOfChromosomes-1] = newChromosomes[i];
+                    newChromosomes[i] = newChromosomes[j];
+                    newChromosomes[j] = newChromosomes[maxNumberOfChromosomes-1];
+                }
+
+            }
+        }
+
     }
 
-    double temp =0;
+    double temp = 0;
     for(int i=0; i<numberOfChromosomes; i++){
         if(newChromosomes[i].getChromosomeWing1Length() > newChromosomes[i].getChromosomeWing2Length()){
             temp = newChromosomes[i].getChromosomeWing2Length();
@@ -358,6 +420,10 @@ chromosome* TabView::getSortedChromosomes(){
             temp = newChromosomes[i].getChromosomeHeadLength();
             newChromosomes[i].setChromosomeHeadLength(newChromosomes[i].getChromosomeTailLength());
             newChromosomes[i].setChromosomeTailLength(temp);
+
+//            temp = newChromosomes[i].getChromosomeTailLength();
+//            newChromosomes[i].setChromosomeTailLength(newChromosomes[i].getChromosomeHeadLength());
+//            newChromosomes[i].setChromosomeHeadLength(temp);
         }
     }
 
@@ -395,4 +461,14 @@ void TabView::setScaleBarPenColor(const QColor &value)
     scaleBarPenColor = value;
 }
 
+
+bool TabView::getManualFlag() const
+{
+    return manualFlag;
+}
+
+void TabView::setManualFlag(bool value)
+{
+    manualFlag = value;
+}
 

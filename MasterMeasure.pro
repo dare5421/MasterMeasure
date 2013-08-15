@@ -17,15 +17,18 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     tabview.cpp \
     chromosome.cpp \
-    scaledialog.cpp
+    scaledialog.cpp \
+    chromosomeindexdialog.cpp
 
 HEADERS  += mainwindow.h \
     tabview.h \
     chromosome.h \
-    scaledialog.h
+    scaledialog.h \
+    chromosomeindexdialog.h
 
 FORMS    += mainwindow.ui \
-    scaledialog.ui
+    scaledialog.ui \
+    chromosomeindexdialog.ui
 
 RESOURCES += \
     icon.qrc

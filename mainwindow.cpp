@@ -56,10 +56,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createActions();
 
-//    ui->hSplitter->resize(500,500);
-//    ui->tableWidget->insertRow(1);
-
-    
+    manualFlag = false;
+    ui->actionAuto->setChecked(true);
 
 }
 
@@ -120,7 +118,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     ui->tabWidget->removeTab(index);
 }
 
-
+// =============================== show bottom things ===========================
 void MainWindow::on_showButton_clicked()
 {
 
@@ -136,7 +134,7 @@ void MainWindow::on_showButton_clicked()
 
     if((ui->tabWidget->currentIndex())>=0){
         for (int i=0; i< ui->tabWidget->count();i++){
-            tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes();
+            tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes(manualFlag);
         }
 
 
@@ -149,24 +147,24 @@ void MainWindow::on_showButton_clicked()
         double satellite2[1000]={0};
         for (int i=0; i< ui->tabWidget->count();i++){
             for(int j=0; j< numberOfChromosomes; j++){
-                avgWing1[j] += tabsChromosomes[i][j].getChromosomeWing1Length();
-                avgWing2[j] += tabsChromosomes[i][j].getChromosomeWing2Length();
+                avgWing1[j/2] += tabsChromosomes[i][j].getChromosomeWing1Length();
+                avgWing2[j/2] += tabsChromosomes[i][j].getChromosomeWing2Length();
 
                 if(tabsChromosomes[i][j].getChromosomeHeadLength()!= 0){
-                    satellite1[j] += tabsChromosomes[i][j].getChromosomeHeadLength();
+                    satellite1[j/2] += tabsChromosomes[i][j].getChromosomeHeadLength();
                 }
                 if(tabsChromosomes[i][j].getChromosomeTailLength()!= 0){
-                    satellite2[j] += tabsChromosomes[i][j].getChromosomeTailLength();
+                    satellite2[j/2] += tabsChromosomes[i][j].getChromosomeTailLength();
                 }
             }
         }
 
-        for(int j=0; j< numberOfChromosomes; j++){
-            avgWing1[j]/= ui->tabWidget->count();
-            avgWing2[j]/= ui->tabWidget->count();
+        for(int j=0; j< numberOfChromosomes/2; j++){
+            avgWing1[j]/= (2*ui->tabWidget->count());
+            avgWing2[j]/= (2*ui->tabWidget->count());
 
-            satellite1[j]/= ui->tabWidget->count();
-            satellite2[j]/= ui->tabWidget->count();
+            satellite1[j]/= (2*ui->tabWidget->count());
+            satellite2[j]/= (2*ui->tabWidget->count());
         }
 
 
@@ -180,20 +178,20 @@ void MainWindow::on_showButton_clicked()
         }
 
         for(int j=0; j< numberOfChromosomes; j++){
-            if(numberOfChromosomes == 1){
+            if(ui->tabWidget->count()<2){
                 sigmaWing1[j] = 0;
                 sigmaWing2[j] = 0;
             }
             else{
-                sigmaWing1[j] /= (numberOfChromosomes-1);
-                sigmaWing2[j] /= (numberOfChromosomes-1);
+                sigmaWing1[j] /= ((2*ui->tabWidget->count())-1);
+                sigmaWing2[j] /= ((2*ui->tabWidget->count())-1);
             }
         }
 
         for (int i=0; i< ui->tabWidget->count();i++){
             for(int j=0; j< numberOfChromosomes; j++){
-                errorBarWing1[j] = qSqrt(sigmaWing1[j]) / qSqrt(numberOfChromosomes);
-                errorBarWing2[j] = qSqrt(sigmaWing2[j]) / qSqrt(numberOfChromosomes);
+                errorBarWing1[j] = qSqrt(sigmaWing1[j]) / qSqrt((2*ui->tabWidget->count()));
+                errorBarWing2[j] = qSqrt(sigmaWing2[j]) / qSqrt((2*ui->tabWidget->count()));
             }
         }
 
@@ -204,7 +202,7 @@ void MainWindow::on_showButton_clicked()
         myTable->setRowCount(0);
 
         //draw in bottom
-        for(int j=0; j< numberOfChromosomes; j++){
+        for(int j=0; j< numberOfChromosomes/2; j++){
             if (j>0)
                 scene->addLine((j-1)*70+15,0,j*70+5,0);
             drawChromosome(j*70,0, avgWing1[j],avgWing2[j], errorBarWing1[j], errorBarWing2[j], satellite1[j], satellite2[j]);
@@ -295,7 +293,7 @@ void MainWindow::drawChromosome(int x, int y, double wing1, double wing2,double 
         polygon->append((QPoint(x+0,wing2-satellite2+15)));
         polygon->append((QPoint(x+20,wing2-satellite2+15)));
 
-        scene->addPolygon(*polygon,QPen(Qt::black),QBrush(Qt::black));
+        scene->addPolygon(*polygon);
 
         scene->addRect(x, y+wing2-satellite2+15, 20, satellite2);
     }
@@ -353,7 +351,7 @@ void MainWindow::on_calibrateButton_clicked()
 
     if((ui->tabWidget->currentIndex())>=0){
         for (int i=0; i< ui->tabWidget->count();i++){
-            tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes();
+            tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes(false);
         }
 
         QString str="";
@@ -492,4 +490,18 @@ void MainWindow::on_actionScale_Bar_Color_triggered()
 void MainWindow::on_tableWidget_cellClicked(int row, int column)
 {
 
+}
+
+void MainWindow::on_actionAuto_triggered()
+{
+    ui->actionManual->setChecked(false);
+    manualFlag = false;
+    tabView->setManualFlag(false);
+}
+
+void MainWindow::on_actionManual_triggered()
+{
+    ui->actionAuto->setChecked(false);
+    manualFlag = true;
+    tabView->setManualFlag(true);
 }

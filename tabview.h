@@ -4,6 +4,7 @@
 #include <QGraphicsView>
 
 #include "chromosome.h"
+#include "chromosomeindexdialog.h"
 
 class TabView:public QGraphicsView
 {
@@ -15,7 +16,7 @@ public:
 
     chromosome* getChromosomes();
     int getNumberOfChromosomes();
-    chromosome* getSortedChromosomes();
+    chromosome* getSortedChromosomes(bool manual);
 
 
 
@@ -33,6 +34,9 @@ public:
     void drawScaleBar(double micro);
 
     void removeScaleBar();
+    bool getManualFlag() const;
+    void setManualFlag(bool value);
+
 private:
     QGraphicsScene *scene;
     QPointF startPoint;
@@ -68,6 +72,11 @@ private:
     QColor scaleBarPenColor;
 
     QGraphicsItemGroup * cliGroup;
+
+
+    ChromosomeIndexDialog *indexDialog;
+
+    bool manualFlag;
 
 private slots:
     void start();

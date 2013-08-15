@@ -11,6 +11,8 @@
         <file>pencil.png</file>
         <file>center.png</file>
         <file>satellite.png</file>
+        <file>hand.png</file>
+        <file>auto.png</file>
     </qresource>
     <qresource prefix="/about">
         <file>email.png</file>
