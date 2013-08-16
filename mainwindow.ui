@@ -19,6 +19,9 @@
   <property name="windowTitle">
    <string>Master Measure</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <property name="styleSheet">
     <string notr="true"/>
