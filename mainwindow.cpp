@@ -70,7 +70,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::currentPath());
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
     if (!fileName.isEmpty()) {
 
         tabView = new TabView(fileName, micro);
