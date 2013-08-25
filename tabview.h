@@ -6,6 +6,9 @@
 #include "chromosome.h"
 #include "chromosomeindexdialog.h"
 
+//#include <QStack>
+#include <QList>
+
 class TabView:public QGraphicsView
 {
 
@@ -77,6 +80,12 @@ private:
     ChromosomeIndexDialog *indexDialog;
 
     bool manualFlag;
+
+//    QStack<QPointF> pointStack;
+    QList<QGraphicsItem*> lineList;
+    QList<QPointF> startPointList;
+
+    int itemIndex;
 
 private slots:
     void start();

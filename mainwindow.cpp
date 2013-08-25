@@ -66,8 +66,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-
 void MainWindow::on_actionOpen_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
@@ -113,7 +111,6 @@ void MainWindow::contextMenuEvent(QContextMenuEvent  *event)
     menu.exec(event->globalPos());
 //    menu.
 }
-
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
@@ -512,13 +509,17 @@ void MainWindow::createActions()
     saveAction = new QAction(tr("&Save Idiogram"), this);
     saveAction->setIcon(QIcon(":/image/floppy.png"));
     connect(saveAction, SIGNAL(triggered()),this, SLOT(on_actionSave_triggered()));
-}
 
+//    undoAction = undoStack->createUndoAction(this, tr("&Undo"));
+//    undoAction->setShortcuts(QKeySequence::Undo);
+
+//    redoAction = undoStack->createRedoAction(this, tr("&Redo"));
+//    redoAction->setShortcuts(QKeySequence::Redo);
+}
 
 double MainWindow::pixToMicro(double pix){
     return pix / (scale*micro/40);
 }
-
 
 void MainWindow::on_calibrateButton_clicked()
 {
@@ -647,8 +648,6 @@ void MainWindow::on_actionAbout_triggered()
                  "</p>"
                  "<p>(C) 2013 </p>")   );
 }
-
-
 
 void MainWindow::on_actionLine_Color_triggered()
 {

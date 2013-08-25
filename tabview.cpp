@@ -87,6 +87,10 @@ TabView::TabView(QString fileName, double micro)
     linePenWidth = 2;
 
     manualFlag = false;
+
+    itemIndex = 0;
+
+
 }
 
 void TabView::mousePressEvent(QMouseEvent *event)
@@ -101,8 +105,22 @@ void TabView::mousePressEvent(QMouseEvent *event)
             if(isEndPoint){
                 endPoint = event->pos();
                 endPoint = mapToScene(endPoint.x(),endPoint.y());
-                scene->addEllipse(endPoint.x(),endPoint.y(),2,2,penDot,brush);
-                scene->addLine(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y(),penLine);
+
+                QGraphicsEllipseItem* ellipse = new QGraphicsEllipseItem(endPoint.x(),endPoint.y(),2,2);
+                QGraphicsLineItem* line = new QGraphicsLineItem(startPoint.x(),startPoint.y(),endPoint.x(),endPoint.y());
+
+                QList<QGraphicsItem*> groupItems;
+
+                ellipse->setPen(penDot);
+                ellipse->setBrush(brush);
+                line->setPen(penLine);
+
+                groupItems.append(ellipse);
+                groupItems.append(line);
+
+                lineList.append(scene->createItemGroup(groupItems));
+                itemIndex++;
+
 
                 chromosomes[numberOfChromosomes-1].setChromosomeLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()+lineLength(startPoint, endPoint));
 
@@ -119,9 +137,13 @@ void TabView::mousePressEvent(QMouseEvent *event)
                     flag_satellite = 2;
                 }
 
+//                pointStack.push(startPoint);
+//                pointStack.push(endPoint);
 
                 startPoint = endPoint;
                 lastPoint = endPoint;
+
+                startPointList<<startPoint;
 
                 //                if(chromosomes[numberOfChromosomes-1].getTopLeft().x() > startPoint.x() ){
                 //                    chromosomes[numberOfChromosomes-1].setTopLeft(QPoint(startPoint.x(),))
@@ -145,7 +167,17 @@ void TabView::mousePressEvent(QMouseEvent *event)
             }else {
                 startPoint = event->pos();
                 startPoint = mapToScene(startPoint.x(),startPoint.y());
-                scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush);
+
+                lineList.clear();
+                startPointList.clear();
+
+                lineList.insert(0, scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush));
+                startPointList.insert(0,startPoint);
+
+                itemIndex++;
+
+//                lineList[itemIndex++]=scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush);
+
                 isEndPoint = true;
                 lastPoint = startPoint;
                 numberOfChromosomes++;
@@ -181,7 +213,31 @@ void TabView::keyPressEvent(QKeyEvent * event){
     int key = event->key();
     switch(key){
 
+    case Qt::Key_Delete:
+    {
+        if(!lineList.isEmpty()){
+
+            scene->removeItem(lineList.last());
+
+            if(startPointList.count()>1)
+                startPointList.removeLast();
+            else // this is start point of chromosome
+            {
+                isDraw = false;
+                isEndPoint = false;
+            }
+
+            startPoint = startPointList.last();
+
+            lineList.removeLast();
+
+        }
+
+        break;
+    }
+
     case Qt::Key_S:
+    {
         isDraw = true;
         if(manualFlag){
             indexDialog = new ChromosomeIndexDialog(this);
@@ -189,30 +245,33 @@ void TabView::keyPressEvent(QKeyEvent * event){
         }
 
         break;
+    }
 
     case Qt::Key_C:
+    {
         scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penCenter,brushCenter);
         flag_center = 1;
         break;
+    }
 
-        //    case Qt::Key_H:
-        //        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penHead,brushHead);
-        //        flag_head = true;
-        //        break;
+            //    case Qt::Key_H:
+            //        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penHead,brushHead);
+            //        flag_head = true;
+            //        break;
 
     case Qt::Key_T:
+    {
         scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penTail,brushTail);
         if (flag_center != 2){
             flag_head = true;
         }else
             flag_satellite = 1;
         break;
+    }
 
     case Qt::Key_E:
 
-        //        scene->addWidget(textBox);
-
-        //        QMessageBox::information(this, tr("Master Measure"),QString::number(indexDialog->getPairIndex()));
+    {
 
         if(manualFlag){
             QGraphicsTextItem *text;
@@ -239,9 +298,11 @@ void TabView::keyPressEvent(QKeyEvent * event){
         //                              ,QPointF(chromosomes[numberOfChromosomes-1].
         //                              getBottomRightX(),chromosomes[numberOfChromosomes-1].getBottomRightY())));
         break;
+    }
 
 
     case Qt::Key_P:
+    {
         QMessageBox::information(this, tr("Master Measure"),
                                  QString::number(numberOfChromosomes)+"\nlenght:"+
                                  QString::number(chromosomes[numberOfChromosomes-1].getChromosomeLength())+"\nhead:"+
@@ -251,15 +312,23 @@ void TabView::keyPressEvent(QKeyEvent * event){
                 QString::number(chromosomes[numberOfChromosomes-1].getChromosomeWing2Length())
                 );
         break;
+    }
+
 
     case Qt::Key_Q:
+    {
         QString str="";
         for (int i=0; i<numberOfChromosomes;i++){
             str += QString::number(i)+" "+
                     QString::number(chromosomes[i].getChromosomeLength())+"\n";
         }
         QMessageBox::information(this, tr("Master Measure"),str);
+        break;
     }
+
+
+    }
+
 
 }
 
