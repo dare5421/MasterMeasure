@@ -1,7 +1,7 @@
 #include "scaledialog.h"
 #include "ui_scaledialog.h"
 #include <QCloseEvent>
-//#include <QMessageBox>
+
 #include "tabview.h"
 #include "mainwindow.h"
 

@@ -35,4 +35,4 @@ RESOURCES += \
 
 RC_FILE = myapp.rc
 
-HEADERS += tabview.h
+

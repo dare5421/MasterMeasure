@@ -37,9 +37,6 @@
           <verstretch>1</verstretch>
          </sizepolicy>
         </property>
-        <property name="cursor">
-         <cursorShape>CrossCursor</cursorShape>
-        </property>
         <property name="tabPosition">
          <enum>QTabWidget::North</enum>
         </property>
@@ -177,6 +174,24 @@
    <addaction name="actionExit"/>
   </widget>
   <widget class="QDockWidget" name="dockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>165</width>
+     <height>111</height>
+    </size>
+   </property>
+   <property name="whatsThis">
+    <string>Ideogram</string>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="windowTitle">
+    <string>Ideogram and Probablistics Features</string>
+   </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
@@ -209,13 +224,13 @@
          <cursorShape>ArrowCursor</cursorShape>
         </property>
         <attribute name="horizontalHeaderVisible">
-         <bool>true</bool>
+         <bool>false</bool>
         </attribute>
         <attribute name="horizontalHeaderCascadingSectionResizes">
          <bool>false</bool>
         </attribute>
         <attribute name="verticalHeaderVisible">
-         <bool>true</bool>
+         <bool>false</bool>
         </attribute>
         <column>
          <property name="text">

@@ -82,8 +82,11 @@ private:
     bool manualFlag;
 
 //    QStack<QPointF> pointStack;
-    QList<QGraphicsItem*> lineList;
+    QList<QGraphicsItem*> itemList;
     QList<QPointF> startPointList;
+
+    enum type{sPointType, lineType, centromereType, satelliteType};
+    QList<type> typeList;
 
     int itemIndex;
 

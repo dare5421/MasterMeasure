@@ -9,7 +9,8 @@
 #include <QGraphicsLineItem>
 #include <QMenu>
 
-//#include <QLineEdit>
+#include <QScrollBar>
+
 
 void TabView::drawScaleBar(double micro)
 {
@@ -35,8 +36,6 @@ void TabView::drawScaleBar(double micro)
     groupItems.append(vLine1);
     groupItems.append(vLine2);
     groupItems.append(text);
-    // Finally  construct the group
-
 
     cliGroup = scene->createItemGroup(groupItems);
 
@@ -52,6 +51,8 @@ TabView::TabView(QString fileName, double micro)
 {
     scene = new QGraphicsScene;
 
+
+
     QImage image(fileName);
 
     if (image.isNull()) {
@@ -66,6 +67,10 @@ TabView::TabView(QString fileName, double micro)
     drawScaleBar(micro);
 
     this->setScene(scene);
+
+    this->setCursor(QCursor(Qt::CrossCursor));
+    this->verticalScrollBar()->setCursor(QCursor(Qt::ArrowCursor));
+    this->horizontalScrollBar()->setCursor(QCursor(Qt::ArrowCursor));
 
     isEndPoint = false;
     isDraw = false;
@@ -118,36 +123,32 @@ void TabView::mousePressEvent(QMouseEvent *event)
                 groupItems.append(ellipse);
                 groupItems.append(line);
 
-                lineList.append(scene->createItemGroup(groupItems));
+                itemList.append(scene->createItemGroup(groupItems));
+                typeList << lineType;
                 itemIndex++;
 
 
-                chromosomes[numberOfChromosomes-1].setChromosomeLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()+lineLength(startPoint, endPoint));
+//                chromosomes[numberOfChromosomes-1].setChromosomeLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()+lineLength(startPoint, endPoint));
 
-                if(flag_center == 1 ){
-                    chromosomes[numberOfChromosomes-1].setChromosomeWing1Length(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
-                    flag_center = 2;
-                }
-                if(flag_head){
-                    chromosomes[numberOfChromosomes-1].setChromosomeHeadLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
-                    flag_head = false;
-                }
-                if(flag_satellite == 1){
-                    chromosomes[numberOfChromosomes-1].setChromosomeTailLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
-                    flag_satellite = 2;
-                }
+//                if(flag_center == 1 ){
+//                    chromosomes[numberOfChromosomes-1].setChromosomeWing1Length(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
+//                    flag_center = 2;
+//                }
+//                if(flag_head){
+//                    chromosomes[numberOfChromosomes-1].setChromosomeHeadLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
+//                    flag_head = false;
+//                }
+//                if(flag_satellite == 1){
+//                    chromosomes[numberOfChromosomes-1].setChromosomeTailLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-lineLength(startPoint, endPoint));
+//                    flag_satellite = 2;
+//                }
 
-//                pointStack.push(startPoint);
-//                pointStack.push(endPoint);
 
                 startPoint = endPoint;
                 lastPoint = endPoint;
 
                 startPointList<<startPoint;
 
-                //                if(chromosomes[numberOfChromosomes-1].getTopLeft().x() > startPoint.x() ){
-                //                    chromosomes[numberOfChromosomes-1].setTopLeft(QPoint(startPoint.x(),))
-                //                }
                 if(chromosomes[numberOfChromosomes-1].getTopLeftX() > startPoint.x()){
                     chromosomes[numberOfChromosomes-1].setTopLeftX(startPoint.x());
                 }
@@ -168,15 +169,15 @@ void TabView::mousePressEvent(QMouseEvent *event)
                 startPoint = event->pos();
                 startPoint = mapToScene(startPoint.x(),startPoint.y());
 
-                lineList.clear();
+                itemList.clear();
                 startPointList.clear();
+                typeList.clear();
 
-                lineList.insert(0, scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush));
-                startPointList.insert(0,startPoint);
+                itemList << scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush);
+                startPointList << startPoint;
+                typeList << sPointType;
 
                 itemIndex++;
-
-//                lineList[itemIndex++]=scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush);
 
                 isEndPoint = true;
                 lastPoint = startPoint;
@@ -208,28 +209,52 @@ void TabView::keyPressEvent(QKeyEvent * event){
     QBrush brushHead(Qt::green);
     QBrush brushTail(Qt::yellow);
 
-    //    QLineEdit* textBox = new QLineEdit;
-
     int key = event->key();
     switch(key){
 
     case Qt::Key_Delete:
     {
-        if(!lineList.isEmpty()){
+        if(!itemList.isEmpty()){
 
-            scene->removeItem(lineList.last());
+            scene->removeItem(itemList.last());
 
-            if(startPointList.count()>1)
-                startPointList.removeLast();
-            else // this is start point of chromosome
-            {
-                isDraw = false;
-                isEndPoint = false;
+            switch(typeList.last()){
+
+                case sPointType:
+                {
+                    isDraw = false;
+                    isEndPoint = false;
+
+                    numberOfChromosomes--;
+                    flag_head = false;
+                    flag_center = 0;
+                    flag_satellite = 0;
+
+
+                    break;
+                }
+                case lineType:
+                {
+                    startPointList.removeLast();
+
+                    break;
+                }
+                case centromereType:
+                {
+                    startPointList.removeLast();
+                    break;
+                }
+                case satelliteType:
+                {
+                    startPointList.removeLast();
+                    break;
+                }
             }
 
             startPoint = startPointList.last();
 
-            lineList.removeLast();
+            itemList.removeLast();
+            typeList.removeLast();
 
         }
 
@@ -249,19 +274,22 @@ void TabView::keyPressEvent(QKeyEvent * event){
 
     case Qt::Key_C:
     {
-        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penCenter,brushCenter);
+        itemList << scene->addEllipse(startPoint.x()-4,startPoint.y()-4,8,8,penCenter,brushCenter);
+        startPointList << startPoint;
+        typeList << centromereType;
+
         flag_center = 1;
+
         break;
     }
 
-            //    case Qt::Key_H:
-            //        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penHead,brushHead);
-            //        flag_head = true;
-            //        break;
 
     case Qt::Key_T:
     {
-        scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,penTail,brushTail);
+        itemList << scene->addEllipse(startPoint.x()-4,startPoint.y()-4,8,8,penTail,brushTail);
+        startPointList << startPoint;
+        typeList << satelliteType;
+
         if (flag_center != 2){
             flag_head = true;
         }else
@@ -272,6 +300,49 @@ void TabView::keyPressEvent(QKeyEvent * event){
     case Qt::Key_E:
 
     {
+//        ====================
+
+        bool cFlag = false;
+        bool satFlag = false;
+
+        while(!typeList.isEmpty()){
+            switch(typeList.last()){
+
+                case sPointType:
+                {
+
+                    break;
+                }
+                case lineType:
+                {
+                    chromosomes[numberOfChromosomes-1].setChromosomeLength
+                        (chromosomes[numberOfChromosomes-1].getChromosomeLength()+
+                        lineLength(startPointList[startPointList.size()-2], startPointList.last()));
+                    break;
+                }
+                case centromereType:
+                {
+                    chromosomes[numberOfChromosomes-1].setChromosomeWing2Length
+                            (chromosomes[numberOfChromosomes-1].getChromosomeLength());
+                    cFlag = satFlag ? false : true ;
+                    break;
+                }
+                case satelliteType:
+                {
+                    chromosomes[numberOfChromosomes-1].setChromosomeTailLength
+                                (chromosomes[numberOfChromosomes-1].getChromosomeLength());
+                    satFlag = true;
+
+                    break;
+                }
+
+            }
+
+            itemList.removeLast();
+            typeList.removeLast();
+            startPointList.removeLast();
+        }
+//        ====================
 
         if(manualFlag){
             QGraphicsTextItem *text;
@@ -286,17 +357,26 @@ void TabView::keyPressEvent(QKeyEvent * event){
         isDraw = false;
         isEndPoint = false;
         flag_end = true;
-        chromosomes[numberOfChromosomes-1].setChromosomeWing2Length(chromosomes[numberOfChromosomes-1].getChromosomeLength()-chromosomes[numberOfChromosomes-1].getChromosomeWing1Length());
-        if(flag_satellite == 2){
-            chromosomes[numberOfChromosomes-1].setChromosomeTailLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-chromosomes[numberOfChromosomes-1].getChromosomeTailLength());
-            flag_satellite = false;
+        chromosomes[numberOfChromosomes-1].setChromosomeWing1Length
+                (chromosomes[numberOfChromosomes-1].getChromosomeLength()-
+                chromosomes[numberOfChromosomes-1].getChromosomeWing2Length());
+
+//        if(flag_satellite == 2){
+//            chromosomes[numberOfChromosomes-1].setChromosomeTailLength(chromosomes[numberOfChromosomes-1].getChromosomeLength()-chromosomes[numberOfChromosomes-1].getChromosomeTailLength());
+//            flag_satellite = false;
+//        }
+        if(cFlag){
+            chromosomes[numberOfChromosomes-1].setChromosomeTailLength
+                    (chromosomes[numberOfChromosomes-1].getChromosomeLength()-
+                    chromosomes[numberOfChromosomes-1].getChromosomeTailLength());
         }
 
 
-        //        scene->addRect(QRectF(QPointF(chromosomes[numberOfChromosomes-1].
-        //                              getTopLeftX(),chromosomes[numberOfChromosomes-1].getTopLeftY())
-        //                              ,QPointF(chromosomes[numberOfChromosomes-1].
-        //                              getBottomRightX(),chromosomes[numberOfChromosomes-1].getBottomRightY())));
+/*                scene->addRect(QRectF(QPointF(chromosomes[numberOfChromosomes-1].
+                                      getTopLeftX(),chromosomes[numberOfChromosomes-1].getTopLeftY())
+                                      ,QPointF(chromosomes[numberOfChromosomes-1].
+                                      getBottomRightX(),chromosomes[numberOfChromosomes-1].getBottomRightY())));
+*/
         break;
     }
 

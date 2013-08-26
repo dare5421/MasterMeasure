@@ -5,16 +5,13 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 
-
-
 #include <QDesktopWidget>
 #include <QPolygonF>
 #include <QGraphicsTextItem>
 #include <QPointF>
 
 #include <QtMath>
-//#include <QPixmap>
-//#include <QImage>
+
 #include <QSvgGenerator>
 
 #include <QColorDialog>
