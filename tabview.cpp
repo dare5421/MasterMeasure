@@ -366,9 +366,10 @@ void TabView::keyPressEvent(QKeyEvent * event){
 //            flag_satellite = false;
 //        }
         if(cFlag){
-            chromosomes[numberOfChromosomes-1].setChromosomeTailLength
-                    (chromosomes[numberOfChromosomes-1].getChromosomeLength()-
-                    chromosomes[numberOfChromosomes-1].getChromosomeTailLength());
+            if(chromosomes[numberOfChromosomes-1].getChromosomeTailLength()!=0)
+                chromosomes[numberOfChromosomes-1].setChromosomeTailLength
+                        (chromosomes[numberOfChromosomes-1].getChromosomeLength()-
+                        chromosomes[numberOfChromosomes-1].getChromosomeTailLength());
         }
 
 
