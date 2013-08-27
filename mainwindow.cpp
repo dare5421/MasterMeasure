@@ -37,14 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
     tabsChromosomes = new chromosome* [maxTab];
 
     scene = new QGraphicsScene(this);
-    //    scene->addRect(0,0,10,10,QPen(Qt::blue));
-    //    scene->addRect(0,-20,10,20,QPen(Qt::red));
-    //    scene->addLine(-500, 0, 500,0);
-    //    scene->addLine(0, -500, 0,500);
-    ui->graphicsView->setScene(scene);
-    //    ui->graphicsView->setSceneRect(0,0,1000,1000);
 
-    //    dialogFlag = false;
+    ui->graphicsView->setScene(scene);
 
     micro = 11.9;
 
@@ -690,4 +684,44 @@ void MainWindow::on_actionManual_triggered()
     ui->actionAuto->setChecked(false);
     manualFlag = true;
     tabView->setManualFlag(true);
+}
+
+void MainWindow::on_actionSave_Tab_triggered()
+{
+    TabView *tab = currentTabView();
+    if (tab == 0)
+        return;
+
+    for (;;) {
+        QString fileName = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
+
+        if (fileName.isEmpty())
+            fileName = QFileDialog::getSaveFileName(this);
+        if (fileName.isEmpty())
+            break;
+
+        QFile file(fileName);
+        if (!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::warning(this,
+                                tr("File error"),
+                                tr("Failed to open\n%1").arg(fileName));
+//            tab->setFileName(QString());
+        } else {
+            QTextStream stream(&file);
+            tab->save(stream);
+//            tab->setFileName(fileName);
+
+            int index = ui->tabWidget->indexOf(tab);
+//            Q_ASSERT(index != -1);
+            ui->tabWidget->setTabText(index, fileName);
+
+            break;
+        }
+    }
+
+}
+
+TabView* MainWindow::currentTabView()const
+{
+    return (TabView*)ui->tabWidget->currentWidget();
 }

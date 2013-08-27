@@ -622,3 +622,8 @@ void TabView::setManualFlag(bool value)
     manualFlag = value;
 }
 
+void TabView::save(QTextStream &stream)
+{
+
+}
+

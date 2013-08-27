@@ -8,6 +8,7 @@
 
 //#include <QStack>
 #include <QList>
+#include <QTextStream>
 
 class TabView:public QGraphicsView
 {
@@ -40,6 +41,7 @@ public:
     bool getManualFlag() const;
     void setManualFlag(bool value);
 
+    void save(QTextStream &stream);
 private:
     QGraphicsScene *scene;
     QPointF startPoint;

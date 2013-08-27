@@ -29,6 +29,7 @@ public:
     double getMicro() const;
     void setMicro(double value);
 
+    TabView *currentTabView() const;
 
 private slots:
     void on_actionOpen_triggered();
@@ -55,6 +56,8 @@ private slots:
     void on_actionAuto_triggered();
 
     void on_actionManual_triggered();
+
+    void on_actionSave_Tab_triggered();
 
 private:
     Ui::MainWindow *ui;
