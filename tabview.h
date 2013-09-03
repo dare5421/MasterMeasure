@@ -20,6 +20,10 @@ class TabView:public QGraphicsView
 public:
 
     enum type{sPointType, lineType, centromereType, satelliteType};
+
+    int type2int(ChromosomeShape::type t);
+    ChromosomeShape::type int2type(int i);
+
     TabView(QString fileName, double micro);
 
     chromosome* getChromosomes();

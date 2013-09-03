@@ -62,8 +62,8 @@ TabView::TabView(QString fileName, double micro)
     }
 
     scene->setBackgroundBrush(QBrush(Qt::lightGray));
-//    scene->addPixmap(QPixmap::fromImage(image));
-    chromosomeShape.addImage(scene->addPixmap(QPixmap::fromImage(image)));
+    scene->addPixmap(QPixmap::fromImage(image));
+    chromosomeShape.addImage(&image);
 
     drawScaleBar(micro);
 
@@ -657,13 +657,14 @@ void TabView::save(QDataStream &stream)
         stream << shape.getItemList().count();
         for (int j=0; j< shape.getItemList().count();j++){
             if(i==0&&j==0){
-                const QGraphicsPixmapItem* image=shape.getImage();
-                stream << image;
+//                QImage* image=shape.getImage();
+                stream << shape.getImage();
             }
             const QPointF point = shape.getPointList()[j];
             const ChromosomeShape::type pointType=shape.getTypeList()[j];
-            const QGraphicsItem *item = shape.getItemList()[j];
-            stream << item << point << pointType;
+            type2int(pointType);
+//            const QGraphicsItem *item = shape.getItemList()[j];
+            stream << point << pointType;
         }
     }
 }
@@ -671,7 +672,7 @@ void TabView::save(QDataStream &stream)
 bool TabView::load(QDataStream &stream){
 
     shapeList.clear();
-    QGraphicsPixmapItem* image;
+    QImage* image = new QImage;
     int numberOfShape;
     int numberOfItem;
 
@@ -686,32 +687,34 @@ bool TabView::load(QDataStream &stream){
         stream >> numberOfItem;
         for (int j=0; j< numberOfItem;j++){
             if(i==0&&j==0){
-                stream >> image;
+                stream >> *image;
                 shape.addImage(image);
             }
             QPointF point;
-            ChromosomeShape::type pointType;
-            QGraphicsItem *item;
-            stream >> item >> point >> pointType;
-            shape.addItem(item);
+            int pointTypeInt;
+//            QGraphicsItem *item;
+            stream >> point >> pointTypeInt;
+//            shape.addItem(item);
+            ChromosomeShape::type pointType = int2type(pointTypeInt);
             shape.addPoint(point);
             shape.addType(pointType);
         }
         shapeList << shape;
     }
 
-//    while (!stream.atEnd()) {
-//        QPointF point ;
-//        ChromosomeShape::type pointType;
-//        QGraphicsItem *item ;
-
-//        stream >> item >> point >> pointType;
-
-//        if (stream.status() != QTextStream::Ok)
-//            return false;
-//    }
 
 
 
     return true;
+}
+
+
+int TabView::type2int(ChromosomeShape::type t)
+{
+    return (int)t;
+}
+
+ChromosomeShape::type TabView::int2type(int i)
+{
+    return (ChromosomeShape::type)i;
 }

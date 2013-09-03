@@ -22,7 +22,7 @@ void ChromosomeShape::addPoint(QPointF point)
     pointList << point;
 }
 
-void ChromosomeShape::addImage(QGraphicsPixmapItem *img)
+void ChromosomeShape::addImage(QImage *img)
 {
     image = img;
 }
@@ -79,7 +79,7 @@ void ChromosomeShape::clearLists()
     clearPointList();
 }
 
-QGraphicsPixmapItem *ChromosomeShape::getImage() const
+QImage *ChromosomeShape::getImage() const
 {
     return image;
 }

@@ -728,6 +728,23 @@ TabView* MainWindow::currentTabView()const
 
 void MainWindow::on_actionOpen_Saved_Tab_triggered()
 {
+
+//    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+//    if (!fileName.isEmpty()) {
+
+//        tabView = new TabView(fileName, micro);
+
+//        ui->tabWidget->addTab(tabView,"someTab");
+
+//        QFileInfo fileInfo = fileName;
+//        ui->tabWidget->setTabText(ui->tabWidget->count()-1,fileInfo.baseName());
+
+//        ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
+
+//        tabView->setManualFlag(manualFlag);
+
+//    }
+//    =========================================
     QString fileName = QFileDialog::getOpenFileName(this);
     if (fileName.isEmpty())
         return;
@@ -750,4 +767,6 @@ void MainWindow::on_actionOpen_Saved_Tab_triggered()
         delete tab;
         return;
     }
+//    ============================================
+
 }
