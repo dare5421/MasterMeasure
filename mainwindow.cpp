@@ -707,7 +707,7 @@ void MainWindow::on_actionSave_Tab_triggered()
                                 tr("Failed to open\n%1").arg(fileName));
 //            tab->setFileName(QString());
         } else {
-            QTextStream stream(&file);
+            QDataStream stream(&file);
             tab->save(stream);
 //            tab->setFileName(fileName);
 
@@ -724,4 +724,30 @@ void MainWindow::on_actionSave_Tab_triggered()
 TabView* MainWindow::currentTabView()const
 {
     return (TabView*)ui->tabWidget->currentWidget();
+}
+
+void MainWindow::on_actionOpen_Saved_Tab_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this);
+    if (fileName.isEmpty())
+        return;
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::warning(this,
+                            tr("File error"),
+                            tr("Failed to open\n%1").arg(fileName));
+        return;
+    }
+    QDataStream stream(&file);
+
+    TabView *tab = new TabView(fileName, micro);
+
+    if (!tab->load(stream)) {
+        QMessageBox::warning(this,
+                            tr("Parse error"),
+                            tr("Failed to parse\n%1").arg(fileName));
+        delete tab;
+        return;
+    }
 }

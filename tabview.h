@@ -8,7 +8,9 @@
 
 //#include <QStack>
 #include <QList>
-#include <QTextStream>
+#include <QDataStream>
+
+#include "chromosomeshape.h"
 
 class TabView:public QGraphicsView
 {
@@ -16,6 +18,8 @@ class TabView:public QGraphicsView
     Q_OBJECT
 
 public:
+
+    enum type{sPointType, lineType, centromereType, satelliteType};
     TabView(QString fileName, double micro);
 
     chromosome* getChromosomes();
@@ -41,7 +45,8 @@ public:
     bool getManualFlag() const;
     void setManualFlag(bool value);
 
-    void save(QTextStream &stream);
+    void save(QDataStream &stream);
+    bool load(QDataStream &stream);
 private:
     QGraphicsScene *scene;
     QPointF startPoint;
@@ -84,11 +89,14 @@ private:
     bool manualFlag;
 
 //    QStack<QPointF> pointStack;
-    QList<QGraphicsItem*> itemList;
-    QList<QPointF> startPointList;
 
-    enum type{sPointType, lineType, centromereType, satelliteType};
-    QList<type> typeList;
+//    QList<QGraphicsItem*> itemList;
+//    QList<QPointF> startPointList;
+//    QList<type> typeList;
+
+    ChromosomeShape chromosomeShape;
+
+    QList<ChromosomeShape> shapeList;
 
     int itemIndex;
 

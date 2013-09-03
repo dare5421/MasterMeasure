@@ -18,13 +18,15 @@ SOURCES += main.cpp\
     tabview.cpp \
     chromosome.cpp \
     scaledialog.cpp \
-    chromosomeindexdialog.cpp
+    chromosomeindexdialog.cpp \
+    chromosomeshape.cpp
 
 HEADERS  += mainwindow.h \
     tabview.h \
     chromosome.h \
     scaledialog.h \
-    chromosomeindexdialog.h
+    chromosomeindexdialog.h \
+    chromosomeshape.h
 
 FORMS    += mainwindow.ui \
     scaledialog.ui \

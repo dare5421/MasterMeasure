@@ -59,6 +59,8 @@ private slots:
 
     void on_actionSave_Tab_triggered();
 
+    void on_actionOpen_Saved_Tab_triggered();
+
 private:
     Ui::MainWindow *ui;
 

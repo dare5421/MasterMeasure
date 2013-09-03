@@ -62,7 +62,8 @@ TabView::TabView(QString fileName, double micro)
     }
 
     scene->setBackgroundBrush(QBrush(Qt::lightGray));
-    scene->addPixmap(QPixmap::fromImage(image));
+//    scene->addPixmap(QPixmap::fromImage(image));
+    chromosomeShape.addImage(scene->addPixmap(QPixmap::fromImage(image)));
 
     drawScaleBar(micro);
 
@@ -121,10 +122,15 @@ void TabView::mousePressEvent(QMouseEvent *event)
                 line->setPen(penLine);
 
                 groupItems.append(ellipse);
-                groupItems.append(line);
+                groupItems.append(line);                
 
-                itemList.append(scene->createItemGroup(groupItems));
-                typeList << lineType;
+//                itemList.append(scene->createItemGroup(groupItems));
+//                typeList << lineType;
+//                startPointList<<endPoint;
+                chromosomeShape.addItem(scene->createItemGroup(groupItems));
+                chromosomeShape.addType(ChromosomeShape::type(lineType));
+                chromosomeShape.addPoint(endPoint);
+
                 itemIndex++;
 
 
@@ -147,7 +153,6 @@ void TabView::mousePressEvent(QMouseEvent *event)
                 startPoint = endPoint;
                 lastPoint = endPoint;
 
-                startPointList<<startPoint;
 
                 if(chromosomes[numberOfChromosomes-1].getTopLeftX() > startPoint.x()){
                     chromosomes[numberOfChromosomes-1].setTopLeftX(startPoint.x());
@@ -169,13 +174,17 @@ void TabView::mousePressEvent(QMouseEvent *event)
                 startPoint = event->pos();
                 startPoint = mapToScene(startPoint.x(),startPoint.y());
 
-                itemList.clear();
-                startPointList.clear();
-                typeList.clear();
+//                itemList.clear();
+//                startPointList.clear();
+//                typeList.clear();
+                chromosomeShape.clearLists();
+//                itemList << scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush);
+//                startPointList << startPoint;
+//                typeList << sPointType;
 
-                itemList << scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush);
-                startPointList << startPoint;
-                typeList << sPointType;
+                chromosomeShape.addItem(scene->addEllipse(startPoint.x(),startPoint.y(),2,2,penDot,brush));
+                chromosomeShape.addType(ChromosomeShape::type(sPointType));
+                chromosomeShape.addPoint(startPoint);
 
                 itemIndex++;
 
@@ -214,11 +223,11 @@ void TabView::keyPressEvent(QKeyEvent * event){
 
     case Qt::Key_Delete:
     {
-        if(!itemList.isEmpty()){
+        if(!chromosomeShape.getItemList().isEmpty()){
 
-            scene->removeItem(itemList.last());
+            scene->removeItem(chromosomeShape.getItemList().last());
 
-            switch(typeList.last()){
+            switch(chromosomeShape.getTypeList().last()){
 
                 case sPointType:
                 {
@@ -235,26 +244,33 @@ void TabView::keyPressEvent(QKeyEvent * event){
                 }
                 case lineType:
                 {
-                    startPointList.removeLast();
+//                    startPointList.removeLast();
+                    chromosomeShape.removeLastPoint();
 
                     break;
                 }
                 case centromereType:
                 {
-                    startPointList.removeLast();
+//                    startPointList.removeLast();
+                    chromosomeShape.removeLastPoint();
+
                     break;
                 }
                 case satelliteType:
                 {
-                    startPointList.removeLast();
+//                    startPointList.removeLast();
+                    chromosomeShape.removeLastPoint();
+
                     break;
                 }
             }
 
-            startPoint = startPointList.last();
+            startPoint = chromosomeShape.getPointList().last();
 
-            itemList.removeLast();
-            typeList.removeLast();
+//            itemList.removeLast();
+//            typeList.removeLast();
+            chromosomeShape.removeLastItem();
+            chromosomeShape.removeLastType();
 
         }
 
@@ -274,9 +290,12 @@ void TabView::keyPressEvent(QKeyEvent * event){
 
     case Qt::Key_C:
     {
-        itemList << scene->addEllipse(startPoint.x()-4,startPoint.y()-4,8,8,penCenter,brushCenter);
-        startPointList << startPoint;
-        typeList << centromereType;
+//        itemList << scene->addEllipse(startPoint.x()-4,startPoint.y()-4,8,8,penCenter,brushCenter);
+//        startPointList << startPoint;
+//        typeList << centromereType;
+        chromosomeShape.addItem(scene->addEllipse(startPoint.x()-4,startPoint.y()-4,8,8,penCenter,brushCenter));
+        chromosomeShape.addType(ChromosomeShape::type(centromereType) );
+        chromosomeShape.addPoint(startPoint);
 
         flag_center = 1;
 
@@ -286,9 +305,13 @@ void TabView::keyPressEvent(QKeyEvent * event){
 
     case Qt::Key_T:
     {
-        itemList << scene->addEllipse(startPoint.x()-4,startPoint.y()-4,8,8,penTail,brushTail);
-        startPointList << startPoint;
-        typeList << satelliteType;
+//        itemList << scene->addEllipse(startPoint.x()-4,startPoint.y()-4,8,8,penTail,brushTail);
+//        startPointList << startPoint;
+//        typeList << satelliteType;
+
+        chromosomeShape.addItem(scene->addEllipse(startPoint.x()-4,startPoint.y()-4,8,8,penTail,brushTail));
+        chromosomeShape.addType(ChromosomeShape::type(satelliteType) );
+        chromosomeShape.addPoint(startPoint);
 
         if (flag_center != 2){
             flag_head = true;
@@ -300,13 +323,14 @@ void TabView::keyPressEvent(QKeyEvent * event){
     case Qt::Key_E:
 
     {
-//        ====================
-
         bool cFlag = false;
         bool satFlag = false;
 
-        while(!typeList.isEmpty()){
-            switch(typeList.last()){
+        if (!chromosomeShape.getItemList().isEmpty())
+            shapeList << chromosomeShape;
+
+        while(!chromosomeShape.getTypeList().isEmpty()){
+            switch(chromosomeShape.getTypeList().last()){
 
                 case sPointType:
                 {
@@ -317,7 +341,7 @@ void TabView::keyPressEvent(QKeyEvent * event){
                 {
                     chromosomes[numberOfChromosomes-1].setChromosomeLength
                         (chromosomes[numberOfChromosomes-1].getChromosomeLength()+
-                        lineLength(startPointList[startPointList.size()-2], startPointList.last()));
+                        lineLength(chromosomeShape.getPointList()[chromosomeShape.getPointList().size()-2], chromosomeShape.getPointList().last()));
                     break;
                 }
                 case centromereType:
@@ -338,11 +362,14 @@ void TabView::keyPressEvent(QKeyEvent * event){
 
             }
 
-            itemList.removeLast();
-            typeList.removeLast();
-            startPointList.removeLast();
+//            itemList.removeLast();
+//            typeList.removeLast();
+//            startPointList.removeLast();
+
+            chromosomeShape.removeLastItem();
+            chromosomeShape.removeLastPoint();
+            chromosomeShape.removeLastType();
         }
-//        ====================
 
         if(manualFlag){
             QGraphicsTextItem *text;
@@ -622,8 +649,69 @@ void TabView::setManualFlag(bool value)
     manualFlag = value;
 }
 
-void TabView::save(QTextStream &stream)
+void TabView::save(QDataStream &stream)
 {
-
+    stream << shapeList.count();
+    for(int i = 0 ; i< shapeList.count(); i++){
+        const ChromosomeShape shape = shapeList[i];
+        stream << shape.getItemList().count();
+        for (int j=0; j< shape.getItemList().count();j++){
+            if(i==0&&j==0){
+                const QGraphicsPixmapItem* image=shape.getImage();
+                stream << image;
+            }
+            const QPointF point = shape.getPointList()[j];
+            const ChromosomeShape::type pointType=shape.getTypeList()[j];
+            const QGraphicsItem *item = shape.getItemList()[j];
+            stream << item << point << pointType;
+        }
+    }
 }
 
+bool TabView::load(QDataStream &stream){
+
+    shapeList.clear();
+    QGraphicsPixmapItem* image;
+    int numberOfShape;
+    int numberOfItem;
+
+
+//    if(!stream.atEnd()){
+//        stream >> image;
+//    }
+
+    stream >> numberOfShape;
+    for(int i = 0 ; i< numberOfShape; i++){
+        ChromosomeShape shape;
+        stream >> numberOfItem;
+        for (int j=0; j< numberOfItem;j++){
+            if(i==0&&j==0){
+                stream >> image;
+                shape.addImage(image);
+            }
+            QPointF point;
+            ChromosomeShape::type pointType;
+            QGraphicsItem *item;
+            stream >> item >> point >> pointType;
+            shape.addItem(item);
+            shape.addPoint(point);
+            shape.addType(pointType);
+        }
+        shapeList << shape;
+    }
+
+//    while (!stream.atEnd()) {
+//        QPointF point ;
+//        ChromosomeShape::type pointType;
+//        QGraphicsItem *item ;
+
+//        stream >> item >> point >> pointType;
+
+//        if (stream.status() != QTextStream::Ok)
+//            return false;
+//    }
+
+
+
+    return true;
+}
