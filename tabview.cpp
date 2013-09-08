@@ -114,9 +114,81 @@ TabView::TabView(QString fileName, double micro, QDataStream &stream)
 
     scene->setBackgroundBrush(QBrush(Qt::lightGray));
     scene->addPixmap(QPixmap::fromImage(image));
-
-
     this->setScene(scene);
+
+    linePenColor = Qt::red;//we should save color and other thing and load it
+    linePenWidth = 2;
+
+    QPen penDot(linePenColor.lighter(150));
+    QPen penLine(linePenColor);
+    QBrush brush(linePenColor.darker(200));
+    penDot.setWidth(6);
+    penLine.setWidth(linePenWidth);
+
+    QPen penCenter(Qt::blue);
+    QPen penHead(Qt::green);
+    QPen penTail(Qt::cyan);
+
+    QBrush brushCenter(Qt::blue);
+    QBrush brushHead(Qt::green);
+    QBrush brushTail(Qt::yellow);
+
+
+
+    for (int i=0;i<shapeList.size();i++){
+//        for(int j=0;j<shapeList[i].getPointList().size();j++){
+
+//        }
+        int tempCounter = 0;
+        QList<ChromosomeShape::type> typeList = shapeList[i].getTypeList();
+        QPointF sP;
+        foreach (QPointF p, shapeList[i].getPointList()) {
+            //switch case on point type and draw what you want
+            switch(type2int(typeList[tempCounter++])){
+
+            case 0:// sPointType:
+            {
+                scene->addEllipse(p.x(),p.y(),2,2,penDot,brush);
+                sP = p;
+                break;
+            }
+            case 1://lineType:
+            {
+                QGraphicsEllipseItem* ellipse = new QGraphicsEllipseItem(p.x(),p.y(),2,2);
+                QGraphicsLineItem* line = new QGraphicsLineItem(sP.x(),sP.y(),p.x(),p.y());
+
+                QList<QGraphicsItem*> groupItems;
+
+                ellipse->setPen(penDot);
+                ellipse->setBrush(brush);
+                line->setPen(penLine);
+
+                groupItems.append(ellipse);
+                groupItems.append(line);
+
+                scene->createItemGroup(groupItems);
+
+                sP = p;
+                break;
+            }
+            case 2://centromereType:
+            {
+                scene->addEllipse(p.x()-4,p.y()-4,8,8,penCenter,brushCenter);
+                break;
+            }
+            case 3://satelliteType:
+            {
+                scene->addEllipse(p.x()-4,p.y()-4,8,8,penTail,brushTail);
+                break;
+            }
+            }
+
+        }
+//        foreach (ChromosomeShape::type t,shapeList[i].getTypeList()){
+
+
+//        }
+    }
 
 }
 
