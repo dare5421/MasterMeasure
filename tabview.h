@@ -25,6 +25,7 @@ public:
     ChromosomeShape::type int2type(int i);
 
     TabView(QString fileName, double micro);
+    TabView(QString fileName, double micro, QDataStream &stream);
 
     chromosome* getChromosomes();
     int getNumberOfChromosomes();

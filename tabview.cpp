@@ -51,8 +51,6 @@ TabView::TabView(QString fileName, double micro)
 {
     scene = new QGraphicsScene;
 
-
-
     QImage image(fileName);
 
     if (image.isNull()) {
@@ -63,7 +61,7 @@ TabView::TabView(QString fileName, double micro)
 
     scene->setBackgroundBrush(QBrush(Qt::lightGray));
     scene->addPixmap(QPixmap::fromImage(image));
-    chromosomeShape.addImage(&image);
+    chromosomeShape.addImage(image);
 
     drawScaleBar(micro);
 
@@ -96,6 +94,29 @@ TabView::TabView(QString fileName, double micro)
 
     itemIndex = 0;
 
+
+}
+
+TabView::TabView(QString fileName, double micro, QDataStream &stream)
+{
+    scene = new QGraphicsScene;
+
+
+    if (!this->load(stream)) {
+        QMessageBox::warning(this,
+                            tr("Parse error"),
+                            tr("Failed to parse\n%1").arg(fileName));
+        return;
+    }
+
+    QImage image = shapeList[0].getImage();
+
+
+    scene->setBackgroundBrush(QBrush(Qt::lightGray));
+    scene->addPixmap(QPixmap::fromImage(image));
+
+
+    this->setScene(scene);
 
 }
 
@@ -657,7 +678,6 @@ void TabView::save(QDataStream &stream)
         stream << shape.getItemList().count();
         for (int j=0; j< shape.getItemList().count();j++){
             if(i==0&&j==0){
-//                QImage* image=shape.getImage();
                 stream << shape.getImage();
             }
             const QPointF point = shape.getPointList()[j];
@@ -672,7 +692,7 @@ void TabView::save(QDataStream &stream)
 bool TabView::load(QDataStream &stream){
 
     shapeList.clear();
-    QImage* image = new QImage;
+    QImage image ;
     int numberOfShape;
     int numberOfItem;
 
@@ -687,7 +707,7 @@ bool TabView::load(QDataStream &stream){
         stream >> numberOfItem;
         for (int j=0; j< numberOfItem;j++){
             if(i==0&&j==0){
-                stream >> *image;
+                stream >> image;
                 shape.addImage(image);
             }
             QPointF point;

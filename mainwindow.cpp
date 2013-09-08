@@ -758,15 +758,17 @@ void MainWindow::on_actionOpen_Saved_Tab_triggered()
     }
     QDataStream stream(&file);
 
-    TabView *tab = new TabView(fileName, micro);
+    tabView = new TabView(fileName, micro, stream);
+    ui->tabWidget->addTab(tabView,"someTab");
+    ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
 
-    if (!tab->load(stream)) {
-        QMessageBox::warning(this,
-                            tr("Parse error"),
-                            tr("Failed to parse\n%1").arg(fileName));
-        delete tab;
-        return;
-    }
+//    if (!tab->load(stream)) {
+//        QMessageBox::warning(this,
+//                            tr("Parse error"),
+//                            tr("Failed to parse\n%1").arg(fileName));
+//        delete tab;
+//        return;
+//    }
 //    ============================================
 
 }

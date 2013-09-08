@@ -13,7 +13,7 @@ public:
     void addItem(QGraphicsItem* item);
     void addType(type itemType);
     void addPoint(QPointF point);
-    void addImage(QImage *img);
+    void addImage(QImage img);
 
     void removeLastItem();
     void removeLastType();
@@ -29,13 +29,13 @@ public:
 
     void clearLists();
 
-    QImage *getImage() const;
+    QImage getImage() const;
 
 private:
     QList<QGraphicsItem *> itemList;
     QList<QPointF> pointList;
     QList<type> typeList;
-    QImage * image;
+    QImage  image;
 };
 
 #endif // SHAPE_H
