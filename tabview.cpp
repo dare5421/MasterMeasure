@@ -99,6 +99,11 @@ TabView::TabView(QString fileName, double micro)
 
 TabView::TabView(QString fileName, double micro, QDataStream &stream)
 {
+
+    // we need to save number of chromosomes draw before
+    // we should save color and other thing and load it
+
+
     scene = new QGraphicsScene;
 
 
@@ -116,7 +121,32 @@ TabView::TabView(QString fileName, double micro, QDataStream &stream)
     scene->addPixmap(QPixmap::fromImage(image));
     this->setScene(scene);
 
-    linePenColor = Qt::red;//we should save color and other thing and load it
+    drawScaleBar(micro);
+
+    this->setCursor(QCursor(Qt::CrossCursor));
+    this->verticalScrollBar()->setCursor(QCursor(Qt::ArrowCursor));
+    this->horizontalScrollBar()->setCursor(QCursor(Qt::ArrowCursor));
+
+
+    isEndPoint = false;
+    isDraw = false;
+
+    createActions();
+
+    maxNumberOfChromosomes = 100; //danger
+    numberOfChromosomes = 0;
+
+    chromosomes = new chromosome[maxNumberOfChromosomes];
+
+    flag_start = false;
+    flag_head = false;
+    flag_center = 0;
+    flag_satellite = 0;
+    flag_end = false;
+    manualFlag = false;
+
+
+    linePenColor = Qt::red;
     linePenWidth = 2;
 
     QPen penDot(linePenColor.lighter(150));
