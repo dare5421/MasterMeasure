@@ -774,8 +774,7 @@ void TabView::setManualFlag(bool value)
 
 //============================== save & load ===========================
 
-void TabView::save(QDataStream &stream)
-{
+void TabView::save(QDataStream &stream){
 
     stream << numberOfChromosomes;
 
@@ -804,8 +803,6 @@ bool TabView::load(QDataStream &stream){
 
 
     stream >> numberOfChromosomes;
-
-//    chromosomes = new chromosome[100];
 
     for(int i = 0; i < numberOfChromosomes; i++){
         stream >> chromosomes[i];
