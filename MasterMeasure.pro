@@ -26,7 +26,8 @@ HEADERS  += mainwindow.h \
     chromosome.h \
     scaledialog.h \
     chromosomeindexdialog.h \
-    chromosomeshape.h
+    chromosomeshape.h \
+    overloads.h
 
 FORMS    += mainwindow.ui \
     scaledialog.ui \

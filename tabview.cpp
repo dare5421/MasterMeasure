@@ -11,6 +11,7 @@
 
 #include <QScrollBar>
 
+#include "overloads.h"
 
 void TabView::drawScaleBar(double micro)
 {
@@ -103,6 +104,10 @@ TabView::TabView(QString fileName, double micro, QDataStream &stream)
     // we need to save number of chromosomes draw before
     // we should save color and other thing and load it
 
+    maxNumberOfChromosomes = 100; //danger
+    numberOfChromosomes = 0;
+
+    chromosomes = new chromosome[maxNumberOfChromosomes];
 
     scene = new QGraphicsScene;
 
@@ -131,12 +136,7 @@ TabView::TabView(QString fileName, double micro, QDataStream &stream)
     isEndPoint = false;
     isDraw = false;
 
-    createActions();
-
-    maxNumberOfChromosomes = 100; //danger
-    numberOfChromosomes = 0;
-
-    chromosomes = new chromosome[maxNumberOfChromosomes];
+    createActions();    
 
     flag_start = false;
     flag_head = false;
@@ -772,8 +772,17 @@ void TabView::setManualFlag(bool value)
     manualFlag = value;
 }
 
+//============================== save & load ===========================
+
 void TabView::save(QDataStream &stream)
 {
+
+    stream << numberOfChromosomes;
+
+    for(int i = 0; i < numberOfChromosomes; i++){
+        stream << chromosomes[i];
+    }
+
     stream << shapeList.count();
     for(int i = 0 ; i< shapeList.count(); i++){
         const ChromosomeShape shape = shapeList[i];
@@ -792,6 +801,16 @@ void TabView::save(QDataStream &stream)
 }
 
 bool TabView::load(QDataStream &stream){
+
+
+    stream >> numberOfChromosomes;
+
+//    chromosomes = new chromosome[100];
+
+    for(int i = 0; i < numberOfChromosomes; i++){
+        stream >> chromosomes[i];
+    }
+
 
     shapeList.clear();
     QImage image ;

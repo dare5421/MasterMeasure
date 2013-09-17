@@ -6,6 +6,7 @@ class chromosome
 {
 public:
     chromosome();
+    ~chromosome();
 
     void setChromosomeLength(double lenght);
     void setChromosomeHeadLength(double lenght);

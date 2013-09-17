@@ -18,6 +18,11 @@ chromosome::chromosome()
 
 }
 
+chromosome::~chromosome()
+{
+
+}
+
 
 int chromosome::getTopLeftX() const
 {
