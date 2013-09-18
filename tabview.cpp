@@ -132,6 +132,7 @@ TabView::TabView(QString fileName, double micro, QDataStream &stream)
     this->verticalScrollBar()->setCursor(QCursor(Qt::ArrowCursor));
     this->horizontalScrollBar()->setCursor(QCursor(Qt::ArrowCursor));
 
+//    manualFlag = false;
 
     isEndPoint = false;
     isDraw = false;
@@ -143,7 +144,6 @@ TabView::TabView(QString fileName, double micro, QDataStream &stream)
     flag_center = 0;
     flag_satellite = 0;
     flag_end = false;
-    manualFlag = false;
 
 
     linePenColor = Qt::red;
@@ -165,19 +165,26 @@ TabView::TabView(QString fileName, double micro, QDataStream &stream)
 
 
 
+    QPointF sP;
     for (int i=0;i<shapeList.size();i++){
-//        for(int j=0;j<shapeList[i].getPointList().size();j++){
 
-//        }
         int tempCounter = 0;
         QList<ChromosomeShape::type> typeList = shapeList[i].getTypeList();
-        QPointF sP;
         foreach (QPointF p, shapeList[i].getPointList()) {
             //switch case on point type and draw what you want
             switch(type2int(typeList[tempCounter++])){
 
             case 0:// sPointType:
             {
+
+                if(manualFlag && i){
+                    QGraphicsTextItem *text;
+                    text = scene->addText(QString::number(chromosomes[i-1].getIndex()));
+                    text->setPos(sP.x()-15,sP.y()+15);
+                    text->setDefaultTextColor(Qt::white);
+                    text->setFlag(QGraphicsItem::ItemIsMovable, true);
+                }
+
                 scene->addEllipse(p.x(),p.y(),2,2,penDot,brush);
                 sP = p;
                 break;
@@ -214,10 +221,14 @@ TabView::TabView(QString fileName, double micro, QDataStream &stream)
             }
 
         }
-//        foreach (ChromosomeShape::type t,shapeList[i].getTypeList()){
 
-
-//        }
+    }
+    if(manualFlag ){
+        QGraphicsTextItem *text;
+        text = scene->addText(QString::number(chromosomes[numberOfChromosomes-1].getIndex()));
+        text->setPos(sP.x()-15,sP.y()+15);
+        text->setDefaultTextColor(Qt::white);
+        text->setFlag(QGraphicsItem::ItemIsMovable, true);
     }
 
 }
@@ -772,9 +783,11 @@ void TabView::setManualFlag(bool value)
     manualFlag = value;
 }
 
-//============================== save & load ===========================
+//============================== save & load ============================
 
 void TabView::save(QDataStream &stream){
+
+    stream << manualFlag;
 
     stream << numberOfChromosomes;
 
@@ -801,6 +814,7 @@ void TabView::save(QDataStream &stream){
 
 bool TabView::load(QDataStream &stream){
 
+    stream >> manualFlag;
 
     stream >> numberOfChromosomes;
 

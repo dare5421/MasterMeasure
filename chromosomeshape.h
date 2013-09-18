@@ -6,7 +6,7 @@ class ChromosomeShape
 {
 public:
 
-    enum type{sPointType, lineType, centromereType, satelliteType};
+    enum type{sPointType, lineType, centromereType, satelliteType, endPointType};
 
     ChromosomeShape();
 

@@ -100,7 +100,6 @@ void MainWindow::contextMenuEvent(QContextMenuEvent  *event)
 //    menu.addAction(endAction);
 
     menu.exec(event->globalPos());
-//    menu.
 }
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
@@ -150,7 +149,7 @@ void MainWindow::on_showButton_clicked()
         QTableWidget *myTable = ui->tableWidget;
         myTable->setRowCount(0);
 
-        if(!manualFlag)
+        if(!manualFlag)//============================ Auto =========================
         {
             for (int i=0; i< ui->tabWidget->count();i++){
                 for(int j=0; j< numberOfChromosomes; j++){
@@ -500,12 +499,6 @@ void MainWindow::createActions()
     saveAction = new QAction(tr("&Save Idiogram"), this);
     saveAction->setIcon(QIcon(":/image/floppy.png"));
     connect(saveAction, SIGNAL(triggered()),this, SLOT(on_actionSave_triggered()));
-
-//    undoAction = undoStack->createUndoAction(this, tr("&Undo"));
-//    undoAction->setShortcuts(QKeySequence::Undo);
-
-//    redoAction = undoStack->createRedoAction(this, tr("&Redo"));
-//    redoAction->setShortcuts(QKeySequence::Redo);
 }
 
 double MainWindow::pixToMicro(double pix){
@@ -693,10 +686,11 @@ void MainWindow::on_actionSave_Tab_triggered()
         return;
 
     for (;;) {
-        QString fileName = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
+//        QString fileName = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
+        QString fileName = QFileDialog::getSaveFileName(this, "Save Tab", ui->tabWidget->tabText(ui->tabWidget->currentIndex()), "master measure tab (*.mmt)");
 
-        if (fileName.isEmpty())
-            fileName = QFileDialog::getSaveFileName(this);
+//        if (fileName.isEmpty())
+//            fileName = QFileDialog::getSaveFileName(this);
         if (fileName.isEmpty())
             break;
 
@@ -745,7 +739,7 @@ void MainWindow::on_actionOpen_Saved_Tab_triggered()
 
 //    }
 //    =========================================
-    QString fileName = QFileDialog::getOpenFileName(this);
+    QString fileName = QFileDialog::getOpenFileName(this, "Open Saved Tab","","master measure tab (*.mmt)");
     if (fileName.isEmpty())
         return;
 

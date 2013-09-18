@@ -19,7 +19,7 @@ class TabView:public QGraphicsView
 
 public:
 
-    enum type{sPointType, lineType, centromereType, satelliteType};
+    enum type{sPointType, lineType, centromereType, satelliteType, endPointType};
 
     int type2int(ChromosomeShape::type t);
     ChromosomeShape::type int2type(int i);
