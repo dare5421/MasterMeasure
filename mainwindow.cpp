@@ -47,8 +47,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createActions();
 
-    manualFlag = false;
-    ui->actionAuto->setChecked(true);
+//    manualFlag = false;
+//    ui->actionAuto->setChecked(true);
+    manualFlag = true;
+    ui->actionManual->setChecked(true);
+
+
+    //disable all action, except open file or open tab
+    ui->actionSave->setEnabled(false);
+    ui->actionLine_Color->setEnabled(false);
+    ui->actionLine_Width->setEnabled(false);
+    ui->actionSave_Tab->setEnabled(false);
 
 }
 
@@ -72,6 +81,12 @@ void MainWindow::on_actionOpen_triggered()
         ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
 
         tabView->setManualFlag(manualFlag);
+
+        //Enable all action
+        ui->actionSave->setEnabled(true);
+        ui->actionLine_Color->setEnabled(true);
+        ui->actionLine_Width->setEnabled(true);
+        ui->actionSave_Tab->setEnabled(true);
 
     }
 }

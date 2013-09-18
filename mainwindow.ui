@@ -170,8 +170,8 @@
    <addaction name="actionLine_Color"/>
    <addaction name="actionLine_Width"/>
    <addaction name="separator"/>
-   <addaction name="actionAuto"/>
    <addaction name="actionManual"/>
+   <addaction name="actionAuto"/>
    <addaction name="separator"/>
    <addaction name="actionExit"/>
   </widget>
