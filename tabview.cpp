@@ -507,12 +507,15 @@ void TabView::keyPressEvent(QKeyEvent * event){
 
         if(manualFlag){
             QGraphicsTextItem *text;
-            text = scene->addText(QString::number(indexDialog->getPairIndex()));
+            text = scene->addText(QString::number(indexDialog->getPairIndex())+indexDialog->getGenome());
             text->setPos(lastPoint.x()-15,lastPoint.y()+15);
             text->setDefaultTextColor(Qt::white);
             text->setFlag(QGraphicsItem::ItemIsMovable, true);
+            QChar ch = 'A';
+            chromosomes[numberOfChromosomes-1].
+                    setIndex(indexDialog->getPairIndex()+ 1000*(indexDialog->getGenome().toLatin1()- ch.toLatin1()+1));
 
-            chromosomes[numberOfChromosomes-1].setIndex(indexDialog->getPairIndex());
+//            QMessageBox::information(this, tr("Master Measure"),QString::number(1000*(indexDialog->getGenome().toLatin1()- ch.toLatin1()+1)));
         }
 
         isDraw = false;
@@ -635,12 +638,12 @@ void TabView::end()
 {
     if(manualFlag){
         QGraphicsTextItem *text;
-        text = scene->addText(QString::number(indexDialog->getPairIndex()));
+        text = scene->addText(QString::number(indexDialog->getPairIndex())+indexDialog->getGenome());
         text->setPos(lastPoint.x()-15,lastPoint.y()+15);
         text->setDefaultTextColor(Qt::white);
         text->setFlag(QGraphicsItem::ItemIsMovable, true);
-
-        chromosomes[numberOfChromosomes-1].setIndex(indexDialog->getPairIndex());
+        QChar ch = 'A';
+        chromosomes[numberOfChromosomes-1].setIndex(indexDialog->getPairIndex()+ 1000*(indexDialog->getGenome().toLatin1()- ch.toLatin1()+1));
     }
 
     isDraw = false;
