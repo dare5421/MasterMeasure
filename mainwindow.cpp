@@ -261,7 +261,7 @@ void MainWindow::on_showButton_clicked()
             for(int j=0; j< numberOfChromosomes/2; j++){
                 if (j>0)
                     scene->addLine((j-1)*70+15,0,j*70+5,0);
-                drawChromosome(j*70,0,
+                drawChromosome(j*70,0,0,
                                avgWing1[0][j] * 150 / maxChromosomeLength,avgWing2[0][j]* 150 / maxChromosomeLength,
                                errorBarWing1[j], errorBarWing2[j],
                                (satellite1[j] > satellite2[j])?satellite1[j]:satellite2[j] ,
@@ -296,12 +296,14 @@ void MainWindow::on_showButton_clicked()
         }
         else{ // =================== manual ==============================
 
-            int countChromosome[1000]={0};
+            int countChromosome[26][1000]={0};
             int numChro = 0;
 
             QSet<int> chromosomesIndex;
 
             QSet<int> chromosomesGenome;
+
+            QSet<int> chromosomesTopIndex;
 
 
             for (int i=0; i< ui->tabWidget->count();i++){
@@ -320,13 +322,14 @@ void MainWindow::on_showButton_clicked()
                     avgTotalLength[ (index)%1000-1] +=
                             tabsChromosomes[i][j].getChromosomeLength();
 
-                    countChromosome[ (index)%1000-1]++;
+                    countChromosome[index / 1000 - 1][index%1000-1]++;
 
 //                    if( (index)%1000 > numChro)
 //                        numChro =  (index)%1000;
 
                     chromosomesIndex << index;
                     chromosomesGenome << (index / 1000);
+                    chromosomesTopIndex << (index % 1000);
 
 
                     if(j == 0 || ( (index)%1000 != tabsChromosomes[i][j-1].getIndex()))
@@ -353,24 +356,29 @@ void MainWindow::on_showButton_clicked()
 
             numChro = chromosomesIndex.size();
             int numberOfGenome = chromosomesGenome.size();
+            int topIndex = chromosomesTopIndex.size();
 
 
 //!!!!!!!! ATTENTION TO THIS PART. IT NEED MORE ATTENTION !!!!!!!!!
-            for(int j=0; j< numChro; j++){
 
-                allShortLength[j] = avgWing1[0][j];
+            for (int i=0; i<numberOfGenome;i++)
+                for(int j=0; j< topIndex; j++){
 
-                avgWing1[0][j]/= (countChromosome[j]);
-                avgWing2[0][j]/= (countChromosome[j]);
+                    if(avgWing1[i][j] && avgWing2[i][j]){
+                        allShortLength[j] = avgWing1[0][j];//!!!!!!!!!!
 
-                allTotalLength[j] = avgTotalLength[j];
+                        avgWing1[i][j]/= (countChromosome[i][j]);
+                        avgWing2[i][j]/= (countChromosome[i][j]);
 
-                avgTotalLength[j]/=(countChromosome[j]);
+                        allTotalLength[j] = avgTotalLength[j];
 
-                satellite1[j]/= countChromosome[j];
-                satellite2[j]/= countChromosome[j];
+                        avgTotalLength[j]/=(countChromosome[0][j]);
 
-            }
+                        satellite1[j]/= countChromosome[0][j];
+                        satellite2[j]/= countChromosome[0][j];
+                    }
+
+                }
 
             for (int i=0; i< ui->tabWidget->count();i++){
                 for(int j=0; j< numChro; j++){
@@ -383,86 +391,95 @@ void MainWindow::on_showButton_clicked()
 
             for(int j=0; j< numChro; j++){
 
-                sigmaWing1[j] /= (countChromosome[j]-1);
-                sigmaWing2[j] /= (countChromosome[j]-1);
+                sigmaWing1[j] /= (countChromosome[0][j]-1);
+                sigmaWing2[j] /= (countChromosome[0][j]-1);
 
-                sigmaTotalLength[j] /= (countChromosome[j]-1);
+                sigmaTotalLength[j] /= (countChromosome[0][j]-1);
 
             }
 
             for (int i=0; i< ui->tabWidget->count();i++){
                 for(int j=0; j< numChro; j++){
-                    errorBarWing1[j] = qSqrt(sigmaWing1[j]) / qSqrt(countChromosome[j]);
-                    errorBarWing2[j] = qSqrt(sigmaWing2[j]) / qSqrt(countChromosome[j]);
+                    errorBarWing1[j] = qSqrt(sigmaWing1[j]) / qSqrt(countChromosome[0][j]);
+                    errorBarWing2[j] = qSqrt(sigmaWing2[j]) / qSqrt(countChromosome[0][j]);
 
-                    errorBarTotalLength[j] = qSqrt(sigmaTotalLength[j]) / qSqrt(countChromosome[j]);
+                    errorBarTotalLength[j] = qSqrt(sigmaTotalLength[j]) / qSqrt(countChromosome[0][j]);
                 }
             }
 //!!!!!!!!!!!!!!!!!
 
-            //draw in bottom
-
-            int genome;
-
-            for(int j=0; j< numChro; j++){
-
-                genome = (tabsChromosomes[0][j].getIndex())/1000;
-                genome--;
+//            draw in bottom
 
 
-                //if (j>0)
-                if((tabsChromosomes[0][j].getIndex())%1000 > 1)
-                    scene->addLine((j-1)*70+15,genome * 300,j*70+5,genome * 300);
-
-//                drawChromosome(j*70,genome * 300,
-//                               avgWing1[genome][j] * 150 / maxChromosomeLength, avgWing2[genome][j]* 150 / maxChromosomeLength,
-//                               errorBarWing1[j], errorBarWing2[j],
-//                               (satellite1[j] > satellite2[j])?satellite1[j]:satellite2[j],
-//                               (satellite1[j] > satellite2[j])?true:false  );
-
-                drawChromosome(j*70,genome * 300,
-                               avgWing1[genome][j] * 150 / maxChromosomeLength, avgWing2[genome][j]* 150 / maxChromosomeLength,
-                               0, 0,
-                               0,
-                               false  );
+            int genomeLine = -1;
+//            QMessageBox::information(this, tr("Master Measure"),QString::number(numberOfGenome)
+//                                     +"  "+QString::number(numChro)
+//                                      +"  "+QString::number(topIndex)
+//                                     );
 
 
+//            for(int i=0; i<numberOfGenome; i++)
+            for(int i=0; i<26; i++)
+            for(int j=0; j< topIndex ; j++){
+                if(avgWing1[i][j]+avgWing2[i][j]){
+    //                genome = (tabsChromosomes[0][j].getIndex())/1000-1;
 
-//                if (j>0)
-//                    scene->addLine((j-1)*70+15,0,j*70+5,0);
-//                drawChromosome(j*70,0,
-//                               avgWing1[j] * 150 / maxChromosomeLength,avgWing2[j]* 150 / maxChromosomeLength,
-//                               errorBarWing1[j], errorBarWing2[j],
-//                               (satellite1[j] > satellite2[j])?satellite1[j]:satellite2[j],
-//                               (satellite1[j] > satellite2[j])?true:false  );
+//                    QMessageBox::information(this, tr("Master Measure"),QString::number(i)+"  "+QString::number(j));
+                    if (j>0)
+    //                if((tabsChromosomes[0][j].getIndex())%1000 > 1)
+                        scene->addLine((j-1)*70+15,genomeLine * 300,j*70+5,genomeLine * 300);
+                    else genomeLine++;
+
+                    drawChromosome(j*70,genomeLine * 300,i,
+                                   avgWing1[i][j] * 150 / maxChromosomeLength, avgWing2[i][j]* 150 / maxChromosomeLength,
+                                   errorBarWing1[j], errorBarWing2[j],
+                                   (satellite1[j] > satellite2[j])?satellite1[j]:satellite2[j],
+                                   (satellite1[j] > satellite2[j])?true:false);
+
+    //                drawChromosome(j*70,i * 300,
+    //                               avgWing1[i][j] * 150 / maxChromosomeLength, avgWing2[i][j]* 150 / maxChromosomeLength,
+    //                               0, 0,
+    //                               0,
+    //                               false  );
 
 
-                //============ add chromosomes to table ================
+
+    //                if (j>0)
+    //                    scene->addLine((j-1)*70+15,0,j*70+5,0);
+    //                drawChromosome(j*70,0,
+    //                               avgWing1[j] * 150 / maxChromosomeLength,avgWing2[j]* 150 / maxChromosomeLength,
+    //                               errorBarWing1[j], errorBarWing2[j],
+    //                               (satellite1[j] > satellite2[j])?satellite1[j]:satellite2[j],
+    //                               (satellite1[j] > satellite2[j])?true:false  );
 
 
-//                myTable->insertRow(myTable->rowCount());
+                    //============ add chromosomes to table ================
 
 
-//                myTable->setItem(j, 0,new QTableWidgetItem("Chromosome "+QString::number(j+1)) );
+    //                myTable->insertRow(myTable->rowCount());
 
-//                myTable->setItem(j, 1, new QTableWidgetItem(QString::number(avgWing1[genome][j])+" " +177+" " + QString::number(errorBarWing1[j])));
 
-//                myTable->setItem(j, 2, new QTableWidgetItem(QString::number(avgWing2[genome][j])+" " +177+" " + QString::number(errorBarWing2[j])));
+    //                myTable->setItem(j, 0,new QTableWidgetItem("Chromosome "+QString::number(j+1)) );
 
-//                myTable->setItem(j, 3, new QTableWidgetItem(QString::number(avgWing2[genome][j]+avgWing1[genome][j])+" " +177+" " + QString::number(errorBarTotalLength[j])));
+    //                myTable->setItem(j, 1, new QTableWidgetItem(QString::number(avgWing1[genome][j])+" " +177+" " + QString::number(errorBarWing1[j])));
 
-//                myTable->setItem(j, 4, new QTableWidgetItem(QString::number(avgWing2[genome][j] / avgWing1[genome][j])));
+    //                myTable->setItem(j, 2, new QTableWidgetItem(QString::number(avgWing2[genome][j])+" " +177+" " + QString::number(errorBarWing2[j])));
 
-//                myTable->setItem(j, 5, new QTableWidgetItem(QString::number(avgWing1[genome][j] / avgWing2[genome][j])));
+    //                myTable->setItem(j, 3, new QTableWidgetItem(QString::number(avgWing2[genome][j]+avgWing1[genome][j])+" " +177+" " + QString::number(errorBarTotalLength[j])));
 
-//                myTable->setItem(j, 6, new QTableWidgetItem(QString::number(allTotalLength[j])));
+    //                myTable->setItem(j, 4, new QTableWidgetItem(QString::number(avgWing2[genome][j] / avgWing1[genome][j])));
 
-//                myTable->setItem(j, 7, new QTableWidgetItem("% "+QString::number((avgWing2[genome][j]+avgWing1[genome][j])*100.0/allTotalLength[j])));
+    //                myTable->setItem(j, 5, new QTableWidgetItem(QString::number(avgWing1[genome][j] / avgWing2[genome][j])));
 
-//                myTable->setItem(j, 8, new QTableWidgetItem("% "+QString::number(allShortLength[j]*100.0/allTotalLength[j])));
+    //                myTable->setItem(j, 6, new QTableWidgetItem(QString::number(allTotalLength[j])));
 
-//                myTable->setItem(j, 9, new QTableWidgetItem("% "+QString::number(minTotalLength[j]*100.0/maxTotalLength[j])));
+    //                myTable->setItem(j, 7, new QTableWidgetItem("% "+QString::number((avgWing2[genome][j]+avgWing1[genome][j])*100.0/allTotalLength[j])));
 
+    //                myTable->setItem(j, 8, new QTableWidgetItem("% "+QString::number(allShortLength[j]*100.0/allTotalLength[j])));
+
+    //                myTable->setItem(j, 9, new QTableWidgetItem("% "+QString::number(minTotalLength[j]*100.0/maxTotalLength[j])));
+
+                }
             }
 
 
@@ -476,7 +493,7 @@ void MainWindow::on_showButton_clicked()
 
 }
 
-void MainWindow::drawChromosome(int x, int y, double wing1, double wing2,
+void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
                                 double errorWing1,double errorWing2,
                                 double satellite, bool isSatUp){
 
@@ -564,6 +581,19 @@ void MainWindow::drawChromosome(int x, int y, double wing1, double wing2,
         scene->addLine(x+10, y+wing2+5-errorWing2, x+10, y+wing2+5+errorWing2);
         scene->addLine(x+8, y+wing2+5+errorWing2, x+12, y+wing2+5+errorWing2);
     }
+
+    // draw genomes and Index next to them
+    QGraphicsTextItem *genome = new QGraphicsTextItem;
+//    int gen= y/300;
+    QChar cGen = 'A'+yy;
+    genome->setPlainText(cGen + QString::number(x/70+1));
+
+
+    QPointF genomePos= QPointF(x,y+wing2-satellite+20);
+
+
+    genome->setPos(genomePos);
+    scene->addItem(genome);
 
 
 
