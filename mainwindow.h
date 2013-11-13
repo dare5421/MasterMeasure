@@ -31,6 +31,8 @@ public:
 
     TabView *currentTabView() const;
 
+    double standardError(int n, QList<double> x);
+
 private slots:
     void on_actionOpen_triggered();
     void on_tabWidget_tabCloseRequested(int index);
