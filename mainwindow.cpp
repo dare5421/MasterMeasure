@@ -154,19 +154,19 @@ void MainWindow::on_showButton_clicked()
         double errorBarWing1[26][1000]={0};
         double errorBarWing2[26][1000]={0};
 
-        double satellite1[1000]={0};
-        double satellite2[1000]={0};
-        double avgTotalLength[1000]={0};
+        double satellite1[26][1000]={0};
+        double satellite2[26][1000]={0};
+        double avgTotalLength[26][1000]={0};
 
-        double minTotalLength[1000]={0};
-        double maxTotalLength[1000]={0};
+        double minTotalLength[26][1000]={0};
+        double maxTotalLength[26][1000]={0};
 
-        double allTotalLength[1000]={0};
-        double allShortLength[1000]={0};
-        double sigmaWing1[1000]={0};
-        double sigmaWing2[1000]={0};
-        double sigmaTotalLength[1000]={0};
-        double errorBarTotalLength[1000]={0};
+        double allTotalLength[26][1000]={0};    // sum of lengths of chromosomes
+        double allShortLength[26][1000]={0};
+        double sigmaWing1[26][1000]={0};
+        double sigmaWing2[26][1000]={0};
+        double sigmaTotalLength[26][1000]={0};
+        double errorBarTotalLength[26][1000]={0};
 
         QTableWidget *myTable = ui->tableWidget;
         myTable->setRowCount(0);
@@ -183,25 +183,25 @@ void MainWindow::on_showButton_clicked()
                     maxChromosomeLength = tabsChromosomes[i][j].getChromosomeLength()>maxChromosomeLength?
                                 tabsChromosomes[i][j].getChromosomeLength():maxChromosomeLength;
 
-                    avgTotalLength[j/2] += tabsChromosomes[i][j].getChromosomeLength();
+                    avgTotalLength[0][j/2] += tabsChromosomes[i][j].getChromosomeLength();
 
                     if(j%2 == 0)
-                        minTotalLength[j/2]= tabsChromosomes[i][j].getChromosomeLength();
+                        minTotalLength[0][j/2]= tabsChromosomes[i][j].getChromosomeLength();
 
 
-                    if(tabsChromosomes[i][j].getChromosomeLength() < minTotalLength[j/2]){
-                        minTotalLength[j/2]= tabsChromosomes[i][j].getChromosomeLength();
+                    if(tabsChromosomes[i][j].getChromosomeLength() < minTotalLength[0][j/2]){
+                        minTotalLength[0][j/2]= tabsChromosomes[i][j].getChromosomeLength();
                     }
 
-                    if(tabsChromosomes[i][j].getChromosomeLength() > maxTotalLength[j/2]){
-                        maxTotalLength[j/2]= tabsChromosomes[i][j].getChromosomeLength();
+                    if(tabsChromosomes[i][j].getChromosomeLength() > maxTotalLength[0][j/2]){
+                        maxTotalLength[0][j/2]= tabsChromosomes[i][j].getChromosomeLength();
                     }
 
                     if(tabsChromosomes[i][j].getChromosomeHeadLength()!= 0){
-                        satellite1[j/2] += tabsChromosomes[i][j].getChromosomeHeadLength();
+                        satellite1[0][j/2] += tabsChromosomes[i][j].getChromosomeHeadLength();
                     }
                     if(tabsChromosomes[i][j].getChromosomeTailLength()!= 0){
-                        satellite2[j/2] += tabsChromosomes[i][j].getChromosomeTailLength();
+                        satellite2[0][j/2] += tabsChromosomes[i][j].getChromosomeTailLength();
                     }
                 }
             }
@@ -210,17 +210,17 @@ void MainWindow::on_showButton_clicked()
 
             for(int j=0; j< numberOfChromosomes/2; j++){
 
-                allShortLength[j] = avgWing1[0][j];
+                allShortLength[0][j] = avgWing1[0][j];
 
                 avgWing1[0][j]/= (2*ui->tabWidget->count());
                 avgWing2[0][j]/= (2*ui->tabWidget->count());
 
-                allTotalLength[j] = avgTotalLength[j];
+                allTotalLength[0][j] = avgTotalLength[0][j];
 
-                avgTotalLength[j]/=(2*ui->tabWidget->count());
+                avgTotalLength[0][j]/=(2*ui->tabWidget->count());
 
-                satellite1[j]/= (2*ui->tabWidget->count());
-                satellite2[j]/= (2*ui->tabWidget->count());
+                satellite1[0][j]/= (2*ui->tabWidget->count());
+                satellite2[0][j]/= (2*ui->tabWidget->count());
             }
 
 
@@ -228,35 +228,35 @@ void MainWindow::on_showButton_clicked()
 
             for (int i=0; i< ui->tabWidget->count();i++){
                 for(int j=0; j< numberOfChromosomes; j++){
-                    sigmaWing1[j] += qPow((tabsChromosomes[i][j].getChromosomeWing1Length() - avgWing1[0][j]),2);
-                    sigmaWing2[j] += qPow((tabsChromosomes[i][j].getChromosomeWing2Length() - avgWing2[0][j]),2);
+                    sigmaWing1[0][j] += qPow((tabsChromosomes[i][j].getChromosomeWing1Length() - avgWing1[0][j]),2);
+                    sigmaWing2[0][j] += qPow((tabsChromosomes[i][j].getChromosomeWing2Length() - avgWing2[0][j]),2);
 
-                    sigmaTotalLength[j] += qPow((tabsChromosomes[i][j].getChromosomeLength() - avgTotalLength[j]),2);
+                    sigmaTotalLength[0][j] += qPow((tabsChromosomes[i][j].getChromosomeLength() - avgTotalLength[0][j]),2);
                 }
             }
 
             for(int j=0; j< numberOfChromosomes; j++){
                 if(ui->tabWidget->count()<2){
-                    sigmaWing1[j] = 0;
-                    sigmaWing2[j] = 0;
+                    sigmaWing1[0][j] = 0;
+                    sigmaWing2[0][j] = 0;
 
-                    sigmaTotalLength[j] = 0;
+                    sigmaTotalLength[0][j] = 0;
                 }
                 else{
-                    sigmaWing1[j] /= ((2*ui->tabWidget->count())-1);
-                    sigmaWing2[j] /= ((2*ui->tabWidget->count())-1);
+                    sigmaWing1[0][j] /= ((2*ui->tabWidget->count())-1);
+                    sigmaWing2[0][j] /= ((2*ui->tabWidget->count())-1);
 
-                    sigmaTotalLength[j] /= ((2*ui->tabWidget->count())-1);
+                    sigmaTotalLength[0][j] /= ((2*ui->tabWidget->count())-1);
                 }
             }
 
 
             for (int i=0; i< ui->tabWidget->count();i++){
                 for(int j=0; j< numberOfChromosomes; j++){
-                    errorBarWing1[0][j] = qSqrt(sigmaWing1[j]) / qSqrt((2*ui->tabWidget->count()));
-                    errorBarWing2[0][j] = qSqrt(sigmaWing2[j]) / qSqrt((2*ui->tabWidget->count()));
+                    errorBarWing1[0][j] = qSqrt(sigmaWing1[0][j]) / qSqrt((2*ui->tabWidget->count()));
+                    errorBarWing2[0][j] = qSqrt(sigmaWing2[0][j]) / qSqrt((2*ui->tabWidget->count()));
 
-                    errorBarTotalLength[j] = qSqrt(sigmaTotalLength[j]) / qSqrt((2*ui->tabWidget->count()));
+                    errorBarTotalLength[0][j] = qSqrt(sigmaTotalLength[0][j]) / qSqrt((2*ui->tabWidget->count()));
                 }
             }
 
@@ -267,8 +267,8 @@ void MainWindow::on_showButton_clicked()
                 drawChromosome(j*70,0,0,
                                avgWing1[0][j] * 150 / maxChromosomeLength,avgWing2[0][j]* 150 / maxChromosomeLength,
                                errorBarWing1[0][j], errorBarWing2[0][j],
-                               (satellite1[j] > satellite2[j])?satellite1[j]:satellite2[j] ,
-                               (satellite1[j] > satellite2[j])?true:false  );
+                               (satellite1[0][j] > satellite2[0][j])?satellite1[0][j]:satellite2[0][j] ,
+                               (satellite1[0][j] > satellite2[0][j])?true:false  );
 
                 //============ add chromosomes to table ================
                 myTable->insertRow(myTable->rowCount());
@@ -280,19 +280,19 @@ void MainWindow::on_showButton_clicked()
 
                 myTable->setItem(j, 2, new QTableWidgetItem(QString::number(avgWing2[0][j])+" " +177+" " + QString::number(errorBarWing2[0][j])));
 
-                myTable->setItem(j, 3, new QTableWidgetItem(QString::number(avgWing2[0][j]+avgWing1[0][j])+" " +177+" " + QString::number(errorBarTotalLength[j])));
+                myTable->setItem(j, 3, new QTableWidgetItem(QString::number(avgWing2[0][j]+avgWing1[0][j])+" " +177+" " + QString::number(errorBarTotalLength[0][j])));
 
                 myTable->setItem(j, 4, new QTableWidgetItem(QString::number(avgWing2[0][j] / avgWing1[0][j])));
 
                 myTable->setItem(j, 5, new QTableWidgetItem(QString::number(avgWing1[0][j] / avgWing2[0][j])));
 
-                myTable->setItem(j, 6, new QTableWidgetItem(QString::number(allTotalLength[j])));
+                myTable->setItem(j, 6, new QTableWidgetItem(QString::number(allTotalLength[0][j])));
 
-                myTable->setItem(j, 7, new QTableWidgetItem("% "+QString::number((avgWing2[0][j]+avgWing1[0][j])*100.0/allTotalLength[j])));
+                myTable->setItem(j, 7, new QTableWidgetItem("% "+QString::number((avgWing2[0][j]+avgWing1[0][j])*100.0/allTotalLength[0][j])));
 
-                myTable->setItem(j, 8, new QTableWidgetItem("% "+QString::number(allShortLength[j]*100.0/allTotalLength[j])));
+                myTable->setItem(j, 8, new QTableWidgetItem("% "+QString::number(allShortLength[0][j]*100.0/allTotalLength[0][j])));
 
-                myTable->setItem(j, 9, new QTableWidgetItem("% "+QString::number(minTotalLength[j]*100.0/maxTotalLength[j])));
+                myTable->setItem(j, 9, new QTableWidgetItem("% "+QString::number(minTotalLength[0][j]*100.0/maxTotalLength[0][j])));
             }
 
 
@@ -322,7 +322,7 @@ void MainWindow::on_showButton_clicked()
                     avgWing2[index / 1000 -1][index % 1000 - 1] +=
                             tabsChromosomes[i][j].getChromosomeWing2Length();
 
-                    avgTotalLength[ (index)%1000-1] +=
+                    avgTotalLength[0][ (index)%1000-1] +=
                             tabsChromosomes[i][j].getChromosomeLength();
 
                     countChromosome[index / 1000 - 1][index%1000-1]++;
@@ -336,22 +336,22 @@ void MainWindow::on_showButton_clicked()
 
 
                     if(j == 0 || ( (index)%1000 != tabsChromosomes[i][j-1].getIndex()))
-                        minTotalLength[ (index)%1000-1]= tabsChromosomes[i][j].getChromosomeLength();
+                        minTotalLength[0][ (index)%1000-1]= tabsChromosomes[i][j].getChromosomeLength();
 
 
-                    if(tabsChromosomes[i][j].getChromosomeLength() < minTotalLength[ (index)%1000-1]){
-                        minTotalLength[ (index)%1000-1]= tabsChromosomes[i][j].getChromosomeLength();
+                    if(tabsChromosomes[i][j].getChromosomeLength() < minTotalLength[0][ (index)%1000-1]){
+                        minTotalLength[0][ (index)%1000-1]= tabsChromosomes[i][j].getChromosomeLength();
                     }
 
-                    if(tabsChromosomes[i][j].getChromosomeLength() > maxTotalLength[ (index)%1000-1]){
-                        maxTotalLength[ (index)%1000-1]= tabsChromosomes[i][j].getChromosomeLength();
+                    if(tabsChromosomes[i][j].getChromosomeLength() > maxTotalLength[0][ (index)%1000-1]){
+                        maxTotalLength[0][ (index)%1000-1]= tabsChromosomes[i][j].getChromosomeLength();
                     }
 
                     if(tabsChromosomes[i][j].getChromosomeHeadLength()!= 0){
-                        satellite1[ (index)%1000-1] += tabsChromosomes[i][j].getChromosomeHeadLength();
+                        satellite1[0][ (index)%1000-1] += tabsChromosomes[i][j].getChromosomeHeadLength();
                     }
                     if(tabsChromosomes[i][j].getChromosomeTailLength()!= 0){
-                        satellite2[ (index)%1000-1] += tabsChromosomes[i][j].getChromosomeTailLength();
+                        satellite2[0][ (index)%1000-1] += tabsChromosomes[i][j].getChromosomeTailLength();
                     }
 
                 }
@@ -368,45 +368,45 @@ void MainWindow::on_showButton_clicked()
                 for(int j=0; j< topIndex; j++){
 
                     if(avgWing1[i][j] && avgWing2[i][j]){
-                        allShortLength[j] = avgWing1[0][j];//!!!!!!!!!!
+                        allShortLength[0][j] = avgWing1[0][j];//!!!!!!!!!!
 
                         avgWing1[i][j]/= (countChromosome[i][j]);
                         avgWing2[i][j]/= (countChromosome[i][j]);
 
-                        allTotalLength[j] = avgTotalLength[j];
+                        allTotalLength[0][j] = avgTotalLength[0][j];
 
-                        avgTotalLength[j]/=(countChromosome[0][j]);
+                        avgTotalLength[0][j]/=(countChromosome[0][j]);
 
-                        satellite1[j]/= countChromosome[0][j];
-                        satellite2[j]/= countChromosome[0][j];
+                        satellite1[0][j]/= countChromosome[0][j];
+                        satellite2[0][j]/= countChromosome[0][j];
                     }
 
                 }
 
             for (int i=0; i< ui->tabWidget->count();i++){
                 for(int j=0; j< numChro; j++){
-                    sigmaWing1[j] += qPow((tabsChromosomes[i][j].getChromosomeWing1Length() - avgWing1[0][j]),2);
-                    sigmaWing2[j] += qPow((tabsChromosomes[i][j].getChromosomeWing2Length() - avgWing2[0][j]),2);
+                    sigmaWing1[0][j] += qPow((tabsChromosomes[i][j].getChromosomeWing1Length() - avgWing1[0][j]),2);
+                    sigmaWing2[0][j] += qPow((tabsChromosomes[i][j].getChromosomeWing2Length() - avgWing2[0][j]),2);
 
-                    sigmaTotalLength[j] += qPow((tabsChromosomes[i][j].getChromosomeLength() - avgTotalLength[j]),2);
+                    sigmaTotalLength[0][j] += qPow((tabsChromosomes[i][j].getChromosomeLength() - avgTotalLength[0][j]),2);
                 }
             }
 
             for(int j=0; j< numChro; j++){
 
-                sigmaWing1[j] /= (countChromosome[0][j]-1);
-                sigmaWing2[j] /= (countChromosome[0][j]-1);
+                sigmaWing1[0][j] /= (countChromosome[0][j]-1);
+                sigmaWing2[0][j] /= (countChromosome[0][j]-1);
 
-                sigmaTotalLength[j] /= (countChromosome[0][j]-1);
+                sigmaTotalLength[0][j] /= (countChromosome[0][j]-1);
 
             }
 
             for (int i=0; i< ui->tabWidget->count();i++){
                 for(int j=0; j< numChro; j++){
-                    errorBarWing1[0][j] = qSqrt(sigmaWing1[j]) / qSqrt(countChromosome[0][j]);
-                    errorBarWing2[0][j] = qSqrt(sigmaWing2[j]) / qSqrt(countChromosome[0][j]);
+                    errorBarWing1[0][j] = qSqrt(sigmaWing1[0][j]) / qSqrt(countChromosome[0][j]);
+                    errorBarWing2[0][j] = qSqrt(sigmaWing2[0][j]) / qSqrt(countChromosome[0][j]);
 
-                    errorBarTotalLength[j] = qSqrt(sigmaTotalLength[j]) / qSqrt(countChromosome[0][j]);
+                    errorBarTotalLength[0][j] = qSqrt(sigmaTotalLength[0][j]) / qSqrt(countChromosome[0][j]);
                 }
             }
 //!!!!!!!!!!!!!!!!!
@@ -436,8 +436,8 @@ void MainWindow::on_showButton_clicked()
                     drawChromosome(j*70,genomeLine * 300,i,
                                    avgWing1[i][j] * 150 / maxChromosomeLength, avgWing2[i][j]* 150 / maxChromosomeLength,
                                    errorBarWing1[0][j], errorBarWing2[0][j],
-                                   (satellite1[j] > satellite2[j])?satellite1[j]:satellite2[j],
-                                   (satellite1[j] > satellite2[j])?true:false);
+                                   (satellite1[0][j] > satellite2[0][j])?satellite1[0][j]:satellite2[0][j],
+                                   (satellite1[0][j] > satellite2[0][j])?true:false);
 
     //                drawChromosome(j*70,i * 300,
     //                               avgWing1[i][j] * 150 / maxChromosomeLength, avgWing2[i][j]* 150 / maxChromosomeLength,
