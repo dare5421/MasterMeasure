@@ -82,8 +82,8 @@ private:
 
     void drawChromosome(int x, int y, int yy, double wing1, double wing2,double errorWing1,double errorWing2,double satellite, bool isSatUp);
 
-    double* errorBarWing1;
-    double* errorBarWing2;
+//    double* errorBarWing1;
+//    double* errorBarWing2;
 
     void createActions();
     QAction *saveAction;
