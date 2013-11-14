@@ -42,8 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     micro = 11.9;
 
-//    errorBarWing1 = new double [1000]();
-//    errorBarWing2 = new double [1000]();
+//    errorBarWing1 = new double [max_size]();
+//    errorBarWing2 = new double [max_size]();
 
     createActions();
 
@@ -126,15 +126,10 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 void MainWindow::on_showButton_clicked()
 {
 
-//    for(int j=0; j< 1000; j++){
-//        errorBarWing1[j] = 0;
-//        errorBarWing2[0][j] = 0;
-//    }
-
+    const int max_size = 500;
     scale = scaleDialog->getScale();
 
     scene->clear();
-
 
     if((ui->tabWidget->currentIndex())>=0){
         for (int i=0; i< ui->tabWidget->count();i++){
@@ -145,33 +140,33 @@ void MainWindow::on_showButton_clicked()
         int numberOfChromosomes =
                 ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
 
-//        double avgWing1[1000]={0};
-//        double avgWing2[1000]={0};
+//        double avgWing1[max_size]={0};
+//        double avgWing2[max_size]={0};
 
-        double avgWing1[26][1000]={0};
-        double avgWing2[26][1000]={0};
+        double avgWing1[26][max_size]={0};
+        double avgWing2[26][max_size]={0};
 
-        double errorBarWing1[26][1000]={0};
-        double errorBarWing2[26][1000]={0};
+        double errorBarWing1[26][max_size]={0};
+        double errorBarWing2[26][max_size]={0};
 
-        double satellite1[26][1000]={0};
-        double satellite2[26][1000]={0};
-        double avgTotalLength[26][1000]={0};
+        double satellite1[26][max_size]={0};
+        double satellite2[26][max_size]={0};
+        double avgTotalLength[26][max_size]={0};
 
-        double minTotalLength[26][1000]={0};
-        double maxTotalLength[26][1000]={0};
+        double minTotalLength[26][max_size]={0};
+        double maxTotalLength[26][max_size]={0};
 
-        double allTotalLength[26][1000]={0};    // sum of lengths of chromosomes
-        double allShortLength[26][1000]={0};
-        double sigmaWing1[26][1000]={0};
-        double sigmaWing2[26][1000]={0};
-        double sigmaTotalLength[26][1000]={0};
-        double errorBarTotalLength[26][1000]={0};
+        QList<double> wing1[26][max_size];
+        QList<double> wing2[26][max_size];
+        QList<double> chromosomeLength[26][max_size];
 
+        double allTotalLength[26][max_size]={0};    // sum of lengths of chromosomes
+        double allShortLength[26][max_size]={0};
+        double sigmaWing1[26][max_size]={0};
+        double sigmaWing2[26][max_size]={0};
+        double sigmaTotalLength[26][max_size]={0};
+        double errorBarTotalLength[26][max_size]={0};
 
-        QList<double> wing1[26][1000];
-        QList<double> wing2[26][1000];
-        QList<double> chromosomeLength[26][1000];
 
 
         QTableWidget *myTable = ui->tableWidget;
@@ -305,7 +300,7 @@ void MainWindow::on_showButton_clicked()
         }
         else{ // =================== manual ==============================
 
-            int countChromosome[26][1000]={0};//count chromosomes with same index
+            int countChromosome[26][max_size]={0};//count chromosomes with same index
             int numChro = 0;
 
             QSet<int> chromosomesIndex; //number of different index
@@ -464,8 +459,8 @@ void MainWindow::on_showButton_clicked()
                     drawChromosome(j*70,genomeLine * 300,i,
                                    avgWing1[i][j] * 150 / maxChromosomeLength, avgWing2[i][j]* 150 / maxChromosomeLength,
                                    errorBarWing1[0][j], errorBarWing2[0][j],
-                                   (satellite1[0][j] > satellite2[0][j])?satellite1[0][j]:satellite2[0][j],
-                                   (satellite1[0][j] > satellite2[0][j])?true:false);
+                                   (satellite1[i][j] > satellite2[i][j])?satellite1[i][j]:satellite2[i][j],
+                                   (satellite1[i][j] > satellite2[i][j])?true:false);
 
     //                drawChromosome(j*70,i * 300,
     //                               avgWing1[i][j] * 150 / maxChromosomeLength, avgWing2[i][j]* 150 / maxChromosomeLength,
@@ -487,12 +482,15 @@ void MainWindow::on_showButton_clicked()
                     //============ add chromosomes to table ================
 
 
-    //                myTable->insertRow(myTable->rowCount());
+                    myTable->insertRow(myTable->rowCount());
 
 
-    //                myTable->setItem(j, 0,new QTableWidgetItem("Chromosome "+QString::number(j+1)) );
+//                    myTable->setItem(j, 0,new QTableWidgetItem("Chromosome "+QString::number(j+1)) );
+                    QChar genC = 'A' + i;
+                    myTable->setItem(j, 0,new QTableWidgetItem(QString::number(j+1)+ genC ) );
 
-    //                myTable->setItem(j, 1, new QTableWidgetItem(QString::number(avgWing1[genome][j])+" " +177+" " + QString::number(errorBarWing1[0][j])));
+                    myTable->setItem(j, 1, new QTableWidgetItem(QString::number(avgWing1[i][j])
+                                                                +" " +177+" " + QString::number(errorBarWing1[i][j])));
 
     //                myTable->setItem(j, 2, new QTableWidgetItem(QString::number(avgWing2[genome][j])+" " +177+" " + QString::number(errorBarWing2[0][j])));
 
