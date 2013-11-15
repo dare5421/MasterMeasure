@@ -42,8 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     micro = 11.9;
 
-//    errorBarWing1 = new double [max_size]();
-//    errorBarWing2 = new double [max_size]();
+//    standardErrorWing1 = new double [max_size]();
+//    standardErrorWing2 = new double [max_size]();
 
     createActions();
 
@@ -123,10 +123,30 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 }
 
 // =============================== show bottom things ===========================
+void MainWindow::createArray(double ** &array,  int max_size,  int genome_size)
+{
+    array = new double *[genome_size];
+    for(int i=0; i<genome_size; i++)
+        array[i] = new double[max_size]();
+
+//    for(int i=0; i<genome_size; i++)
+//        for(int j=0; j<max_size; j++)
+//            array[i][j] = 0;
+
+}
+
+void MainWindow::deleteArray(double **&array, int genome_size)
+{
+    for(int i=0; i<genome_size; i++)
+        delete []array[i];
+    delete []array;
+}
+
 void MainWindow::on_showButton_clicked()
 {
 
-    const int max_size = 500;
+    int max_size = 100;
+    int genome_size = 26;
     scale = scaleDialog->getScale();
 
     scene->clear();
@@ -140,37 +160,116 @@ void MainWindow::on_showButton_clicked()
         int numberOfChromosomes =
                 ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
 
-//        double avgWing1[max_size]={0};
-//        double avgWing2[max_size]={0};
 
-        double avgWing1[26][max_size]={0};
-        double avgWing2[26][max_size]={0};
+//        double avgWing1[genome_size][max_size]={0};
+//        double avgWing2[genome_size][max_size]={0};
 
-        double errorBarWing1[26][max_size]={0};
-        double errorBarWing2[26][max_size]={0};
+        double **avgWing1;
+        createArray(avgWing1, max_size, genome_size);
 
-        double satellite1[26][max_size]={0};
-        double satellite2[26][max_size]={0};
-        double avgTotalLength[26][max_size]={0};
+        double **avgWing2;
+        createArray(avgWing2, max_size, genome_size);
 
-        double minTotalLength[26][max_size]={0};
-        double maxTotalLength[26][max_size]={0};
+//        QMessageBox::information(this, tr("Master Measure"),QString::number(avgWing1[0][0]));
 
-        QList<double> wing1[26][max_size];
-        QList<double> wing2[26][max_size];
-        QList<double> chromosomeLength[26][max_size];
+//        double standardErrorTotalLength[genome_size][max_size]={0};
+//        double standardErrorWing1[genome_size][max_size]={0};
+//        double standardErrorWing2[genome_size][max_size]={0};
+//        double standardErrorLS[genome_size][max_size]={0};
+//        double standardErrorSL[genome_size][max_size]={0};
+        double **standardErrorTotalLength;
+        createArray(standardErrorTotalLength, max_size, genome_size);
 
-        double allTotalLength[26][max_size]={0};    // sum of lengths of chromosomes
-        double allShortLength[26][max_size]={0};
-        double sigmaWing1[26][max_size]={0};
-        double sigmaWing2[26][max_size]={0};
-        double sigmaTotalLength[26][max_size]={0};
-        double errorBarTotalLength[26][max_size]={0};
+        double **standardErrorWing1;
+        createArray(standardErrorWing1, max_size, genome_size);
+
+        double **standardErrorWing2;
+        createArray(standardErrorWing2, max_size, genome_size);
+
+        double **standardErrorLS;
+        createArray(standardErrorLS, max_size, genome_size);
+
+        double **standardErrorSL;
+        createArray(standardErrorSL, max_size, genome_size);
+
+        double **standardErrorCI;
+        createArray(standardErrorCI, max_size, genome_size);
+
+
+//        double **standardErrorRL;
+//        createArray(standardErrorRL, max_size, genome_size);
+
+
+//        double satellite1[genome_size][max_size]={0};
+//        double satellite2[genome_size][max_size]={0};
+//        double avgTotalLength[genome_size][max_size]={0};
+        double **satellite1;
+        createArray(satellite1, max_size, genome_size);
+
+        double **satellite2;
+        createArray(satellite2, max_size, genome_size);
+
+        double **avgTotalLength;
+        createArray(avgTotalLength, max_size, genome_size);
+
+
+//        double minTotalLength[genome_size][max_size]={0};
+//        double maxTotalLength[genome_size][max_size]={0};
+        double **minTotalLength;
+        createArray(minTotalLength, max_size, genome_size);
+
+        double **maxTotalLength;
+        createArray(maxTotalLength, max_size, genome_size);
+
+
+        QList<double> chromosomeLength[genome_size][max_size];
+        QList<double> wing1[genome_size][max_size];
+        QList<double> wing2[genome_size][max_size];
+        QList<double> LS[genome_size][max_size];
+        QList<double> SL[genome_size][max_size];
+        QList<double> CI[genome_size][max_size];
+
+
+//        double allTotalLength[genome_size][max_size]={0};    // sum of lengths of chromosomes
+//        double allShortLength[genome_size][max_size]={0};
+//        double sigmaWing1[genome_size][max_size]={0};
+//        double sigmaWing2[genome_size][max_size]={0};
+//        double sigmaTotalLength[genome_size][max_size]={0};
+
+        double **allTotalLength;
+        createArray(allTotalLength, max_size, genome_size);
+
+        double **allShortLength;
+        createArray(allShortLength, max_size, genome_size);
+
+        double **sigmaWing1;
+        createArray(sigmaWing1, max_size, genome_size);
+
+        double **sigmaWing2;
+        createArray(sigmaWing2, max_size, genome_size);
+
+        double **sigmaTotalLength;
+        createArray(sigmaTotalLength, max_size, genome_size);
+
+        double HCL = 0;
+        double TF = 0;
+        double AsK = 0;
+        double CL_min = 0;
+        double CL_max = 0;
+        double X_ci = 0;
+        double A = 0;
+        double A1 = 0;
+
+//        double **RL;
+//        createArray(RL, max_size, genome_size);
+
 
 
 
         QTableWidget *myTable = ui->tableWidget;
         myTable->setRowCount(0);
+
+        myTable->horizontalHeader()->setVisible(true);
 
         double maxChromosomeLength = 0;
 
@@ -254,10 +353,10 @@ void MainWindow::on_showButton_clicked()
 
             for (int i=0; i< ui->tabWidget->count();i++){
                 for(int j=0; j< numberOfChromosomes; j++){
-                    errorBarWing1[0][j] = qSqrt(sigmaWing1[0][j]) / qSqrt((2*ui->tabWidget->count()));
-                    errorBarWing2[0][j] = qSqrt(sigmaWing2[0][j]) / qSqrt((2*ui->tabWidget->count()));
+                    standardErrorWing1[0][j] = qSqrt(sigmaWing1[0][j]) / qSqrt((2*ui->tabWidget->count()));
+                    standardErrorWing2[0][j] = qSqrt(sigmaWing2[0][j]) / qSqrt((2*ui->tabWidget->count()));
 
-                    errorBarTotalLength[0][j] = qSqrt(sigmaTotalLength[0][j]) / qSqrt((2*ui->tabWidget->count()));
+                    standardErrorTotalLength[0][j] = qSqrt(sigmaTotalLength[0][j]) / qSqrt((2*ui->tabWidget->count()));
                 }
             }
 
@@ -267,7 +366,7 @@ void MainWindow::on_showButton_clicked()
                     scene->addLine((j-1)*70+15,0,j*70+5,0);
                 drawChromosome(j*70,0,0,
                                avgWing1[0][j] * 150 / maxChromosomeLength,avgWing2[0][j]* 150 / maxChromosomeLength,
-                               errorBarWing1[0][j], errorBarWing2[0][j],
+                               standardErrorWing1[0][j], standardErrorWing2[0][j],
                                (satellite1[0][j] > satellite2[0][j])?satellite1[0][j]:satellite2[0][j] ,
                                (satellite1[0][j] > satellite2[0][j])?true:false  );
 
@@ -277,11 +376,11 @@ void MainWindow::on_showButton_clicked()
 
                 myTable->setItem(j, 0,new QTableWidgetItem("Chromosome "+QString::number(j+1)) );
 
-                myTable->setItem(j, 1, new QTableWidgetItem(QString::number(avgWing1[0][j])+" " +177+" " + QString::number(errorBarWing1[0][j])));
+                myTable->setItem(j, 1, new QTableWidgetItem(QString::number(avgWing1[0][j])+" " +177+" " + QString::number(standardErrorWing1[0][j])));
 
-                myTable->setItem(j, 2, new QTableWidgetItem(QString::number(avgWing2[0][j])+" " +177+" " + QString::number(errorBarWing2[0][j])));
+                myTable->setItem(j, 2, new QTableWidgetItem(QString::number(avgWing2[0][j])+" " +177+" " + QString::number(standardErrorWing2[0][j])));
 
-                myTable->setItem(j, 3, new QTableWidgetItem(QString::number(avgWing2[0][j]+avgWing1[0][j])+" " +177+" " + QString::number(errorBarTotalLength[0][j])));
+                myTable->setItem(j, 3, new QTableWidgetItem(QString::number(avgWing2[0][j]+avgWing1[0][j])+" " +177+" " + QString::number(standardErrorTotalLength[0][j])));
 
                 myTable->setItem(j, 4, new QTableWidgetItem(QString::number(avgWing2[0][j] / avgWing1[0][j])));
 
@@ -300,7 +399,9 @@ void MainWindow::on_showButton_clicked()
         }
         else{ // =================== manual ==============================
 
-            int countChromosome[26][max_size]={0};//count chromosomes with same index
+            int countChromosome[500][26]={0};//count chromosomes with same index
+
+
             int numChro = 0;
 
             QSet<int> chromosomesIndex; //number of different index
@@ -329,9 +430,12 @@ void MainWindow::on_showButton_clicked()
 
                     countChromosome[index / 1000 - 1][index % 1000 - 1]++;
 
-                    wing1[index / 1000 - 1][index % 1000 - 1]<<tabsChromosomes[i][j].getChromosomeWing1Length();
-                    wing2[index / 1000 - 1][index % 1000 - 1]<<tabsChromosomes[i][j].getChromosomeWing2Length();
-                    chromosomeLength[index / 1000 - 1][index % 1000 - 1]<<tabsChromosomes[i][j].getChromosomeLength();
+                    chromosomeLength[index / 1000 - 1][index % 1000 - 1] << tabsChromosomes[i][j].getChromosomeLength();
+                    wing1[index / 1000 - 1][index % 1000 - 1] << tabsChromosomes[i][j].getChromosomeWing1Length();
+                    wing2[index / 1000 - 1][index % 1000 - 1] << tabsChromosomes[i][j].getChromosomeWing2Length();
+                    SL[index / 1000 - 1][index % 1000 - 1] << tabsChromosomes[i][j].getChromosomeWing1Length()/tabsChromosomes[i][j].getChromosomeWing2Length();
+                    LS[index / 1000 - 1][index % 1000 - 1] << tabsChromosomes[i][j].getChromosomeWing2Length()/tabsChromosomes[i][j].getChromosomeWing1Length();
+                    CI[index / 1000 - 1][index % 1000 - 1] << tabsChromosomes[i][j].getChromosomeWing1Length()/tabsChromosomes[i][j].getChromosomeLength();
 
 //                    if( (index)%1000 > numChro)
 //                        numChro =  (index)%1000;
@@ -370,11 +474,12 @@ void MainWindow::on_showButton_clicked()
 
 
 //!!!!!!!! ATTENTION TO THIS PART. IT NEED MORE ATTENTION !!!!!!!!!
+            int flag = 0,counter = 0, ARg2_counter = 0;
 
             for (int i=0; i<numberOfGenome;i++){
                 for(int j=0; j< topIndexOfGenomes; j++){
 
-                    if(avgWing1[i][j] && avgWing2[i][j] && countChromosome[i][j]){
+                    if(avgWing1[i][j] + avgWing2[i][j] && countChromosome[i][j]){
 
                         allShortLength[i][j] = avgWing1[i][j]; // what about long wings ??????????!!!!!!!!!
 
@@ -389,15 +494,89 @@ void MainWindow::on_showButton_clicked()
                         satellite2[i][j]/= countChromosome[i][j];
 
 
-                        errorBarWing1[i][j] = standardError(countChromosome[i][j],wing1[i][j]);
-                        errorBarWing2[i][j] = standardError(countChromosome[i][j],wing2[i][j]);
-                        errorBarTotalLength[i][j] = standardError(countChromosome[i][j],chromosomeLength[i][j]);
+                        standardErrorTotalLength[i][j] = standardError(countChromosome[i][j],chromosomeLength[i][j]);
+                        standardErrorWing1[i][j] = standardError(countChromosome[i][j],wing1[i][j]);
+                        standardErrorWing2[i][j] = standardError(countChromosome[i][j],wing2[i][j]);
+                        standardErrorLS[i][j] = standardError(countChromosome[i][j],LS[i][j]);
+                        standardErrorSL[i][j] = standardError(countChromosome[i][j],SL[i][j]);
+                        standardErrorCI[i][j] = standardError(countChromosome[i][j],CI[i][j]);
 
+                        HCL += avgWing1[i][j] + avgWing2[i][j];
+
+                        TF += avgWing1[i][j];//it's not TF still
+
+                        AsK += avgWing2[i][j];
+
+                        CL_max = avgWing1[i][j]+avgWing2[i][j] > CL_max ? avgWing1[i][j]+avgWing2[i][j]: CL_max;
+
+                        if (!flag){
+                            CL_min = avgWing1[i][j]+avgWing2[i][j];
+                            flag = 1;
+                        }
+
+                        CL_min = avgWing1[i][j]+avgWing2[i][j] < CL_min ? avgWing1[i][j]+avgWing2[i][j]: CL_min;
+
+                        X_ci += avgWing1[i][j]/(avgWing1[i][j]+avgWing2[i][j]);
+
+                        counter++;
+
+                        A += (avgWing1[i][j]-avgWing2[i][j])/(avgWing1[i][j]-avgWing2[i][j]);
+
+                        if(avgWing2[i][j]/avgWing1[i][j]>2)
+                            ARg2_counter++;
+
+                        A1 += avgWing1[i][j] /avgWing2[i][j];
 
                     }
 
                 }
             }
+
+            double CV_CL = 0, CV_CI = 0;
+            double avgCL = HCL / counter;
+            double avgCI = X_ci / counter;
+
+            for (int i=0; i<numberOfGenome;i++){
+                for(int j=0; j< topIndexOfGenomes; j++){
+                    if(avgWing1[i][j] + avgWing2[i][j] && countChromosome[i][j]){
+                        CV_CL += qPow( avgWing1[i][j] + avgWing2[i][j] - avgCL , 2);
+
+                        CV_CI += qPow( avgWing1[i][j]/(avgWing1[i][j] + avgWing2[i][j]) - avgCI , 2);
+                    }
+                }
+            }
+
+            CV_CL /= (counter-1);
+            CV_CL = qSqrt(CV_CL);
+            CV_CL /= avgCL;
+            CV_CL *= 100.0;
+
+            CV_CI /= (counter-1);
+            CV_CI = qSqrt(CV_CI);
+            CV_CI /= avgCI;
+            CV_CI *= 100.0;
+
+            QString stebbin;
+            if(CL_max/CL_min<2){
+                if(ARg2_counter*100.0/counter == 100){stebbin = "4A";}
+                else if(ARg2_counter*100.0/counter > 50){stebbin = "3A";}
+                else if(ARg2_counter*100.0/counter > 1){stebbin = "2A";}
+                else{stebbin = "1A";}
+            }else if(CL_max/CL_min<4){
+                if(ARg2_counter*100.0/counter == 100){stebbin = "4B";}
+                else if(ARg2_counter*100.0/counter > 50){stebbin = "3B";}
+                else if(ARg2_counter*100.0/counter > 1){stebbin = "2B";}
+                else{stebbin = "1B";}
+            }else{
+                if(ARg2_counter*100.0/counter == 100){stebbin = "4C";}
+                else if(ARg2_counter*100.0/counter > 50){stebbin = "3C";}
+                else if(ARg2_counter*100.0/counter > 1){stebbin = "2C";}
+                else{stebbin = "1C";}
+            }
+
+
+
+
 
             //////////////////////////////////////////////////////
 
@@ -425,10 +604,10 @@ void MainWindow::on_showButton_clicked()
 
 //            for (int i=0; i< ui->tabWidget->count();i++){
 //                for(int j=0; j< numChro; j++){
-//                    errorBarWing1[0][j] = qSqrt(sigmaWing1[0][j]) / qSqrt(countChromosome[0][j]);
-//                    errorBarWing2[0][j] = qSqrt(sigmaWing2[0][j]) / qSqrt(countChromosome[0][j]);
+//                    standardErrorWing1[0][j] = qSqrt(sigmaWing1[0][j]) / qSqrt(countChromosome[0][j]);
+//                    standardErrorWing2[0][j] = qSqrt(sigmaWing2[0][j]) / qSqrt(countChromosome[0][j]);
 
-//                    errorBarTotalLength[0][j] = qSqrt(sigmaTotalLength[0][j]) / qSqrt(countChromosome[0][j]);
+//                    standardErrorTotalLength[0][j] = qSqrt(sigmaTotalLength[0][j]) / qSqrt(countChromosome[0][j]);
 //                }
 //            }
 
@@ -445,7 +624,7 @@ void MainWindow::on_showButton_clicked()
 
 
 //            for(int i=0; i<numberOfGenome; i++)
-            for(int i=0; i<26; i++)
+            for(int i=0; i<genome_size; i++)
             for(int j=0; j< topIndexOfGenomes ; j++){
                 if(avgWing1[i][j]+avgWing2[i][j]){
     //                genome = (tabsChromosomes[0][j].getIndex())/1000-1;
@@ -458,7 +637,7 @@ void MainWindow::on_showButton_clicked()
 
                     drawChromosome(j*70,genomeLine * 300,i,
                                    avgWing1[i][j] * 150 / maxChromosomeLength, avgWing2[i][j]* 150 / maxChromosomeLength,
-                                   errorBarWing1[0][j], errorBarWing2[0][j],
+                                   standardErrorWing1[0][j], standardErrorWing2[0][j],
                                    (satellite1[i][j] > satellite2[i][j])?satellite1[i][j]:satellite2[i][j],
                                    (satellite1[i][j] > satellite2[i][j])?true:false);
 
@@ -474,46 +653,129 @@ void MainWindow::on_showButton_clicked()
     //                    scene->addLine((j-1)*70+15,0,j*70+5,0);
     //                drawChromosome(j*70,0,
     //                               avgWing1[j] * 150 / maxChromosomeLength,avgWing2[j]* 150 / maxChromosomeLength,
-    //                               errorBarWing1[0][j], errorBarWing2[0][j],
+    //                               standardErrorWing1[0][j], standardErrorWing2[0][j],
     //                               (satellite1[j] > satellite2[j])?satellite1[j]:satellite2[j],
     //                               (satellite1[j] > satellite2[j])?true:false  );
 
 
                     //============ add chromosomes to table ================
 
-
-                    myTable->insertRow(myTable->rowCount());
+                    int tableRow = myTable->rowCount();
+                    myTable->insertRow(tableRow);
 
 
 //                    myTable->setItem(j, 0,new QTableWidgetItem("Chromosome "+QString::number(j+1)) );
                     QChar genC = 'A' + i;
-                    myTable->setItem(j, 0,new QTableWidgetItem(QString::number(j+1)+ genC ) );
+                    myTable->setItem(tableRow, 0,new QTableWidgetItem(QString::number(j+1)+ genC ) );
+                    // 177 is an ascii code for +/-
+                    myTable->setItem(tableRow, 1, new QTableWidgetItem(QString::number(avgWing2[i][j])+" " +177+" " + QString::number(standardErrorWing2[i][j])));
 
-                    myTable->setItem(j, 1, new QTableWidgetItem(QString::number(avgWing1[i][j])
-                                                                +" " +177+" " + QString::number(errorBarWing1[i][j])));
+                    myTable->setItem(tableRow, 2, new QTableWidgetItem(QString::number(avgWing1[i][j])+" " +177+" " + QString::number(standardErrorWing1[i][j])));
 
-    //                myTable->setItem(j, 2, new QTableWidgetItem(QString::number(avgWing2[genome][j])+" " +177+" " + QString::number(errorBarWing2[0][j])));
+                    myTable->setItem(tableRow, 3, new QTableWidgetItem(QString::number(avgWing2[i][j]+avgWing1[i][j])+" " +177+" " + QString::number(standardErrorTotalLength[i][j])));
 
-    //                myTable->setItem(j, 3, new QTableWidgetItem(QString::number(avgWing2[genome][j]+avgWing1[genome][j])+" " +177+" " + QString::number(errorBarTotalLength[j])));
+                    myTable->setItem(tableRow, 4, new QTableWidgetItem(QString::number(avgWing2[i][j] / avgWing1[i][j])+" " +177+" " + QString::number(standardErrorLS[i][j])));
 
-    //                myTable->setItem(j, 4, new QTableWidgetItem(QString::number(avgWing2[genome][j] / avgWing1[genome][j])));
+                    myTable->setItem(tableRow, 5, new QTableWidgetItem(QString::number(avgWing1[i][j] / avgWing2[i][j])
+                                                                +" " +177+" " + QString::number(standardErrorSL[i][j])));
 
-    //                myTable->setItem(j, 5, new QTableWidgetItem(QString::number(avgWing1[genome][j] / avgWing2[genome][j])));
+                    myTable->setItem(tableRow, 6, new QTableWidgetItem("% "+QString::number((avgWing2[i][j]+avgWing1[i][j])*100.0/HCL)
+                                                                +" " +177+" " + QString::number(standardErrorTotalLength[i][j]*100.0/HCL)));
 
-    //                myTable->setItem(j, 6, new QTableWidgetItem(QString::number(allTotalLength[j])));
+                    myTable->setItem(tableRow, 7, new QTableWidgetItem("% "+QString::number(avgWing1[i][j]*100.0/HCL)
+                                                                +" " +177+" " + QString::number(standardErrorWing1[i][j]*100.0/HCL)));
 
-    //                myTable->setItem(j, 7, new QTableWidgetItem("% "+QString::number((avgWing2[genome][j]+avgWing1[genome][j])*100.0/allTotalLength[j])));
+                    myTable->setItem(tableRow, 8, new QTableWidgetItem(QString::number(avgWing1[i][j]/(avgWing2[i][j]+avgWing1[i][j]))
+                                                                +" " +177+" " + QString::number(standardErrorCI[i][j])));
 
-    //                myTable->setItem(j, 8, new QTableWidgetItem("% "+QString::number(allShortLength[j]*100.0/allTotalLength[j])));
-
-    //                myTable->setItem(j, 9, new QTableWidgetItem("% "+QString::number(minTotalLength[j]*100.0/maxTotalLength[j])));
+                    double slp = avgWing1[i][j] *100.0 / avgWing2[i][j];
+                    myTable->setItem(tableRow, 9, new QTableWidgetItem( slp > 0 ?(slp>12.5?(slp>25?(slp>39.5 ? (slp == 50? "M": "m") : "sm"):"st") : "t"):"T"));
 
                 }
             }
 
+            //add to the end of Table
+            int tableRow = myTable->rowCount();
+            myTable->insertRow(tableRow++);
+            myTable->insertRow(tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "HCL" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(HCL) ) );
+
+            myTable->insertRow(++tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "% TF" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(TF*100.0/HCL) ) );
+
+            myTable->insertRow(++tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "% AsK" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(AsK*100.0/HCL) ) );
+
+            myTable->insertRow(++tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "% S" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(CL_min*100.0/CL_max) ) );
+
+            myTable->insertRow(++tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "X_CI" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(X_ci/counter) ) );
+
+            myTable->insertRow(++tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "A" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(A/counter) ) );
+
+            myTable->insertRow(++tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "X_CA" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(A*100.0/counter) ) );
+
+            myTable->insertRow(++tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "CV_CL" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(CV_CL) ) );
+
+            myTable->insertRow(++tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "CV_CI" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(CV_CI) ) );
+
+            myTable->insertRow(++tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "AI" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(CV_CI*CV_CL/100.0) ) );
+
+            myTable->insertRow(++tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "Stebbin's category of asymmetry" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( stebbin ) );
+
+            myTable->insertRow(++tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "A1" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(1 - A1 / counter) ) );
+
+            myTable->insertRow(++tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "A2" ) );
+            myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(CV_CL/100.0) ) );
+
+
+
 
 
         }
+
+        deleteArray(avgWing1, genome_size);
+        deleteArray(avgWing2, genome_size);
+
+        deleteArray(standardErrorTotalLength, genome_size);
+        deleteArray(standardErrorWing1, genome_size);
+        deleteArray(standardErrorWing2, genome_size);
+        deleteArray(standardErrorLS, genome_size);
+        deleteArray(standardErrorSL, genome_size);
+
+        deleteArray(satellite1, genome_size);
+        deleteArray(satellite2, genome_size);
+        deleteArray(avgTotalLength, genome_size);
+
+        deleteArray(minTotalLength, genome_size);
+        deleteArray(maxTotalLength, genome_size);
+
+        deleteArray(allTotalLength, genome_size);
+        deleteArray(allShortLength, genome_size);
+        deleteArray(sigmaWing1, genome_size);
+        deleteArray(sigmaWing2, genome_size);
+        deleteArray(sigmaTotalLength, genome_size);
 
 
 

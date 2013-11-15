@@ -33,6 +33,8 @@ public:
 
     double standardError(int n, QList<double> x);
 
+    void createArray(double **&array, int max_size, int genome_size);
+    void deleteArray(double **&array,  int genome_size);
 private slots:
     void on_actionOpen_triggered();
     void on_tabWidget_tabCloseRequested(int index);

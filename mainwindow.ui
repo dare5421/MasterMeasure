@@ -240,32 +240,27 @@
         </column>
         <column>
          <property name="text">
-          <string>S ± SE</string>
+          <string>L</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>L ± SE</string>
+          <string>S</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>TL ± SE</string>
+          <string>CL</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>LS</string>
+          <string>AR</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>SL</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>ΣTL</string>
+          <string>r_value</string>
          </property>
         </column>
         <column>
@@ -275,12 +270,17 @@
         </column>
         <column>
          <property name="text">
-          <string>%TF</string>
+          <string>%F</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>%S</string>
+          <string>CI</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Chromosome Type (Levan)</string>
          </property>
         </column>
        </widget>
