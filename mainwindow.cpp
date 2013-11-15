@@ -636,8 +636,8 @@ void MainWindow::on_showButton_clicked()
                     else genomeLine++;
 
                     drawChromosome(j*70,genomeLine * 300,i,
-                                   avgWing1[i][j] * 150 / maxChromosomeLength, avgWing2[i][j]* 150 / maxChromosomeLength,
-                                   standardErrorWing1[0][j], standardErrorWing2[0][j],
+                                   avgWing1[i][j] * 150.0 / maxChromosomeLength, avgWing2[i][j]* 150.0 / maxChromosomeLength,
+                                   standardErrorWing1[i][j], standardErrorWing2[i][j],
                                    (satellite1[i][j] > satellite2[i][j])?satellite1[i][j]:satellite2[i][j],
                                    (satellite1[i][j] > satellite2[i][j])?true:false);
 
@@ -696,8 +696,9 @@ void MainWindow::on_showButton_clicked()
 
             //add to the end of Table
             int tableRow = myTable->rowCount();
-            myTable->insertRow(tableRow++);
             myTable->insertRow(tableRow);
+            myTable->setItem(tableRow, 0,new QTableWidgetItem( "======" ) );
+            myTable->insertRow(++tableRow);
             myTable->setItem(tableRow, 0,new QTableWidgetItem( "HCL" ) );
             myTable->setItem(tableRow, 1,new QTableWidgetItem( QString::number(HCL) ) );
 
@@ -999,11 +1000,16 @@ void MainWindow::on_actionSave_triggered()
             strList<<"\""+ ui->tableWidget->horizontalHeaderItem(i)->text()+"\"";
         }
         ts<<strList.join( "," )+"\n";
-
-        for( int r = 0; r < ui->tableWidget->rowCount(); ++r ){
+        int rows = ui->tableWidget->rowCount();
+        int columns = ui->tableWidget->columnCount();
+        for( int r = 0; r < rows; ++r ){
             strList.clear();
 
-            for( int c = 0; c < ui->tableWidget->columnCount(); ++c ){
+            for( int c = 0; c < columns; ++c ){
+                if(ui->tableWidget->item( r, c )->text()=="======"){
+                    columns = 2;
+                    break;
+                }
                 strList << "\""+ ui->tableWidget->item( r, c )->text()+"\"";
             }
             ts << strList.join( "," )+"\n";
