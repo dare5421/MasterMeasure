@@ -15,6 +15,8 @@ ScaleDialog::ScaleDialog(QWidget *parent) :
 //    this->setWindowFlags(Qt::WindowTitleHint);
 //    this->setWindowFlags(Qt::WindowCloseButtonHint);
     flag = false;
+
+    scaleSet = false;
 }
 
 ScaleDialog::~ScaleDialog()
@@ -33,6 +35,9 @@ void ScaleDialog::on_browseButton_clicked()
 
 //    ((MainWindow*)this->parent())->setDialogFlag(true);
     this->close();
+    setScale(ui->lineEdit->text().toInt());
+
+    scaleSet = true;
 
 }
 
@@ -42,4 +47,9 @@ int ScaleDialog::getScale(){
 
 void ScaleDialog::setScale(int scl){
     scale = scl;
+}
+
+bool ScaleDialog::isScaleSet()
+{
+    return scaleSet;
 }

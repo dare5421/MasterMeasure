@@ -65,6 +65,8 @@ private slots:
 
     void on_actionOpen_Saved_Tab_triggered();
 
+    void on_actionCalibrate_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -93,6 +95,8 @@ private:
     QAction *saveAction;
 
     bool manualFlag;
+
+    bool isCalibratePressed;
 
 
 protected:

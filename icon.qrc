@@ -13,6 +13,7 @@
         <file>satellite.png</file>
         <file>hand.png</file>
         <file>auto.png</file>
+        <file>unit.png</file>
     </qresource>
     <qresource prefix="/about">
         <file>email.png</file>

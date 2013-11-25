@@ -1008,7 +1008,7 @@ void MainWindow::on_actionCalibrate_triggered()
 
             micro/=scale;
 
-            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
+//            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
         }
     }
 

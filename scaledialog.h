@@ -17,11 +17,17 @@ public:
     int getScale();
     void setScale(int scl);
 
+    bool isScaleSet();
+
     bool flag;
+
+    friend class MainWindow;
     
 private:
     Ui::ScaleDialog *ui;
     int scale;
+
+    bool scaleSet;
 
 
 private slots:
