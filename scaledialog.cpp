@@ -27,7 +27,7 @@ ScaleDialog::~ScaleDialog()
 void ScaleDialog::on_pushButton_clicked()
 {
     this->close();
-    setScale((ui->comboBox->currentText()).toInt());
+//    setScale((ui->comboBox->currentText()).toInt());
 }
 
 void ScaleDialog::on_browseButton_clicked()

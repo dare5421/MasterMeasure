@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>373</width>
-    <height>196</height>
+    <width>347</width>
+    <height>55</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,59 +25,12 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Please select scale</string>
+        <string>how much is it</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QComboBox" name="comboBox">
-       <item>
-        <property name="text">
-         <string>40</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>60</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>80</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>100</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>150</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string> Apply Magnification</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLineEdit" name="lineEdit"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Or do the calibration manually</string>
-       </property>
-      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="browseButton">
@@ -91,8 +44,7 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>comboBox</tabstop>
-  <tabstop>pushButton</tabstop>
+  <tabstop>lineEdit</tabstop>
   <tabstop>browseButton</tabstop>
  </tabstops>
  <resources/>

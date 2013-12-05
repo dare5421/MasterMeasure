@@ -367,6 +367,7 @@ void MainWindow::on_showButton_clicked()
                     scene->addLine((j-1)*70+15,0,j*70+5,0);
                 drawChromosome(j*70,0,0,
                                avgWing1[0][j] * 150 / maxChromosomeLength,avgWing2[0][j]* 150 / maxChromosomeLength,
+                                avgWing1[0][j],avgWing2[0][j],
                                standardErrorWing1[0][j], standardErrorWing2[0][j],
                                (satellite1[0][j] > satellite2[0][j])?satellite1[0][j]:satellite2[0][j] ,
                                (satellite1[0][j] > satellite2[0][j])?true:false  );
@@ -416,27 +417,27 @@ void MainWindow::on_showButton_clicked()
                 for(int j=0; j< numberOfChromosomes; j++){
 
                     maxChromosomeLength = tabsChromosomes[i][j].getChromosomeLength()> maxChromosomeLength?
-                                tabsChromosomes[i][j].getChromosomeLength():maxChromosomeLength;// !!!!!! آیا نباید از آرایه 26 تایی استفاده کرد !!!!!
+                                tabsChromosomes[i][j].getChromosomeLength():maxChromosomeLength;
 
                     int index = tabsChromosomes[i][j].getIndex();
 
                     avgWing1[index / 1000 - 1][index % 1000 - 1] +=
-                            tabsChromosomes[i][j].getChromosomeWing1Length();
+                            pixToMicro(tabsChromosomes[i][j].getChromosomeWing1Length());
 
                     avgWing2[index / 1000 - 1][index % 1000 - 1] +=
-                            tabsChromosomes[i][j].getChromosomeWing2Length();
+                            pixToMicro(tabsChromosomes[i][j].getChromosomeWing2Length());
 
                     avgTotalLength[index / 1000 - 1][index % 1000 - 1] +=
-                            tabsChromosomes[i][j].getChromosomeLength();
+                            pixToMicro(tabsChromosomes[i][j].getChromosomeLength());
 
                     countChromosome[index / 1000 - 1][index % 1000 - 1]++;
 
-                    chromosomeLength[index / 1000 - 1][index % 1000 - 1] << tabsChromosomes[i][j].getChromosomeLength();
-                    wing1[index / 1000 - 1][index % 1000 - 1] << tabsChromosomes[i][j].getChromosomeWing1Length();
-                    wing2[index / 1000 - 1][index % 1000 - 1] << tabsChromosomes[i][j].getChromosomeWing2Length();
-                    SL[index / 1000 - 1][index % 1000 - 1] << tabsChromosomes[i][j].getChromosomeWing1Length()/tabsChromosomes[i][j].getChromosomeWing2Length();
-                    LS[index / 1000 - 1][index % 1000 - 1] << tabsChromosomes[i][j].getChromosomeWing2Length()/tabsChromosomes[i][j].getChromosomeWing1Length();
-                    CI[index / 1000 - 1][index % 1000 - 1] << tabsChromosomes[i][j].getChromosomeWing1Length()/tabsChromosomes[i][j].getChromosomeLength();
+                    chromosomeLength[index / 1000 - 1][index % 1000 - 1] << pixToMicro(tabsChromosomes[i][j].getChromosomeLength());
+                    wing1[index / 1000 - 1][index % 1000 - 1] << pixToMicro(tabsChromosomes[i][j].getChromosomeWing1Length());
+                    wing2[index / 1000 - 1][index % 1000 - 1] << pixToMicro(tabsChromosomes[i][j].getChromosomeWing2Length());
+                    SL[index / 1000 - 1][index % 1000 - 1] << pixToMicro(tabsChromosomes[i][j].getChromosomeWing1Length()/tabsChromosomes[i][j].getChromosomeWing2Length());
+                    LS[index / 1000 - 1][index % 1000 - 1] << pixToMicro(tabsChromosomes[i][j].getChromosomeWing2Length()/tabsChromosomes[i][j].getChromosomeWing1Length());
+                    CI[index / 1000 - 1][index % 1000 - 1] << pixToMicro(tabsChromosomes[i][j].getChromosomeWing1Length()/tabsChromosomes[i][j].getChromosomeLength());
 
 //                    if( (index)%1000 > numChro)
 //                        numChro =  (index)%1000;
@@ -447,23 +448,23 @@ void MainWindow::on_showButton_clicked()
 
 
                     if(j == 0 || ( index % 1000 != tabsChromosomes[i][j-1].getIndex()))
-                        minTotalLength[index / 1000 - 1][index % 1000 - 1] = tabsChromosomes[i][j].getChromosomeLength();
+                        minTotalLength[index / 1000 - 1][index % 1000 - 1] = pixToMicro(tabsChromosomes[i][j].getChromosomeLength());
 
 
                     if(tabsChromosomes[i][j].getChromosomeLength() < minTotalLength[index / 1000 - 1][index % 1000 - 1]){
-                        minTotalLength[index / 1000 - 1][index % 1000 - 1] = tabsChromosomes[i][j].getChromosomeLength();
+                        minTotalLength[index / 1000 - 1][index % 1000 - 1] = pixToMicro(tabsChromosomes[i][j].getChromosomeLength());
                     }
 
                     if(tabsChromosomes[i][j].getChromosomeLength() > maxTotalLength[index / 1000 - 1][index % 1000 - 1]){
-                        maxTotalLength[index / 1000 - 1][index % 1000 - 1] = tabsChromosomes[i][j].getChromosomeLength();
+                        maxTotalLength[index / 1000 - 1][index % 1000 - 1] = pixToMicro(tabsChromosomes[i][j].getChromosomeLength());
                     }
 
                     if(tabsChromosomes[i][j].getChromosomeHeadLength()!= 0){
-                        satellite1[index / 1000 - 1][index % 1000 - 1] += tabsChromosomes[i][j].getChromosomeHeadLength();
+                        satellite1[index / 1000 - 1][index % 1000 - 1] += pixToMicro(tabsChromosomes[i][j].getChromosomeHeadLength());
                     }
 
                     if(tabsChromosomes[i][j].getChromosomeTailLength()!= 0){
-                        satellite2[index / 1000 - 1][index % 1000 - 1] += tabsChromosomes[i][j].getChromosomeTailLength();
+                        satellite2[index / 1000 - 1][index % 1000 - 1] += pixToMicro(tabsChromosomes[i][j].getChromosomeTailLength());
                     }
 
                 }
@@ -637,9 +638,10 @@ void MainWindow::on_showButton_clicked()
                     else genomeLine++;
 
                     drawChromosome(j*70,genomeLine * 300,i,
-                                   avgWing1[i][j] * 150.0 / maxChromosomeLength, avgWing2[i][j]* 150.0 / maxChromosomeLength,
-                                   standardErrorWing1[i][j], standardErrorWing2[i][j],
-                                   (satellite1[i][j] > satellite2[i][j])?satellite1[i][j]:satellite2[i][j],
+                                   microToPix(avgWing1[i][j] * 150.0 / maxChromosomeLength), microToPix(avgWing2[i][j]* 150.0 / maxChromosomeLength),
+                                   avgWing1[i][j],avgWing2[i][j],
+                                   microToPix(standardErrorWing1[i][j]), microToPix(standardErrorWing2[i][j]),
+                                   (satellite1[i][j] > satellite2[i][j])?microToPix(satellite1[i][j]):microToPix(satellite2[i][j]),
                                    (satellite1[i][j] > satellite2[i][j])?true:false);
 
     //                drawChromosome(j*70,i * 300,
@@ -805,7 +807,7 @@ double MainWindow::standardError(int n, QList<double> x){
 
 }
 
-void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
+void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,double wing1Micro, double wing2Micro,
                                 double errorWing1,double errorWing2,
                                 double satellite, bool isSatUp){
 
@@ -823,8 +825,8 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
     // draw wings lengths next to them
     QGraphicsTextItem *textWing1 = new QGraphicsTextItem;
     QGraphicsTextItem *textWing2 = new QGraphicsTextItem;
-    textWing1->setPlainText(QString::number(pixToMicro(wing1)));
-    textWing2->setPlainText(QString::number(pixToMicro(wing2)));
+    textWing1->setPlainText(QString::number(wing1Micro));
+    textWing2->setPlainText(QString::number(wing2Micro));
 
     QPointF wing1Pos= QPointF(x+20,y-30);
     QPointF wing2Pos= QPointF(x+20,y+10);
@@ -919,7 +921,12 @@ void MainWindow::createActions()
 }
 
 double MainWindow::pixToMicro(double pix){
-    return pix / (scale*micro/40);
+    return pix / micro;
+}
+
+int MainWindow::microToPix(double measure){
+
+    return (int)measure*micro ;
 }
 
 void MainWindow::on_calibrateButton_clicked()
@@ -996,7 +1003,7 @@ void MainWindow::on_actionCalibrate_triggered()
         scaleDialog->show();
         double scale;
 
-        if(scaleDialog->isScaleSet()){
+//        if(scaleDialog->isScaleSet()){
             scale = scaleDialog->getScale();
             tabsChromosomes[0] = ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getSortedChromosomes(false);
 
@@ -1008,8 +1015,8 @@ void MainWindow::on_actionCalibrate_triggered()
 
             micro/=scale;
 
-            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
-        }
+//            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
+//        }
     }
 
 //    manualFlag = false;

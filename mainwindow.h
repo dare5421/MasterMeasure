@@ -35,6 +35,7 @@ public:
 
     void createArray(double **&array, int max_size, int genome_size);
     void deleteArray(double **&array,  int genome_size);
+    int microToPix(double measure);
 private slots:
     void on_actionOpen_triggered();
     void on_tabWidget_tabCloseRequested(int index);
@@ -86,7 +87,7 @@ private:
 
     double micro;
 
-    void drawChromosome(int x, int y, int yy, double wing1, double wing2,double errorWing1,double errorWing2,double satellite, bool isSatUp);
+    void drawChromosome(int x, int y, int yy, double wing1, double wing2,double wing1Micro, double wing2Micro,double errorWing1,double errorWing2,double satellite, bool isSatUp);
 
 //    double* errorBarWing1;
 //    double* errorBarWing2;
