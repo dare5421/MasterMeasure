@@ -123,7 +123,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     ui->tabWidget->removeTab(index);
 }
 
-// =============================== show bottom things ===========================
+
 void MainWindow::createArray(double ** &array,  int max_size,  int genome_size)
 {
     array = new double *[genome_size];
@@ -143,6 +143,7 @@ void MainWindow::deleteArray(double **&array, int genome_size)
     delete []array;
 }
 
+// =============================== show bottom things ===========================
 void MainWindow::on_showButton_clicked()
 {
 
@@ -638,7 +639,7 @@ void MainWindow::on_showButton_clicked()
                     else genomeLine++;
 
                     drawChromosome(j*70,genomeLine * 300,i,
-                                   microToPix(avgWing1[i][j] * 150.0 / maxChromosomeLength), microToPix(avgWing2[i][j]* 150.0 / maxChromosomeLength),
+                                   microToPix(avgWing1[i][j]) * 150.0 / maxChromosomeLength, microToPix(avgWing2[i][j])* 150.0 / maxChromosomeLength,
                                    avgWing1[i][j],avgWing2[i][j],
                                    microToPix(standardErrorWing1[i][j]), microToPix(standardErrorWing2[i][j]),
                                    (satellite1[i][j] > satellite2[i][j])?microToPix(satellite1[i][j]):microToPix(satellite2[i][j]),
@@ -839,21 +840,26 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
 
 
     //add wing 1 to the upon of centromere
-    scene->addRect(x, y-wing1-5+satellite, 20 , wing1-satellite);
+    scene->addRect(x, y-wing1-5, 20 , wing1);
 
     //add satellite for wing1
-    if(isSatUp && satellite){
+    if(!isSatUp && satellite){
 
         QPolygonF *polygon = new QPolygonF();
-        polygon->append((QPoint(x+0,-wing1+satellite-15)));
-        polygon->append((QPoint(x+20,-wing1+satellite-15)));
-        polygon->append((QPoint(x+10,-wing1+satellite-10)));
-        polygon->append((QPoint(x+0,-wing1+satellite-5)));
-        polygon->append((QPoint(x+20,-wing1+satellite-5)));
+//        polygon->append((QPoint(x+0,-wing1+satellite-15)));
+//        polygon->append((QPoint(x+20,-wing1+satellite-15)));
+//        polygon->append((QPoint(x+10,-wing1+satellite-10)));
+//        polygon->append((QPoint(x+0,-wing1+satellite-5)));
+//        polygon->append((QPoint(x+20,-wing1+satellite-5)));
+        polygon->append((QPoint(x+0,-wing1-15)));
+        polygon->append((QPoint(x+20,-wing1-15)));
+        polygon->append((QPoint(x+10,-wing1-10)));
+        polygon->append((QPoint(x+0,-wing1-5)));
+        polygon->append((QPoint(x+20,-wing1-5)));
 
         scene->addPolygon(*polygon,QPen(Qt::red),QBrush(Qt::red));
 
-        scene->addRect(x, y-wing1-15, 20 , satellite);
+        scene->addRect(x, y-wing1-satellite-15, 20 , satellite);
     }    
 
     // add error bar wing1
@@ -871,7 +877,7 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
     scene->addRect(x, y+5, 20, wing2-satellite);
 
     //add satellite to wing2
-    if(!isSatUp  &&  satellite){
+    if(isSatUp  &&  satellite){
         QPolygonF *polygon = new QPolygonF();
         polygon->append((QPoint(x+0,wing2-satellite+5)));
         polygon->append((QPoint(x+20,wing2-satellite+5)));
@@ -879,7 +885,7 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
         polygon->append((QPoint(x+0,wing2-satellite+15)));
         polygon->append((QPoint(x+20,wing2-satellite+15)));
 
-        scene->addPolygon(*polygon, QPen(Qt::yellow),QBrush(Qt::yellow));
+        scene->addPolygon(*polygon, QPen(Qt::red),QBrush(Qt::blue));
 
         scene->addRect(x, y+wing2-satellite+15, 20, satellite);
     }
@@ -900,7 +906,7 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
     QGraphicsTextItem *genome = new QGraphicsTextItem;
 //    int gen= y/300;
     QChar cGen = 'A'+yy;
-    genome->setPlainText(cGen + QString::number(x/70+1));
+    genome->setPlainText( QString::number(x/70+1)+cGen);
 
 
     QPointF genomePos= QPointF(x,y+wing2-satellite+20);
