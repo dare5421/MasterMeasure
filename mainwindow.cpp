@@ -433,12 +433,12 @@ void MainWindow::on_showButton_clicked()
 
                     countChromosome[index / 1000 - 1][index % 1000 - 1]++;
 
-                    chromosomeLength[index / 1000 - 1][index % 1000 - 1] << pixToMicro(tabsChromosomes[i][j].getChromosomeLength());
-                    wing1[index / 1000 - 1][index % 1000 - 1] << pixToMicro(tabsChromosomes[i][j].getChromosomeWing1Length());
-                    wing2[index / 1000 - 1][index % 1000 - 1] << pixToMicro(tabsChromosomes[i][j].getChromosomeWing2Length());
-                    SL[index / 1000 - 1][index % 1000 - 1] << pixToMicro(tabsChromosomes[i][j].getChromosomeWing1Length()/tabsChromosomes[i][j].getChromosomeWing2Length());
-                    LS[index / 1000 - 1][index % 1000 - 1] << pixToMicro(tabsChromosomes[i][j].getChromosomeWing2Length()/tabsChromosomes[i][j].getChromosomeWing1Length());
-                    CI[index / 1000 - 1][index % 1000 - 1] << pixToMicro(tabsChromosomes[i][j].getChromosomeWing1Length()/tabsChromosomes[i][j].getChromosomeLength());
+                    chromosomeLength[index / 1000 - 1][index % 1000 - 1] << /*pixToMicro*/(tabsChromosomes[i][j].getChromosomeLength());
+                    wing1[index / 1000 - 1][index % 1000 - 1] << /*pixToMicro*/(tabsChromosomes[i][j].getChromosomeWing1Length());
+                    wing2[index / 1000 - 1][index % 1000 - 1] << /*pixToMicro*/(tabsChromosomes[i][j].getChromosomeWing2Length());
+                    SL[index / 1000 - 1][index % 1000 - 1] << /*pixToMicro*/(tabsChromosomes[i][j].getChromosomeWing1Length()/tabsChromosomes[i][j].getChromosomeWing2Length());
+                    LS[index / 1000 - 1][index % 1000 - 1] << /*pixToMicro*/(tabsChromosomes[i][j].getChromosomeWing2Length()/tabsChromosomes[i][j].getChromosomeWing1Length());
+                    CI[index / 1000 - 1][index % 1000 - 1] << /*pixToMicro*/(tabsChromosomes[i][j].getChromosomeWing1Length()/tabsChromosomes[i][j].getChromosomeLength());
 
 //                    if( (index)%1000 > numChro)
 //                        numChro =  (index)%1000;
@@ -638,12 +638,21 @@ void MainWindow::on_showButton_clicked()
                         scene->addLine((j-1)*70+15,genomeLine * 300,j*70+5,genomeLine * 300);
                     else genomeLine++;
 
+                    QMessageBox::information(this, tr("Master Measure"),"errorbar1 = "+QString::number(microToPix(standardErrorWing1[i][j]))+
+                                             "\nerrorbar2 = "+QString::number(microToPix(standardErrorWing2[i][j]))+
+                                             "\nerrorbar1 micron = "+QString::number((standardErrorWing1[i][j]))+
+                                             "\nerrorbar2 micron = "+QString::number((standardErrorWing2[i][j]))+
+                                             "\n micron is: " + QString::number(micro)
+                                             );
+
                     drawChromosome(j*70,genomeLine * 300,i,
                                    microToPix(avgWing1[i][j]) * 150.0 / maxChromosomeLength, microToPix(avgWing2[i][j])* 150.0 / maxChromosomeLength,
                                    avgWing1[i][j],avgWing2[i][j],
                                    microToPix(standardErrorWing1[i][j]), microToPix(standardErrorWing2[i][j]),
                                    (satellite1[i][j] > satellite2[i][j])?microToPix(satellite1[i][j]):microToPix(satellite2[i][j]),
                                    (satellite1[i][j] > satellite2[i][j])?true:false);
+
+
 
     //                drawChromosome(j*70,i * 300,
     //                               avgWing1[i][j] * 150 / maxChromosomeLength, avgWing2[i][j]* 150 / maxChromosomeLength,
@@ -802,7 +811,7 @@ double MainWindow::standardError(int n, QList<double> x){
 
     double sum = 0;
     for(int i=0; i<n; i++)
-        sum += qPow(x[i]-avg, 2);
+        sum += qPow(pixToMicro(x[i]-avg), 2);
 
     return sum / (n*(n-1));
 
@@ -811,6 +820,10 @@ double MainWindow::standardError(int n, QList<double> x){
 void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,double wing1Micro, double wing2Micro,
                                 double errorWing1,double errorWing2,
                                 double satellite, bool isSatUp){
+
+//    QMessageBox::information(this, tr("Master Measure"),"errorbar1 = "+QString::number(errorWing1)+
+//                             "\nerrorbar2 = "+QString::number(errorWing2)
+//                             );
 
     // draw centromere
     QPolygonF *polygon = new QPolygonF();
@@ -863,10 +876,10 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
     }    
 
     // add error bar wing1
-    if(isSatUp){
-        scene->addLine(x+8, y-wing1-15-errorWing1, x+12, y-wing1-15-errorWing1);
-        scene->addLine(x+10, y-wing1-15-errorWing1, x+10, y-wing1-15+errorWing1);
-        scene->addLine(x+8, y-wing1-15+errorWing1, x+12, y-wing1-15+errorWing1);
+    if(!isSatUp   && satellite){
+        scene->addLine(x+8, y-wing1-satellite-15-errorWing1, x+12, y-wing1-satellite-15-errorWing1);
+        scene->addLine(x+10, y-wing1-satellite-15-errorWing1, x+10, y-wing1-satellite-15+errorWing1);
+        scene->addLine(x+8, y-wing1-satellite-15+errorWing1, x+12, y-wing1-satellite-15+errorWing1);
     }else{
         scene->addLine(x+8, y-wing1-5-errorWing1, x+12, y-wing1-5-errorWing1);
         scene->addLine(x+10, y-wing1-5-errorWing1, x+10, y-wing1-5+errorWing1);
@@ -874,7 +887,7 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
     }
 
     //add wing2 to underneath of centromere
-    scene->addRect(x, y+5, 20, wing2-satellite);
+    scene->addRect(x, y+5, 20, wing2-(isSatUp ? satellite:0));
 
     //add satellite to wing2
     if(isSatUp  &&  satellite){
@@ -892,7 +905,7 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
 
 
     // add error bar wing2
-    if(!isSatUp){
+    if(isSatUp && satellite){
         scene->addLine(x+8, y+wing2+15-errorWing2, x+12, y+wing2+15-errorWing2);
         scene->addLine(x+10, y+wing2+15-errorWing2, x+10, y+wing2+15+errorWing2);
         scene->addLine(x+8, y+wing2+15+errorWing2, x+12, y+wing2+15+errorWing2);
@@ -902,18 +915,18 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
         scene->addLine(x+8, y+wing2+5+errorWing2, x+12, y+wing2+5+errorWing2);
     }
 
-    // draw genomes and Index next to them
-    QGraphicsTextItem *genome = new QGraphicsTextItem;
-//    int gen= y/300;
-    QChar cGen = 'A'+yy;
-    genome->setPlainText( QString::number(x/70+1)+cGen);
+//    // draw genomes and Index next to them
+//    QGraphicsTextItem *genome = new QGraphicsTextItem;
+
+//    QChar cGen = 'A'+yy;
+//    genome->setPlainText( QString::number(x/70+1)+cGen);
 
 
-    QPointF genomePos= QPointF(x,y+wing2-satellite+20);
+//    QPointF genomePos= QPointF(x,y+wing2+(isSatUp? 10: 0)+errorWing2+10);
 
 
-    genome->setPos(genomePos);
-    scene->addItem(genome);
+//    genome->setPos(genomePos);
+//    scene->addItem(genome);
 
 
 
@@ -932,7 +945,7 @@ double MainWindow::pixToMicro(double pix){
 
 int MainWindow::microToPix(double measure){
 
-    return (int)measure*micro ;
+    return measure*micro ;
 }
 
 void MainWindow::on_calibrateButton_clicked()
