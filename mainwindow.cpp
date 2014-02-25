@@ -649,7 +649,7 @@ void MainWindow::on_showButton_clicked()
                                    microToPix(avgWing1[i][j]) * 150.0 / maxChromosomeLength, microToPix(avgWing2[i][j])* 150.0 / maxChromosomeLength,
                                    avgWing1[i][j],avgWing2[i][j],
                                    microToPix(standardErrorWing1[i][j]), microToPix(standardErrorWing2[i][j]),
-                                   (satellite1[i][j] > satellite2[i][j])?microToPix(satellite1[i][j]):microToPix(satellite2[i][j]),
+                                   ((satellite1[i][j] > satellite2[i][j])?microToPix(satellite1[i][j]):microToPix(satellite2[i][j]))* 150.0 / maxChromosomeLength,
                                    (satellite1[i][j] > satellite2[i][j])?true:false);
 
 

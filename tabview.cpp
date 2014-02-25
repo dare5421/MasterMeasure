@@ -487,8 +487,9 @@ void TabView::keyPressEvent(QKeyEvent * event){
                 }
                 case satelliteType:
                 {
-                    chromosomes[numberOfChromosomes-1].setChromosomeTailLength
+                    chromosomes[numberOfChromosomes-1].setChromosomeHeadLength
                                 (chromosomes[numberOfChromosomes-1].getChromosomeLength());
+
                     satFlag = true;
 
                     break;
@@ -530,10 +531,12 @@ void TabView::keyPressEvent(QKeyEvent * event){
 //            flag_satellite = false;
 //        }
         if(cFlag){
-            if(chromosomes[numberOfChromosomes-1].getChromosomeTailLength()!=0)
+            if(chromosomes[numberOfChromosomes-1].getChromosomeHeadLength()!=0){
                 chromosomes[numberOfChromosomes-1].setChromosomeTailLength
                         (chromosomes[numberOfChromosomes-1].getChromosomeLength()-
-                        chromosomes[numberOfChromosomes-1].getChromosomeTailLength());
+                        chromosomes[numberOfChromosomes-1].getChromosomeHeadLength());
+                chromosomes[numberOfChromosomes-1].setChromosomeHeadLength(0);
+            }
         }
 
 
