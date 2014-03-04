@@ -20,31 +20,35 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QFile>
 
+// constructor of the main window
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    // start user interface
     ui->setupUi(this);
 
+    // start the dialog to define scale of measuring
     scaleDialog = new ScaleDialog(this);
 
-//    scaleDialog->show();
-
+    // delete 2 raw tabs (default) as program started
     ui->tabWidget->removeTab(1);
     ui->tabWidget->removeTab(0);
 
+    // initilize maximum tabs that program gonna have
     maxTab = 100;
+
+    // memory (chromosome) allocation for each tab
     tabsChromosomes = new chromosome* [maxTab];
 
+    // the scene that we want to start drawing on it
     scene = new QGraphicsScene(this);
-
     ui->graphicsView->setScene(scene);
 
+    //1 micro is x pixels, if scale isn't set
     micro = 11.9;
 
-//    standardErrorWing1 = new double [max_size]();
-//    standardErrorWing2 = new double [max_size]();
-
+    //all actions are initialized here
     createActions();
 
 //    manualFlag = false;
@@ -63,11 +67,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 }
 
+// destructor
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+// when "File -> Open" will be clicked, this action will be triggerd
 void MainWindow::on_actionOpen_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
@@ -93,7 +99,7 @@ void MainWindow::on_actionOpen_triggered()
     }
 }
 
-//closeEvent overrided to show a properiate message before close
+// closeEvent overrided to show a properiate message before close
 void MainWindow::closeEvent(QCloseEvent *event){
     QMessageBox::StandardButton msg;
     msg = QMessageBox::warning(this,"Master Measure","Are you sure you want to close?"
@@ -106,6 +112,7 @@ void MainWindow::closeEvent(QCloseEvent *event){
 
 }
 
+// this is the menu when right click will be triggered on main scene
 void MainWindow::contextMenuEvent(QContextMenuEvent  *event)
 {
     QMenu menu;
@@ -118,12 +125,13 @@ void MainWindow::contextMenuEvent(QContextMenuEvent  *event)
     menu.exec(event->globalPos());
 }
 
+// when a tab is going to be closed by user
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
     ui->tabWidget->removeTab(index);
 }
 
-
+// allocate arrays dynamically to have an efficient memory
 void MainWindow::createArray(double ** &array,  int max_size,  int genome_size)
 {
     array = new double *[genome_size];
@@ -136,6 +144,7 @@ void MainWindow::createArray(double ** &array,  int max_size,  int genome_size)
 
 }
 
+// delete dynamics arrays
 void MainWindow::deleteArray(double **&array, int genome_size)
 {
     for(int i=0; i<genome_size; i++)
@@ -798,6 +807,7 @@ void MainWindow::on_showButton_clicked()
 
 }
 
+// calculate standard error
 double MainWindow::standardError(int n, QList<double> x){
 
     if (n<=1)
@@ -817,6 +827,7 @@ double MainWindow::standardError(int n, QList<double> x){
 
 }
 
+// draw ideogram on the bottem of application
 void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,double wing1Micro, double wing2Micro,
                                 double errorWing1,double errorWing2,
                                 double satellite, bool isSatUp){
@@ -932,6 +943,7 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
 
 }
 
+// call actions on right click
 void MainWindow::createActions()
 {
     saveAction = new QAction(tr("&Save Idiogram"), this);
@@ -939,15 +951,18 @@ void MainWindow::createActions()
     connect(saveAction, SIGNAL(triggered()),this, SLOT(on_actionSave_triggered()));
 }
 
+// convert pixels to micros based on the scale was defined
 double MainWindow::pixToMicro(double pix){
     return pix / micro;
 }
 
+// convert micros to pixels
 int MainWindow::microToPix(double measure){
 
     return measure*micro ;
 }
 
+// calibrate micro with pixels by user manually
 void MainWindow::on_calibrateButton_clicked()
 {
 
@@ -1010,6 +1025,7 @@ void MainWindow::on_calibrateButton_clicked()
 
 }
 
+// calibrate micro with pixels by user manually
 void MainWindow::on_actionCalibrate_triggered()
 {
     tabsChromosomes[0] = ((TabView*)ui->tabWidget->widget(0))->getSortedChromosomes(false);
@@ -1100,6 +1116,7 @@ void MainWindow::on_actionCalibrate_triggered()
 
 
 }
+
 
 void MainWindow::on_actionSave_triggered()
 {
