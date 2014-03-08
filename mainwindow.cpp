@@ -1117,7 +1117,7 @@ void MainWindow::on_actionCalibrate_triggered()
 
 }
 
-
+// save ideogram as a .svg file (Scalable Vector Graphics) and also save raw data in a .csv file (Comma-separated values)
 void MainWindow::on_actionSave_triggered()
 {
 //    QMessageBox::information(this, tr("Master Measure"),QString::number(ui->tableWidget->columnCount()));
@@ -1180,16 +1180,19 @@ void MainWindow::on_actionSave_triggered()
 
 }
 
+// return number of pixels in a micro
 double MainWindow::getMicro() const
 {
     return micro;
 }
 
+// set how many pixels a micro is
 void MainWindow::setMicro(double value)
 {
     micro = value;
 }
 
+// about us and the the ways that others can contact us
 void MainWindow::on_actionAbout_triggered()
 {
 //    QMessageBox::about(this,"About MasterMeasure", "MasterMeasure v0.9\n\n(c) 2013 Dariush Zandi");
@@ -1214,6 +1217,7 @@ void MainWindow::on_actionAbout_triggered()
                  "<p>(C) 2013 </p>")   );
 }
 
+// change the color of lines that is drawn
 void MainWindow::on_actionLine_Color_triggered()
 {
     QColor newColor = QColorDialog::getColor(tabView->getLinePenColor());
@@ -1221,6 +1225,7 @@ void MainWindow::on_actionLine_Color_triggered()
         tabView->setLinePenColor(newColor);
 }
 
+// change the line width of lines that is drawn
 void MainWindow::on_actionLine_Width_triggered()
 {
     bool ok;
@@ -1232,6 +1237,7 @@ void MainWindow::on_actionLine_Width_triggered()
         tabView->setLinePenWidth(newWidth);
 }
 
+// change the color of scaleBar
 void MainWindow::on_actionScale_Bar_Color_triggered()
 {
     QColor newColor = QColorDialog::getColor(tabView->getScaleBarPenColor());
@@ -1241,11 +1247,13 @@ void MainWindow::on_actionScale_Bar_Color_triggered()
     tabView->drawScaleBar(micro);
 }
 
+// do nothing (right now) on cell clicking in right bottom of the app
 void MainWindow::on_tableWidget_cellClicked(int row, int column)
 {
 
 }
 
+// check "auto" when it's clicked
 void MainWindow::on_actionAuto_triggered()
 {
     ui->actionManual->setChecked(false);
@@ -1253,6 +1261,7 @@ void MainWindow::on_actionAuto_triggered()
     tabView->setManualFlag(false);
 }
 
+// check "manual" when it's clicked
 void MainWindow::on_actionManual_triggered()
 {
     ui->actionAuto->setChecked(false);
@@ -1260,6 +1269,7 @@ void MainWindow::on_actionManual_triggered()
     tabView->setManualFlag(true);
 }
 
+// when "File -> Save" is clicked, this method will be called
 void MainWindow::on_actionSave_Tab_triggered()
 {
     TabView *tab = currentTabView();
@@ -1296,11 +1306,13 @@ void MainWindow::on_actionSave_Tab_triggered()
 
 }
 
+// return current tab
 TabView* MainWindow::currentTabView()const
 {
     return (TabView*)ui->tabWidget->currentWidget();
 }
 
+// Open a saved tab
 void MainWindow::on_actionOpen_Saved_Tab_triggered()
 {
 
