@@ -13,6 +13,8 @@
 
 #include "overloads.h"
 
+
+// draw the scale-bar based on the micro
 void TabView::drawScaleBar(double micro)
 {
     QPen pen;
@@ -43,11 +45,13 @@ void TabView::drawScaleBar(double micro)
     cliGroup->setFlag(QGraphicsItem::ItemIsMovable, true);
 }
 
+// remove scale-bar
 void TabView::removeScaleBar(){
     //    scene->destroyItemGroup(cliGroup);
     //    scene->removeItem();
 }
 
+// this is the constructor that open and set scale-bar on main scene
 TabView::TabView(QString fileName, double micro)
 {
     scene = new QGraphicsScene;
@@ -98,6 +102,7 @@ TabView::TabView(QString fileName, double micro)
 
 }
 
+// this is the constructor that open a saved tab
 TabView::TabView(QString fileName, double micro, QDataStream &stream)
 {
 
@@ -233,6 +238,7 @@ TabView::TabView(QString fileName, double micro, QDataStream &stream)
 
 }
 
+// when mouse clicked to draw this method will be called
 void TabView::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
@@ -341,7 +347,7 @@ void TabView::mousePressEvent(QMouseEvent *event)
     }
 }
 
-
+// some keys on keyboard defined to do some especial tasks
 void TabView::keyPressEvent(QKeyEvent * event){
 
     QPen penCenter(Qt::blue);
@@ -580,6 +586,7 @@ void TabView::keyPressEvent(QKeyEvent * event){
 
 }
 
+// by right click on the image a menu will be appeared to define and do some especial tasks
 void TabView::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu menu(this);
@@ -595,6 +602,7 @@ void TabView::contextMenuEvent(QContextMenuEvent *event)
     menu.exec(event->globalPos());
 }
 
+// the actions on menus defined here
 void TabView::createActions()
 {
     startAction = new QAction(tr("&Start drawing"), this);
@@ -616,6 +624,7 @@ void TabView::createActions()
     connect(satelliteAction, SIGNAL(triggered()),this, SLOT(satellite()));
 }
 
+// define satellite part on the chromosome
 void TabView::satellite()
 {
     scene->addEllipse(lastPoint.x()-4,lastPoint.y()-4,8,8,QPen(Qt::yellow),QBrush(Qt::cyan));
@@ -625,7 +634,7 @@ void TabView::satellite()
         flag_satellite = 1;
 }
 
-
+// define starting point on drawing a chromosome
 void TabView::start()
 {
     isDraw = true;
@@ -637,6 +646,7 @@ void TabView::start()
     //    QMessageBox::information(this,"hi", "aha ");
 }
 
+// define the end of chromosome
 void TabView::end()
 {
     if(manualFlag){
@@ -659,6 +669,7 @@ void TabView::end()
     }
 }
 
+// define the centromere of the chromosome
 void TabView::center()
 {
     QPen penCenter(Qt::blue);
@@ -669,13 +680,14 @@ void TabView::center()
     flag_center = 1;
 }
 
+// calculate the length between 2 point
 double TabView::lineLength(QPointF startPoint, QPointF endPoint){
 
     return sqrt(pow(startPoint.x()-endPoint.x(), 2) + pow(startPoint.y() - endPoint.y(), 2));
 
 }
 
-
+// return an array of chromosomes on current tab (chromosome is an object of various length of a chromosome part)
 chromosome* TabView::getChromosomes(){
     double temp =0;
     for(int i=0; i<numberOfChromosomes; i++){
@@ -688,10 +700,12 @@ chromosome* TabView::getChromosomes(){
     return chromosomes;
 }
 
+// return number on chromosomes that has been drawn on current tab
 int TabView::getNumberOfChromosomes(){
     return numberOfChromosomes;
 }
 
+// return a sorted array of chromosomes on current tab
 chromosome* TabView::getSortedChromosomes(bool manual){
 
     chromosome *newChromosomes = new chromosome[maxNumberOfChromosomes];
@@ -747,50 +761,56 @@ chromosome* TabView::getSortedChromosomes(bool manual){
     return newChromosomes;
 }
 
+// return the color of line that is being drawn
 QColor TabView::getLinePenColor() const
 {
     return linePenColor;
 }
 
+// set the color of line that is being drawn
 void TabView::setLinePenColor(const QColor &value)
 {
     linePenColor = value;
 }
 
+// return the width of line that is being drawn
 int TabView::getLinePenWidth() const
 {
     return linePenWidth;
 }
 
+// set the width of line that is being drawn
 void TabView::setLinePenWidth(int value)
 {
     linePenWidth = value;
 }
 
-
+// return the color of scale-bar
 QColor TabView::getScaleBarPenColor() const
 {
     return scaleBarPenColor;
 }
 
+// set the color of scale-bar
 void TabView::setScaleBarPenColor(const QColor &value)
 {
     scaleBarPenColor = value;
 }
 
-
+// return that app is in manual mode or auto mod
 bool TabView::getManualFlag() const
 {
     return manualFlag;
 }
 
+// set the mode of application by its value (auto / manual)
 void TabView::setManualFlag(bool value)
 {
     manualFlag = value;
 }
 
 //============================== save & load ============================
-
+// save a stream of chromosomes on a file
 void TabView::save(QDataStream &stream){
 
     stream << manualFlag;
@@ -818,6 +838,7 @@ void TabView::save(QDataStream &stream){
     }
 }
 
+// load a stream of chromosomes from file
 bool TabView::load(QDataStream &stream){
 
     stream >> manualFlag;
@@ -866,12 +887,13 @@ bool TabView::load(QDataStream &stream){
     return true;
 }
 
-
+// convert chromosomes type to int
 int TabView::type2int(ChromosomeShape::type t)
 {
     return (int)t;
 }
 
+// convert int to chromosomes type
 ChromosomeShape::type TabView::int2type(int i)
 {
     return (ChromosomeShape::type)i;
