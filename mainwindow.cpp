@@ -1086,7 +1086,9 @@ void MainWindow::on_actionCalibrate_triggered()
 
 //        tabView->setScale(micro);
 
-        QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
+        QMessageBox::information(this, tr("Master Measure"),"each micron is " +QString::number(micro)+" pixels.");
+
+        tabView->drawScaleBar(micro);
         //        QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
     }
 

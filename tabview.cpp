@@ -48,7 +48,8 @@ void TabView::drawScaleBar(double micro)
 
 // remove scale-bar
 void TabView::removeScaleBar(){
-    //    scene->destroyItemGroup(cliGroup);
+//        scene->destroyItemGroup(cliGroup);
+
     //    scene->removeItem();
 }
 
