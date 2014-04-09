@@ -11,7 +11,7 @@ ScaleDialog::ScaleDialog(QWidget *parent) :
     ui(new Ui::ScaleDialog)
 {
     ui->setupUi(this);
-    scale = 40;
+    scale = 10;
 //    this->setWindowFlags(Qt::WindowTitleHint);
 //    this->setWindowFlags(Qt::WindowCloseButtonHint);
     flag = false;

@@ -36,6 +36,8 @@ public:
     void createArray(double **&array, int max_size, int genome_size);
     void deleteArray(double **&array,  int genome_size);
     int microToPix(double measure);
+
+
 private slots:
     void on_actionOpen_triggered();
     void on_tabWidget_tabCloseRequested(int index);

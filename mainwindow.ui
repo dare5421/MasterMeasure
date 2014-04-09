@@ -394,6 +394,9 @@
    </property>
   </action>
   <action name="actionCalibrate">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="icon.qrc">
      <normaloff>:/image/unit.png</normaloff>:/image/unit.png</iconset>
