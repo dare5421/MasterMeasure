@@ -153,7 +153,7 @@ void MainWindow::deleteArray(double **&array, int genome_size)
 }
 
 // =============================== show bottom things ===========================
-void MainWindow::on_showButton_clicked()
+void MainWindow::on_showButton_clicked(double zSize=1)
 {
 
     int max_size = 100;
@@ -655,7 +655,7 @@ void MainWindow::on_showButton_clicked()
                                                  );
 
                         drawChromosome(j*70,genomeLine * 300,i,
-                                       microToPix(avgWing1[i][j]) * 150.0 / maxChromosomeLength, microToPix(avgWing2[i][j])* 150.0 / maxChromosomeLength,
+                                       microToPix(avgWing1[i][j]) * zSize * 150.0 / maxChromosomeLength, microToPix(avgWing2[i][j])* zSize* 150.0 / maxChromosomeLength,
                                        avgWing1[i][j],avgWing2[i][j],
                                        microToPix(standardErrorWing1[i][j]), microToPix(standardErrorWing2[i][j]),
                                        ((satellite1[i][j] > satellite2[i][j])?microToPix(satellite1[i][j]):microToPix(satellite2[i][j]))* 150.0 / maxChromosomeLength,
@@ -1403,3 +1403,13 @@ void MainWindow::on_actionOpen_Saved_Tab_triggered()
 
 }
 
+
+void MainWindow::on_comboBox_currentIndexChanged(int index)
+{
+    on_showButton_clicked(index+1);
+}
+
+void MainWindow::on_showButton_clicked()
+{
+    on_showButton_clicked(1);
+}

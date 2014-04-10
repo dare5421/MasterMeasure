@@ -42,7 +42,7 @@ private slots:
     void on_actionOpen_triggered();
     void on_tabWidget_tabCloseRequested(int index);
 
-    void on_showButton_clicked();
+    void on_showButton_clicked(double zSize);
 
 
     void on_calibrateButton_clicked();
@@ -69,6 +69,10 @@ private slots:
     void on_actionOpen_Saved_Tab_triggered();
 
     void on_actionCalibrate_triggered();
+
+    void on_comboBox_currentIndexChanged(int index);
+
+    void on_showButton_clicked();
 
 private:
     Ui::MainWindow *ui;
