@@ -42,7 +42,7 @@ private slots:
     void on_actionOpen_triggered();
     void on_tabWidget_tabCloseRequested(int index);
 
-    void on_showButton_clicked(double zSize);
+    void on_showButton_clicked(double zSize, bool showErrorBar, bool showMeasures);
 
 
     void on_calibrateButton_clicked();
@@ -76,6 +76,10 @@ private slots:
 
     void on_horizontalSlider_valueChanged(int value);
 
+    void on_checkBox_errorBar_clicked();
+
+    void on_checkBox_measures_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -95,7 +99,7 @@ private:
 
     double micro;
 
-    void drawChromosome(int x, int y, int yy, double wing1, double wing2,double wing1Micro, double wing2Micro,double errorWing1,double errorWing2,double satellite, bool isSatUp);
+    void drawChromosome(int x, int y, int yy, double wing1, double wing2, double wing1Micro, double wing2Micro, double errorWing1, double errorWing2, double satellite, bool isSatUp, bool showErrorBar, bool showMeasures);
 
 //    double* errorBarWing1;
 //    double* errorBarWing2;

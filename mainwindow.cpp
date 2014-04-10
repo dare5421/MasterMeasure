@@ -65,6 +65,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     isCalibratePressed = false;
 
+    ui->calibrateButton->setHidden(true);
+
 }
 
 // destructor
@@ -153,7 +155,7 @@ void MainWindow::deleteArray(double **&array, int genome_size)
 }
 
 // =============================== show bottom things ===========================
-void MainWindow::on_showButton_clicked(double zSize=5)
+void MainWindow::on_showButton_clicked(double zSize=5,bool showErrorBar=true ,bool showMeasures=true)
 {
     zSize/=5;
     int max_size = 100;
@@ -380,7 +382,7 @@ void MainWindow::on_showButton_clicked(double zSize=5)
                         avgWing1[0][j],avgWing2[0][j],
                         standardErrorWing1[0][j], standardErrorWing2[0][j],
                         (satellite1[0][j] > satellite2[0][j])?satellite1[0][j]:satellite2[0][j] ,
-                                                                               (satellite1[0][j] > satellite2[0][j])?true:false  );
+                                                                               (satellite1[0][j] > satellite2[0][j])?true:false,showErrorBar,showMeasures  );
 
                 //============ add chromosomes to table ================
                 myTable->insertRow(myTable->rowCount());
@@ -659,7 +661,7 @@ void MainWindow::on_showButton_clicked(double zSize=5)
                                        avgWing1[i][j],avgWing2[i][j],
                                        microToPix(standardErrorWing1[i][j]), microToPix(standardErrorWing2[i][j]),
                                        ((satellite1[i][j] > satellite2[i][j])?microToPix(satellite1[i][j]):microToPix(satellite2[i][j]))* 150.0 / maxChromosomeLength,
-                                       (satellite1[i][j] > satellite2[i][j])?true:false);
+                                       (satellite1[i][j] > satellite2[i][j])?true:false, showErrorBar,showMeasures);
 
 
 
@@ -830,7 +832,7 @@ double MainWindow::standardError(int n, QList<double> x){
 // draw ideogram on the bottem of application
 void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,double wing1Micro, double wing2Micro,
                                 double errorWing1,double errorWing2,
-                                double satellite, bool isSatUp){
+                                double satellite, bool isSatUp, bool showErrorBar, bool showMeasures){
 
     //    QMessageBox::information(this, tr("Master Measure"),"errorbar1 = "+QString::number(errorWing1)+
     //                             "\nerrorbar2 = "+QString::number(errorWing2)
@@ -855,12 +857,13 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
 
     QPointF wing1Pos= QPointF(x+20,y-30);
     QPointF wing2Pos= QPointF(x+20,y+10);
+    if(showMeasures){
+        textWing1->setPos(wing1Pos);
+        scene->addItem(textWing1);
 
-    textWing1->setPos(wing1Pos);
-    scene->addItem(textWing1);
-
-    textWing2->setPos(wing2Pos);
-    scene->addItem(textWing2);
+        textWing2->setPos(wing2Pos);
+        scene->addItem(textWing2);
+    }
 
 
     //add wing 1 to the upon of centromere
@@ -887,14 +890,16 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
     }
 
     // add error bar wing1
-    if(!isSatUp   && satellite){
-        scene->addLine(x+8, y-wing1-satellite-15-errorWing1, x+12, y-wing1-satellite-15-errorWing1);
-        scene->addLine(x+10, y-wing1-satellite-15-errorWing1, x+10, y-wing1-satellite-15+errorWing1);
-        scene->addLine(x+8, y-wing1-satellite-15+errorWing1, x+12, y-wing1-satellite-15+errorWing1);
-    }else{
-        scene->addLine(x+8, y-wing1-5-errorWing1, x+12, y-wing1-5-errorWing1);
-        scene->addLine(x+10, y-wing1-5-errorWing1, x+10, y-wing1-5+errorWing1);
-        scene->addLine(x+8, y-wing1-5+errorWing1, x+12, y-wing1-5+errorWing1);
+    if(showErrorBar){
+        if(!isSatUp   && satellite){
+            scene->addLine(x+8, y-wing1-satellite-15-errorWing1, x+12, y-wing1-satellite-15-errorWing1);
+            scene->addLine(x+10, y-wing1-satellite-15-errorWing1, x+10, y-wing1-satellite-15+errorWing1);
+            scene->addLine(x+8, y-wing1-satellite-15+errorWing1, x+12, y-wing1-satellite-15+errorWing1);
+        }else{
+            scene->addLine(x+8, y-wing1-5-errorWing1, x+12, y-wing1-5-errorWing1);
+            scene->addLine(x+10, y-wing1-5-errorWing1, x+10, y-wing1-5+errorWing1);
+            scene->addLine(x+8, y-wing1-5+errorWing1, x+12, y-wing1-5+errorWing1);
+        }
     }
 
     //add wing2 to underneath of centromere
@@ -916,14 +921,16 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
 
 
     // add error bar wing2
-    if(isSatUp && satellite){
-        scene->addLine(x+8, y+wing2+15-errorWing2, x+12, y+wing2+15-errorWing2);
-        scene->addLine(x+10, y+wing2+15-errorWing2, x+10, y+wing2+15+errorWing2);
-        scene->addLine(x+8, y+wing2+15+errorWing2, x+12, y+wing2+15+errorWing2);
-    }else{
-        scene->addLine(x+8, y+wing2+5-errorWing2, x+12, y+wing2+5-errorWing2);
-        scene->addLine(x+10, y+wing2+5-errorWing2, x+10, y+wing2+5+errorWing2);
-        scene->addLine(x+8, y+wing2+5+errorWing2, x+12, y+wing2+5+errorWing2);
+    if(showErrorBar){
+        if(isSatUp && satellite){
+            scene->addLine(x+8, y+wing2+15-errorWing2, x+12, y+wing2+15-errorWing2);
+            scene->addLine(x+10, y+wing2+15-errorWing2, x+10, y+wing2+15+errorWing2);
+            scene->addLine(x+8, y+wing2+15+errorWing2, x+12, y+wing2+15+errorWing2);
+        }else{
+            scene->addLine(x+8, y+wing2+5-errorWing2, x+12, y+wing2+5-errorWing2);
+            scene->addLine(x+10, y+wing2+5-errorWing2, x+10, y+wing2+5+errorWing2);
+            scene->addLine(x+8, y+wing2+5+errorWing2, x+12, y+wing2+5+errorWing2);
+        }
     }
 
     //    // draw genomes and Index next to them
@@ -1416,5 +1423,24 @@ void MainWindow::on_showButton_clicked()
 
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
-    on_showButton_clicked(value);
+    on_showButton_clicked(value,ui->checkBox_errorBar->isChecked(),ui->checkBox_measures->isChecked());
+}
+
+void MainWindow::on_checkBox_errorBar_clicked()
+{
+    if(!ui->checkBox_errorBar->isChecked()){
+//        QMessageBox::warning(this, tr("checkbox"), tr("test"));
+        on_showButton_clicked(ui->horizontalSlider->value(),false,ui->checkBox_measures->isChecked());
+    }
+    else
+        on_showButton_clicked(ui->horizontalSlider->value(),true,ui->checkBox_measures->isChecked());
+}
+
+void MainWindow::on_checkBox_measures_clicked()
+{
+    if(!ui->checkBox_measures->isChecked()){
+        on_showButton_clicked(ui->horizontalSlider->value(),ui->checkBox_errorBar->isChecked(),false);
+    }
+    else
+        on_showButton_clicked(ui->horizontalSlider->value(),ui->checkBox_errorBar->isChecked(),true);
 }
