@@ -204,26 +204,21 @@
        </item>
        <item>
         <widget class="QSlider" name="horizontalSlider">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>10</number>
+         </property>
+         <property name="value">
+          <number>5</number>
+         </property>
          <property name="sliderPosition">
-          <number>0</number>
+          <number>5</number>
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox">
-         <item>
-          <property name="text">
-           <string>1</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>2</string>
-          </property>
-         </item>
         </widget>
        </item>
        <item>

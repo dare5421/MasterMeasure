@@ -153,9 +153,9 @@ void MainWindow::deleteArray(double **&array, int genome_size)
 }
 
 // =============================== show bottom things ===========================
-void MainWindow::on_showButton_clicked(double zSize=1)
+void MainWindow::on_showButton_clicked(double zSize=5)
 {
-
+    zSize/=5;
     int max_size = 100;
     int genome_size = 26;
     scale = scaleDialog->getScale();
@@ -647,12 +647,12 @@ void MainWindow::on_showButton_clicked(double zSize=1)
                             scene->addLine((j-1)*70+15,genomeLine * 300,j*70+5,genomeLine * 300);
                         else genomeLine++;
 
-                        QMessageBox::information(this, tr("Master Measure"),"errorbar1 = "+QString::number(microToPix(standardErrorWing1[i][j]))+
-                                                 "\nerrorbar2 = "+QString::number(microToPix(standardErrorWing2[i][j]))+
-                                                 "\nerrorbar1 micron = "+QString::number((standardErrorWing1[i][j]))+
-                                                 "\nerrorbar2 micron = "+QString::number((standardErrorWing2[i][j]))+
-                                                 "\n micron is: " + QString::number(micro)
-                                                 );
+//                        QMessageBox::information(this, tr("Master Measure"),"errorbar1 = "+QString::number(microToPix(standardErrorWing1[i][j]))+
+//                                                 "\nerrorbar2 = "+QString::number(microToPix(standardErrorWing2[i][j]))+
+//                                                 "\nerrorbar1 micron = "+QString::number((standardErrorWing1[i][j]))+
+//                                                 "\nerrorbar2 micron = "+QString::number((standardErrorWing2[i][j]))+
+//                                                 "\n micron is: " + QString::number(micro)
+//                                                 );
 
                         drawChromosome(j*70,genomeLine * 300,i,
                                        microToPix(avgWing1[i][j]) * zSize * 150.0 / maxChromosomeLength, microToPix(avgWing2[i][j])* zSize* 150.0 / maxChromosomeLength,
@@ -1411,5 +1411,10 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
 
 void MainWindow::on_showButton_clicked()
 {
-    on_showButton_clicked(1);
+    on_showButton_clicked(5);
+}
+
+void MainWindow::on_horizontalSlider_valueChanged(int value)
+{
+    on_showButton_clicked(value);
 }
