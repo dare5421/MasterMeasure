@@ -12,6 +12,8 @@
 
 #include "chromosomeshape.h"
 
+#include "scaledialog.h"
+
 class TabView:public QGraphicsView
 {
 
@@ -50,9 +52,15 @@ public:
     bool getManualFlag() const;
     void setManualFlag(bool value);
 
+
+    double getScale() const;
+    void setScale(double &value);
+
     void save(QDataStream &stream);
     bool load(QDataStream &stream);
 private:
+
+    double scale;
     QGraphicsScene *scene;
     QPointF startPoint;
     QPointF endPoint;

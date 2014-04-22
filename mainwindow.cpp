@@ -51,8 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //all actions are initialized here
     createActions();
 
-//    manualFlag = false;
-//    ui->actionAuto->setChecked(true);
+    //    manualFlag = false;
+    //    ui->actionAuto->setChecked(true);
     manualFlag = true;
     ui->actionManual->setChecked(true);
 
@@ -64,6 +64,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionSave_Tab->setEnabled(false);
 
     isCalibratePressed = false;
+
+    ui->calibrateButton->setHidden(true);
 
 }
 
@@ -117,10 +119,10 @@ void MainWindow::contextMenuEvent(QContextMenuEvent  *event)
 {
     QMenu menu;
 
-//    menu.addAction("this is it");
+    //    menu.addAction("this is it");
     menu.addAction(saveAction);
-//    menu.addAction(centerAction);
-//    menu.addAction(endAction);
+    //    menu.addAction(centerAction);
+    //    menu.addAction(endAction);
 
     menu.exec(event->globalPos());
 }
@@ -138,9 +140,9 @@ void MainWindow::createArray(double ** &array,  int max_size,  int genome_size)
     for(int i=0; i<genome_size; i++)
         array[i] = new double[max_size]();
 
-//    for(int i=0; i<genome_size; i++)
-//        for(int j=0; j<max_size; j++)
-//            array[i][j] = 0;
+    //    for(int i=0; i<genome_size; i++)
+    //        for(int j=0; j<max_size; j++)
+    //            array[i][j] = 0;
 
 }
 
@@ -153,9 +155,9 @@ void MainWindow::deleteArray(double **&array, int genome_size)
 }
 
 // =============================== show bottom things ===========================
-void MainWindow::on_showButton_clicked()
+void MainWindow::on_showButton_clicked(double zSize=5,bool showErrorBar=true ,bool showMeasures=true)
 {
-
+    zSize/=5;
     int max_size = 100;
     int genome_size = 26;
     scale = scaleDialog->getScale();
@@ -172,8 +174,8 @@ void MainWindow::on_showButton_clicked()
                 ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
 
 
-//        double avgWing1[genome_size][max_size]={0};
-//        double avgWing2[genome_size][max_size]={0};
+        //        double avgWing1[genome_size][max_size]={0};
+        //        double avgWing2[genome_size][max_size]={0};
 
         double **avgWing1;
         createArray(avgWing1, max_size, genome_size);
@@ -181,13 +183,13 @@ void MainWindow::on_showButton_clicked()
         double **avgWing2;
         createArray(avgWing2, max_size, genome_size);
 
-//        QMessageBox::information(this, tr("Master Measure"),QString::number(avgWing1[0][0]));
+        //        QMessageBox::information(this, tr("Master Measure"),QString::number(avgWing1[0][0]));
 
-//        double standardErrorTotalLength[genome_size][max_size]={0};
-//        double standardErrorWing1[genome_size][max_size]={0};
-//        double standardErrorWing2[genome_size][max_size]={0};
-//        double standardErrorLS[genome_size][max_size]={0};
-//        double standardErrorSL[genome_size][max_size]={0};
+        //        double standardErrorTotalLength[genome_size][max_size]={0};
+        //        double standardErrorWing1[genome_size][max_size]={0};
+        //        double standardErrorWing2[genome_size][max_size]={0};
+        //        double standardErrorLS[genome_size][max_size]={0};
+        //        double standardErrorSL[genome_size][max_size]={0};
         double **standardErrorTotalLength;
         createArray(standardErrorTotalLength, max_size, genome_size);
 
@@ -207,13 +209,13 @@ void MainWindow::on_showButton_clicked()
         createArray(standardErrorCI, max_size, genome_size);
 
 
-//        double **standardErrorRL;
-//        createArray(standardErrorRL, max_size, genome_size);
+        //        double **standardErrorRL;
+        //        createArray(standardErrorRL, max_size, genome_size);
 
 
-//        double satellite1[genome_size][max_size]={0};
-//        double satellite2[genome_size][max_size]={0};
-//        double avgTotalLength[genome_size][max_size]={0};
+        //        double satellite1[genome_size][max_size]={0};
+        //        double satellite2[genome_size][max_size]={0};
+        //        double avgTotalLength[genome_size][max_size]={0};
         double **satellite1;
         createArray(satellite1, max_size, genome_size);
 
@@ -224,8 +226,8 @@ void MainWindow::on_showButton_clicked()
         createArray(avgTotalLength, max_size, genome_size);
 
 
-//        double minTotalLength[genome_size][max_size]={0};
-//        double maxTotalLength[genome_size][max_size]={0};
+        //        double minTotalLength[genome_size][max_size]={0};
+        //        double maxTotalLength[genome_size][max_size]={0};
         double **minTotalLength;
         createArray(minTotalLength, max_size, genome_size);
 
@@ -241,11 +243,11 @@ void MainWindow::on_showButton_clicked()
         QList<double> CI[genome_size][max_size];
 
 
-//        double allTotalLength[genome_size][max_size]={0};    // sum of lengths of chromosomes
-//        double allShortLength[genome_size][max_size]={0};
-//        double sigmaWing1[genome_size][max_size]={0};
-//        double sigmaWing2[genome_size][max_size]={0};
-//        double sigmaTotalLength[genome_size][max_size]={0};
+        //        double allTotalLength[genome_size][max_size]={0};    // sum of lengths of chromosomes
+        //        double allShortLength[genome_size][max_size]={0};
+        //        double sigmaWing1[genome_size][max_size]={0};
+        //        double sigmaWing2[genome_size][max_size]={0};
+        //        double sigmaTotalLength[genome_size][max_size]={0};
 
         double **allTotalLength;
         createArray(allTotalLength, max_size, genome_size);
@@ -271,8 +273,8 @@ void MainWindow::on_showButton_clicked()
         double A = 0;
         double A1 = 0;
 
-//        double **RL;
-//        createArray(RL, max_size, genome_size);
+        //        double **RL;
+        //        createArray(RL, max_size, genome_size);
 
 
 
@@ -377,10 +379,10 @@ void MainWindow::on_showButton_clicked()
                     scene->addLine((j-1)*70+15,0,j*70+5,0);
                 drawChromosome(j*70,0,0,
                                avgWing1[0][j] * 150 / maxChromosomeLength,avgWing2[0][j]* 150 / maxChromosomeLength,
-                                avgWing1[0][j],avgWing2[0][j],
-                               standardErrorWing1[0][j], standardErrorWing2[0][j],
-                               (satellite1[0][j] > satellite2[0][j])?satellite1[0][j]:satellite2[0][j] ,
-                               (satellite1[0][j] > satellite2[0][j])?true:false  );
+                        avgWing1[0][j],avgWing2[0][j],
+                        standardErrorWing1[0][j], standardErrorWing2[0][j],
+                        (satellite1[0][j] > satellite2[0][j])?satellite1[0][j]:satellite2[0][j] ,
+                                                                               (satellite1[0][j] > satellite2[0][j])?true:false,showErrorBar,showMeasures  );
 
                 //============ add chromosomes to table ================
                 myTable->insertRow(myTable->rowCount());
@@ -449,8 +451,8 @@ void MainWindow::on_showButton_clicked()
                     LS[index / 1000 - 1][index % 1000 - 1] << /*pixToMicro*/(tabsChromosomes[i][j].getChromosomeWing2Length()/tabsChromosomes[i][j].getChromosomeWing1Length());
                     CI[index / 1000 - 1][index % 1000 - 1] << /*pixToMicro*/(tabsChromosomes[i][j].getChromosomeWing1Length()/tabsChromosomes[i][j].getChromosomeLength());
 
-//                    if( (index)%1000 > numChro)
-//                        numChro =  (index)%1000;
+                    //                    if( (index)%1000 > numChro)
+                    //                        numChro =  (index)%1000;
 
                     chromosomesIndex << index;
                     chromosomesGenome << (index / 1000);
@@ -485,7 +487,7 @@ void MainWindow::on_showButton_clicked()
             int topIndexOfGenomes = chromosomesTopIndex.size();
 
 
-//!!!!!!!! ATTENTION TO THIS PART. IT NEED MORE ATTENTION !!!!!!!!!
+            //!!!!!!!! ATTENTION TO THIS PART. IT NEED MORE ATTENTION !!!!!!!!!
             int flag = 0,counter = 0, ARg2_counter = 0;
 
             for (int i=0; i<numberOfGenome;i++){
@@ -592,129 +594,129 @@ void MainWindow::on_showButton_clicked()
 
             //////////////////////////////////////////////////////
 
-//            for (int i=0; i < ui->tabWidget->count();i++){
-//                for(int j=0; j < numChro; j++){
+            //            for (int i=0; i < ui->tabWidget->count();i++){
+            //                for(int j=0; j < numChro; j++){
 
-//                    sigmaWing1[0][j] += qPow((tabsChromosomes[i][j].getChromosomeWing1Length() - avgWing1[0][j]),2);
-//                    sigmaWing2[0][j] += qPow((tabsChromosomes[i][j].getChromosomeWing2Length() - avgWing2[0][j]),2);
+            //                    sigmaWing1[0][j] += qPow((tabsChromosomes[i][j].getChromosomeWing1Length() - avgWing1[0][j]),2);
+            //                    sigmaWing2[0][j] += qPow((tabsChromosomes[i][j].getChromosomeWing2Length() - avgWing2[0][j]),2);
 
-//                    sigmaTotalLength[0][j] += qPow((tabsChromosomes[i][j].getChromosomeLength() - avgTotalLength[0][j]),2);
-//                }
-//            }
+            //                    sigmaTotalLength[0][j] += qPow((tabsChromosomes[i][j].getChromosomeLength() - avgTotalLength[0][j]),2);
+            //                }
+            //            }
 
 
             //////////////////////////////////////////////////////
 
-//            for(int j=0; j< numChro; j++){
+            //            for(int j=0; j< numChro; j++){
 
-//                sigmaWing1[0][j] /= (countChromosome[0][j]-1);
-//                sigmaWing2[0][j] /= (countChromosome[0][j]-1);
+            //                sigmaWing1[0][j] /= (countChromosome[0][j]-1);
+            //                sigmaWing2[0][j] /= (countChromosome[0][j]-1);
 
-//                sigmaTotalLength[0][j] /= (countChromosome[0][j]-1);
+            //                sigmaTotalLength[0][j] /= (countChromosome[0][j]-1);
 
-//            }
+            //            }
 
-//            for (int i=0; i< ui->tabWidget->count();i++){
-//                for(int j=0; j< numChro; j++){
-//                    standardErrorWing1[0][j] = qSqrt(sigmaWing1[0][j]) / qSqrt(countChromosome[0][j]);
-//                    standardErrorWing2[0][j] = qSqrt(sigmaWing2[0][j]) / qSqrt(countChromosome[0][j]);
+            //            for (int i=0; i< ui->tabWidget->count();i++){
+            //                for(int j=0; j< numChro; j++){
+            //                    standardErrorWing1[0][j] = qSqrt(sigmaWing1[0][j]) / qSqrt(countChromosome[0][j]);
+            //                    standardErrorWing2[0][j] = qSqrt(sigmaWing2[0][j]) / qSqrt(countChromosome[0][j]);
 
-//                    standardErrorTotalLength[0][j] = qSqrt(sigmaTotalLength[0][j]) / qSqrt(countChromosome[0][j]);
-//                }
-//            }
+            //                    standardErrorTotalLength[0][j] = qSqrt(sigmaTotalLength[0][j]) / qSqrt(countChromosome[0][j]);
+            //                }
+            //            }
 
-//!!!!!!!!!!!!!!!!!
+            //!!!!!!!!!!!!!!!!!
 
-//            draw in bottom
+            //            draw in bottom
 
 
             int genomeLine = -1;
-//            QMessageBox::information(this, tr("Master Measure"),QString::number(numberOfGenome)
-//                                     +"  "+QString::number(numChro)
-//                                      +"  "+QString::number(topIndex)
-//                                     );
+            //            QMessageBox::information(this, tr("Master Measure"),QString::number(numberOfGenome)
+            //                                     +"  "+QString::number(numChro)
+            //                                      +"  "+QString::number(topIndex)
+            //                                     );
 
 
-//            for(int i=0; i<numberOfGenome; i++)
+            //            for(int i=0; i<numberOfGenome; i++)
             for(int i=0; i<genome_size; i++)
-            for(int j=0; j< topIndexOfGenomes ; j++){
-                if(avgWing1[i][j]+avgWing2[i][j]){
-    //                genome = (tabsChromosomes[0][j].getIndex())/1000-1;
+                for(int j=0; j< topIndexOfGenomes ; j++){
+                    if(avgWing1[i][j]+avgWing2[i][j]){
+                        //                genome = (tabsChromosomes[0][j].getIndex())/1000-1;
 
-//                    QMessageBox::information(this, tr("Master Measure"),QString::number(i)+"  "+QString::number(j));
-                    if (j>0)
-    //                if((tabsChromosomes[0][j].getIndex())%1000 > 1)
-                        scene->addLine((j-1)*70+15,genomeLine * 300,j*70+5,genomeLine * 300);
-                    else genomeLine++;
+                        //                    QMessageBox::information(this, tr("Master Measure"),QString::number(i)+"  "+QString::number(j));
+                        if (j>0)
+                            //                if((tabsChromosomes[0][j].getIndex())%1000 > 1)
+                            scene->addLine((j-1)*70+15,genomeLine * 300,j*70+5,genomeLine * 300);
+                        else genomeLine++;
 
-                    QMessageBox::information(this, tr("Master Measure"),"errorbar1 = "+QString::number(microToPix(standardErrorWing1[i][j]))+
-                                             "\nerrorbar2 = "+QString::number(microToPix(standardErrorWing2[i][j]))+
-                                             "\nerrorbar1 micron = "+QString::number((standardErrorWing1[i][j]))+
-                                             "\nerrorbar2 micron = "+QString::number((standardErrorWing2[i][j]))+
-                                             "\n micron is: " + QString::number(micro)
-                                             );
+//                        QMessageBox::information(this, tr("Master Measure"),"errorbar1 = "+QString::number(microToPix(standardErrorWing1[i][j]))+
+//                                                 "\nerrorbar2 = "+QString::number(microToPix(standardErrorWing2[i][j]))+
+//                                                 "\nerrorbar1 micron = "+QString::number((standardErrorWing1[i][j]))+
+//                                                 "\nerrorbar2 micron = "+QString::number((standardErrorWing2[i][j]))+
+//                                                 "\n micron is: " + QString::number(micro)
+//                                                 );
 
-                    drawChromosome(j*70,genomeLine * 300,i,
-                                   microToPix(avgWing1[i][j]) * 150.0 / maxChromosomeLength, microToPix(avgWing2[i][j])* 150.0 / maxChromosomeLength,
-                                   avgWing1[i][j],avgWing2[i][j],
-                                   microToPix(standardErrorWing1[i][j]), microToPix(standardErrorWing2[i][j]),
-                                   ((satellite1[i][j] > satellite2[i][j])?microToPix(satellite1[i][j]):microToPix(satellite2[i][j]))* 150.0 / maxChromosomeLength,
-                                   (satellite1[i][j] > satellite2[i][j])?true:false);
-
-
-
-    //                drawChromosome(j*70,i * 300,
-    //                               avgWing1[i][j] * 150 / maxChromosomeLength, avgWing2[i][j]* 150 / maxChromosomeLength,
-    //                               0, 0,
-    //                               0,
-    //                               false  );
+                        drawChromosome(j*70,genomeLine * 300,i,
+                                       microToPix(avgWing1[i][j]) * zSize * 150.0 / maxChromosomeLength, microToPix(avgWing2[i][j])* zSize* 150.0 / maxChromosomeLength,
+                                       avgWing1[i][j],avgWing2[i][j],
+                                       microToPix(standardErrorWing1[i][j]), microToPix(standardErrorWing2[i][j]),
+                                       ((satellite1[i][j] > satellite2[i][j])?microToPix(satellite1[i][j]):microToPix(satellite2[i][j]))* 150.0 / maxChromosomeLength,
+                                       (satellite1[i][j] > satellite2[i][j])?true:false, showErrorBar,showMeasures);
 
 
 
-    //                if (j>0)
-    //                    scene->addLine((j-1)*70+15,0,j*70+5,0);
-    //                drawChromosome(j*70,0,
-    //                               avgWing1[j] * 150 / maxChromosomeLength,avgWing2[j]* 150 / maxChromosomeLength,
-    //                               standardErrorWing1[0][j], standardErrorWing2[0][j],
-    //                               (satellite1[j] > satellite2[j])?satellite1[j]:satellite2[j],
-    //                               (satellite1[j] > satellite2[j])?true:false  );
+                        //                drawChromosome(j*70,i * 300,
+                        //                               avgWing1[i][j] * 150 / maxChromosomeLength, avgWing2[i][j]* 150 / maxChromosomeLength,
+                        //                               0, 0,
+                        //                               0,
+                        //                               false  );
 
 
-                    //============ add chromosomes to table ================
 
-                    int tableRow = myTable->rowCount();
-                    myTable->insertRow(tableRow);
+                        //                if (j>0)
+                        //                    scene->addLine((j-1)*70+15,0,j*70+5,0);
+                        //                drawChromosome(j*70,0,
+                        //                               avgWing1[j] * 150 / maxChromosomeLength,avgWing2[j]* 150 / maxChromosomeLength,
+                        //                               standardErrorWing1[0][j], standardErrorWing2[0][j],
+                        //                               (satellite1[j] > satellite2[j])?satellite1[j]:satellite2[j],
+                        //                               (satellite1[j] > satellite2[j])?true:false  );
 
 
-//                    myTable->setItem(j, 0,new QTableWidgetItem("Chromosome "+QString::number(j+1)) );
-                    QChar genC = 'A' + i;
-                    myTable->setItem(tableRow, 0,new QTableWidgetItem(QString::number(j+1)+ genC ) );
-                    // 177 is an ascii code for +/-
-                    myTable->setItem(tableRow, 1, new QTableWidgetItem(QString::number(avgWing2[i][j])+" " +177+" " + QString::number(standardErrorWing2[i][j])));
+                        //============ add chromosomes to table ================
 
-                    myTable->setItem(tableRow, 2, new QTableWidgetItem(QString::number(avgWing1[i][j])+" " +177+" " + QString::number(standardErrorWing1[i][j])));
+                        int tableRow = myTable->rowCount();
+                        myTable->insertRow(tableRow);
 
-                    myTable->setItem(tableRow, 3, new QTableWidgetItem(QString::number(avgWing2[i][j]+avgWing1[i][j])+" " +177+" " + QString::number(standardErrorTotalLength[i][j])));
 
-                    myTable->setItem(tableRow, 4, new QTableWidgetItem(QString::number(avgWing2[i][j] / avgWing1[i][j])+" " +177+" " + QString::number(standardErrorLS[i][j])));
+                        //                    myTable->setItem(j, 0,new QTableWidgetItem("Chromosome "+QString::number(j+1)) );
+                        QChar genC = 'A' + i;
+                        myTable->setItem(tableRow, 0,new QTableWidgetItem(QString::number(j+1)+ genC ) );
+                        // 177 is an ascii code for +/-
+                        myTable->setItem(tableRow, 1, new QTableWidgetItem(QString::number(avgWing2[i][j])+" " +177+" " + QString::number(standardErrorWing2[i][j])));
 
-                    myTable->setItem(tableRow, 5, new QTableWidgetItem(QString::number(avgWing1[i][j] / avgWing2[i][j])
-                                                                +" " +177+" " + QString::number(standardErrorSL[i][j])));
+                        myTable->setItem(tableRow, 2, new QTableWidgetItem(QString::number(avgWing1[i][j])+" " +177+" " + QString::number(standardErrorWing1[i][j])));
 
-                    myTable->setItem(tableRow, 6, new QTableWidgetItem("% "+QString::number((avgWing2[i][j]+avgWing1[i][j])*100.0/HCL)
-                                                                +" " +177+" " + QString::number(standardErrorTotalLength[i][j]*100.0/HCL)));
+                        myTable->setItem(tableRow, 3, new QTableWidgetItem(QString::number(avgWing2[i][j]+avgWing1[i][j])+" " +177+" " + QString::number(standardErrorTotalLength[i][j])));
 
-                    myTable->setItem(tableRow, 7, new QTableWidgetItem("% "+QString::number(avgWing1[i][j]*100.0/HCL)
-                                                                +" " +177+" " + QString::number(standardErrorWing1[i][j]*100.0/HCL)));
+                        myTable->setItem(tableRow, 4, new QTableWidgetItem(QString::number(avgWing2[i][j] / avgWing1[i][j])+" " +177+" " + QString::number(standardErrorLS[i][j])));
 
-                    myTable->setItem(tableRow, 8, new QTableWidgetItem(QString::number(avgWing1[i][j]/(avgWing2[i][j]+avgWing1[i][j]))
-                                                                +" " +177+" " + QString::number(standardErrorCI[i][j])));
+                        myTable->setItem(tableRow, 5, new QTableWidgetItem(QString::number(avgWing1[i][j] / avgWing2[i][j])
+                                                                           +" " +177+" " + QString::number(standardErrorSL[i][j])));
 
-                    double slp = avgWing1[i][j] *100.0 / avgWing2[i][j];
-                    myTable->setItem(tableRow, 9, new QTableWidgetItem( slp > 0 ?(slp>12.5?(slp>25?(slp>39.5 ? (slp == 50? "M": "m") : "sm"):"st") : "t"):"T"));
+                        myTable->setItem(tableRow, 6, new QTableWidgetItem("% "+QString::number((avgWing2[i][j]+avgWing1[i][j])*100.0/HCL)
+                                                                           +" " +177+" " + QString::number(standardErrorTotalLength[i][j]*100.0/HCL)));
 
+                        myTable->setItem(tableRow, 7, new QTableWidgetItem("% "+QString::number(avgWing1[i][j]*100.0/HCL)
+                                                                           +" " +177+" " + QString::number(standardErrorWing1[i][j]*100.0/HCL)));
+
+                        myTable->setItem(tableRow, 8, new QTableWidgetItem(QString::number(avgWing1[i][j]/(avgWing2[i][j]+avgWing1[i][j]))
+                                                                           +" " +177+" " + QString::number(standardErrorCI[i][j])));
+
+                        double slp = avgWing1[i][j] *100.0 / avgWing2[i][j];
+                        myTable->setItem(tableRow, 9, new QTableWidgetItem( slp > 0 ?(slp>12.5?(slp>25?(slp>39.5 ? (slp == 50? "M": "m") : "sm"):"st") : "t"):"T"));
+
+                    }
                 }
-            }
 
             //add to the end of Table
             int tableRow = myTable->rowCount();
@@ -830,11 +832,11 @@ double MainWindow::standardError(int n, QList<double> x){
 // draw ideogram on the bottem of application
 void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,double wing1Micro, double wing2Micro,
                                 double errorWing1,double errorWing2,
-                                double satellite, bool isSatUp){
+                                double satellite, bool isSatUp, bool showErrorBar, bool showMeasures){
 
-//    QMessageBox::information(this, tr("Master Measure"),"errorbar1 = "+QString::number(errorWing1)+
-//                             "\nerrorbar2 = "+QString::number(errorWing2)
-//                             );
+    //    QMessageBox::information(this, tr("Master Measure"),"errorbar1 = "+QString::number(errorWing1)+
+    //                             "\nerrorbar2 = "+QString::number(errorWing2)
+    //                             );
 
     // draw centromere
     QPolygonF *polygon = new QPolygonF();
@@ -855,12 +857,13 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
 
     QPointF wing1Pos= QPointF(x+20,y-30);
     QPointF wing2Pos= QPointF(x+20,y+10);
+    if(showMeasures){
+        textWing1->setPos(wing1Pos);
+        scene->addItem(textWing1);
 
-    textWing1->setPos(wing1Pos);
-    scene->addItem(textWing1);
-
-    textWing2->setPos(wing2Pos);
-    scene->addItem(textWing2);
+        textWing2->setPos(wing2Pos);
+        scene->addItem(textWing2);
+    }
 
 
     //add wing 1 to the upon of centromere
@@ -870,11 +873,11 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
     if(!isSatUp && satellite){
 
         QPolygonF *polygon = new QPolygonF();
-//        polygon->append((QPoint(x+0,-wing1+satellite-15)));
-//        polygon->append((QPoint(x+20,-wing1+satellite-15)));
-//        polygon->append((QPoint(x+10,-wing1+satellite-10)));
-//        polygon->append((QPoint(x+0,-wing1+satellite-5)));
-//        polygon->append((QPoint(x+20,-wing1+satellite-5)));
+        //        polygon->append((QPoint(x+0,-wing1+satellite-15)));
+        //        polygon->append((QPoint(x+20,-wing1+satellite-15)));
+        //        polygon->append((QPoint(x+10,-wing1+satellite-10)));
+        //        polygon->append((QPoint(x+0,-wing1+satellite-5)));
+        //        polygon->append((QPoint(x+20,-wing1+satellite-5)));
         polygon->append((QPoint(x+0,-wing1-15)));
         polygon->append((QPoint(x+20,-wing1-15)));
         polygon->append((QPoint(x+10,-wing1-10)));
@@ -884,17 +887,19 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
         scene->addPolygon(*polygon,QPen(Qt::red),QBrush(Qt::red));
 
         scene->addRect(x, y-wing1-satellite-15, 20 , satellite);
-    }    
+    }
 
     // add error bar wing1
-    if(!isSatUp   && satellite){
-        scene->addLine(x+8, y-wing1-satellite-15-errorWing1, x+12, y-wing1-satellite-15-errorWing1);
-        scene->addLine(x+10, y-wing1-satellite-15-errorWing1, x+10, y-wing1-satellite-15+errorWing1);
-        scene->addLine(x+8, y-wing1-satellite-15+errorWing1, x+12, y-wing1-satellite-15+errorWing1);
-    }else{
-        scene->addLine(x+8, y-wing1-5-errorWing1, x+12, y-wing1-5-errorWing1);
-        scene->addLine(x+10, y-wing1-5-errorWing1, x+10, y-wing1-5+errorWing1);
-        scene->addLine(x+8, y-wing1-5+errorWing1, x+12, y-wing1-5+errorWing1);
+    if(showErrorBar){
+        if(!isSatUp   && satellite){
+            scene->addLine(x+8, y-wing1-satellite-15-errorWing1, x+12, y-wing1-satellite-15-errorWing1);
+            scene->addLine(x+10, y-wing1-satellite-15-errorWing1, x+10, y-wing1-satellite-15+errorWing1);
+            scene->addLine(x+8, y-wing1-satellite-15+errorWing1, x+12, y-wing1-satellite-15+errorWing1);
+        }else{
+            scene->addLine(x+8, y-wing1-5-errorWing1, x+12, y-wing1-5-errorWing1);
+            scene->addLine(x+10, y-wing1-5-errorWing1, x+10, y-wing1-5+errorWing1);
+            scene->addLine(x+8, y-wing1-5+errorWing1, x+12, y-wing1-5+errorWing1);
+        }
     }
 
     //add wing2 to underneath of centromere
@@ -916,28 +921,30 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
 
 
     // add error bar wing2
-    if(isSatUp && satellite){
-        scene->addLine(x+8, y+wing2+15-errorWing2, x+12, y+wing2+15-errorWing2);
-        scene->addLine(x+10, y+wing2+15-errorWing2, x+10, y+wing2+15+errorWing2);
-        scene->addLine(x+8, y+wing2+15+errorWing2, x+12, y+wing2+15+errorWing2);
-    }else{
-        scene->addLine(x+8, y+wing2+5-errorWing2, x+12, y+wing2+5-errorWing2);
-        scene->addLine(x+10, y+wing2+5-errorWing2, x+10, y+wing2+5+errorWing2);
-        scene->addLine(x+8, y+wing2+5+errorWing2, x+12, y+wing2+5+errorWing2);
+    if(showErrorBar){
+        if(isSatUp && satellite){
+            scene->addLine(x+8, y+wing2+15-errorWing2, x+12, y+wing2+15-errorWing2);
+            scene->addLine(x+10, y+wing2+15-errorWing2, x+10, y+wing2+15+errorWing2);
+            scene->addLine(x+8, y+wing2+15+errorWing2, x+12, y+wing2+15+errorWing2);
+        }else{
+            scene->addLine(x+8, y+wing2+5-errorWing2, x+12, y+wing2+5-errorWing2);
+            scene->addLine(x+10, y+wing2+5-errorWing2, x+10, y+wing2+5+errorWing2);
+            scene->addLine(x+8, y+wing2+5+errorWing2, x+12, y+wing2+5+errorWing2);
+        }
     }
 
-//    // draw genomes and Index next to them
-//    QGraphicsTextItem *genome = new QGraphicsTextItem;
+    //    // draw genomes and Index next to them
+    //    QGraphicsTextItem *genome = new QGraphicsTextItem;
 
-//    QChar cGen = 'A'+yy;
-//    genome->setPlainText( QString::number(x/70+1)+cGen);
-
-
-//    QPointF genomePos= QPointF(x,y+wing2+(isSatUp? 10: 0)+errorWing2+10);
+    //    QChar cGen = 'A'+yy;
+    //    genome->setPlainText( QString::number(x/70+1)+cGen);
 
 
-//    genome->setPos(genomePos);
-//    scene->addItem(genome);
+    //    QPointF genomePos= QPointF(x,y+wing2+(isSatUp? 10: 0)+errorWing2+10);
+
+
+    //    genome->setPos(genomePos);
+    //    scene->addItem(genome);
 
 
 
@@ -964,8 +971,7 @@ int MainWindow::microToPix(double measure){
 
 // calibrate micro with pixels by user manually
 void MainWindow::on_calibrateButton_clicked()
-{
-
+{    
     manualFlag = false;
     ui->actionAuto->setChecked(true);
     ui->actionManual->setChecked(false);
@@ -998,8 +1004,8 @@ void MainWindow::on_calibrateButton_clicked()
         }
         micro = temp/numberOfChromosomes;
         micro /= scale; // each micron is about ? pixel
-//        if (!flag)
-//            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
+        //        if (!flag)
+        //            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
 
 
 
@@ -1028,91 +1034,135 @@ void MainWindow::on_calibrateButton_clicked()
 // calibrate micro with pixels by user manually
 void MainWindow::on_actionCalibrate_triggered()
 {
+
     tabsChromosomes[0] = ((TabView*)ui->tabWidget->widget(0))->getSortedChromosomes(false);
     int numberOfChromosomes =
             ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
+    double scale;
 
-    if( ui->tabWidget->count() == 1 ){
+    //first click on calibration
+    if(ui->actionCalibrate->isChecked()){
 
-//        scaleDialog = new ScaleDialog(this);
-        scaleDialog->show();
-        double scale;
+        ui->actionAuto->setChecked(true);
+        ui->actionManual->setChecked(false);
 
-//        if(scaleDialog->isScaleSet()){
+        manualFlag = false;
+        tabView->setManualFlag(manualFlag);
+
+
+        if( ui->tabWidget->count() == 1 ){
+
+
+            scaleDialog->show();
+
             scale = scaleDialog->getScale();
-            tabsChromosomes[0] = ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getSortedChromosomes(false);
+//            tabsChromosomes[0] = ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getSortedChromosomes(false);
 
-            double temp=0;
-            for(int j=0; j< numberOfChromosomes; j++)
-                temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
+//            tabView->setScale(scale);
+            //            double temp=0;
+            //            for(int j=0; j< numberOfChromosomes; j++)
+            //                temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
 
-            micro = temp/numberOfChromosomes;
+            //            micro = temp/numberOfChromosomes;
 
-            micro/=scale;
+            //            micro/=scale;
+            //            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
 
-//            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
-//        }
+        }
+
+    }
+    //second click on calibration
+    else{
+        ui->actionAuto->setChecked(false);
+        ui->actionManual->setChecked(true);
+
+        manualFlag = true;
+        tabView->setManualFlag(manualFlag);
+
+        scale = scaleDialog->getScale();
+        tabsChromosomes[0] = ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getSortedChromosomes(false);
+
+        double temp=0;
+        for(int j=0; j< numberOfChromosomes; j++)
+            temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
+
+        micro = temp/numberOfChromosomes;
+
+        micro/=scale;
+
+
+//        tabView->setScale(micro);
+
+        QMessageBox::information(this, tr("Master Measure"),"each micron is " +QString::number(micro)+" pixels.");
+
+        tabView->drawScaleBar(micro);
+        //        QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
     }
 
-//    manualFlag = false;
-//    ui->actionAuto->setChecked(true);
-//    ui->actionManual->setChecked(false);
-
-////    bool flag = false;
-//    double temp = 0;
-//    if (ui->tabWidget->count()== 0){
-
-//        this->on_actionOpen_triggered();
-////        flag = true;
-
-//    }else if( ui->tabWidget->count() == 1 ){
+    //    ui->actionCalibrate->setChecked(true);
 
 
-//        if( !isCalibratePressed ){
-
-//            for (int i=0; i< ui->tabWidget->count();i++){
-//                tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes(false);
-//            }
-
-////            QString str="";
-//            int numberOfChromosomes =
-//                    ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
-
-//            for(int j=0; j< numberOfChromosomes; j++){
-////                str += "chromosome length"+QString::number(j)+": \n"+
-////                        QString::number((tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength()))+"\n";
-
-//                temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
-//            }
-//            micro = temp/numberOfChromosomes;
-//            QMessageBox::information(this, tr("Master Measure"),QString::number(temp));
-//            //        micro /= scale; // each micron is about ? pixel
-//            //        if (!flag)
-//            //            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
-
-//            isCalibratePressed = true;
 
 
-//        }else if(isCalibratePressed){
-//            //        if (!flag)
-//            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
-//            QMessageBox::information(this, tr("Master Measure"),"The scale is set.");
+    //    manualFlag = false;
+    //    ui->actionAuto->setChecked(true);
+    //    ui->actionManual->setChecked(false);
 
-//            scaleDialog->show();
-//            int scale  = scaleDialog->getScale();
+    ////    bool flag = false;
+    //    double temp = 0;
+    //    if (ui->tabWidget->count()== 0){
 
-//            micro /= scale; // each micron is about ? pixel
+    //        this->on_actionOpen_triggered();
+    ////        flag = true;
 
-//            ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
+    //    }else if( ui->tabWidget->count() == 1 ){
 
-//            manualFlag = true;
-//            ui->actionAuto->setChecked(false);
-//            ui->actionManual->setChecked(true);
-//            ui->calibrateButton->setDisabled(true);
-//            ui->actionCalibrate->setDisabled(true);
-//        }
 
-//    }
+    //        if( !isCalibratePressed ){
+
+    //            for (int i=0; i< ui->tabWidget->count();i++){
+    //                tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes(false);
+    //            }
+
+    ////            QString str="";
+    //            int numberOfChromosomes =
+    //                    ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
+
+    //            for(int j=0; j< numberOfChromosomes; j++){
+    ////                str += "chromosome length"+QString::number(j)+": \n"+
+    ////                        QString::number((tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength()))+"\n";
+
+    //                temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
+    //            }
+    //            micro = temp/numberOfChromosomes;
+    //            QMessageBox::information(this, tr("Master Measure"),QString::number(temp));
+    //            //        micro /= scale; // each micron is about ? pixel
+    //            //        if (!flag)
+    //            //            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
+
+    //            isCalibratePressed = true;
+
+
+    //        }else if(isCalibratePressed){
+    //            //        if (!flag)
+    //            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
+    //            QMessageBox::information(this, tr("Master Measure"),"The scale is set.");
+
+    //            scaleDialog->show();
+    //            int scale  = scaleDialog->getScale();
+
+    //            micro /= scale; // each micron is about ? pixel
+
+    //            ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
+
+    //            manualFlag = true;
+    //            ui->actionAuto->setChecked(false);
+    //            ui->actionManual->setChecked(true);
+    //            ui->calibrateButton->setDisabled(true);
+    //            ui->actionCalibrate->setDisabled(true);
+    //        }
+
+    //    }
 
 
 }
@@ -1120,7 +1170,7 @@ void MainWindow::on_actionCalibrate_triggered()
 // save ideogram as a .svg file (Scalable Vector Graphics) and also save raw data in a .csv file (Comma-separated values)
 void MainWindow::on_actionSave_triggered()
 {
-//    QMessageBox::information(this, tr("Master Measure"),QString::number(ui->tableWidget->columnCount()));
+    //    QMessageBox::information(this, tr("Master Measure"),QString::number(ui->tableWidget->columnCount()));
 
     QString fileName = QFileDialog::getSaveFileName(this, "Save Scene", "", "vector image (*.svg)");
     //    QPixmap pixMap = QPixmap::grabWidget(ui->graphicsView);
@@ -1148,7 +1198,7 @@ void MainWindow::on_actionSave_triggered()
 
     scene->render(&painter);
 
-//    save table in a text file
+    //    save table in a text file
     QFile f( "table.csv" );
 
     if( f.open( QIODevice::WriteOnly ) ){
@@ -1195,26 +1245,26 @@ void MainWindow::setMicro(double value)
 // about us and the the ways that others can contact us
 void MainWindow::on_actionAbout_triggered()
 {
-//    QMessageBox::about(this,"About MasterMeasure", "MasterMeasure v0.9\n\n(c) 2013 Dariush Zandi");
+    //    QMessageBox::about(this,"About MasterMeasure", "MasterMeasure v0.9\n\n(c) 2013 Dariush Zandi");
     QMessageBox::about(this, tr("About Master Measure"),
-              tr("<p><b>Master Measure</b> v0.9 </p>"
-                 "<p>Dariush Zandi </p>"
-                 "<p>"
-                    "<a href=\"mailto:dariush.zandi.n@gmail.com\"><img src=\":/about/email.png\"></a>"
-                    "<a href=\"http://twitter.com/dariushzandi\"><img src=\":/about/twitter.png\"></a>"
-                    "<a href=\"http://ir.linkedin.com/pub/dariush-zandi/19/789/31b\"><img src=\":/about/linkedin.png\"></a>"
-                    "<a href=\"http://dariushzandi.ir\"><img src=\":/about/www.png\"></a>"
-                 "</p>""<p>Ghader Mirzaghaderi </p>"
-                 "<p>"
-                    "<a href=\"mailto:gh.mirzaghaderi@uok.ac.ir\"><img src=\":/about/email.png\"></a>"
-                    "<a href=\"https://www.facebook.com/ghader.mirzaghaderi\"><img src=\":/about/facebook.png\"></a>"
-                    "<a href=\"http://agri.uok.ac.ir/mirzaghaderi/\"><img src=\":/about/www.png\"></a>"
-                 "</p>""<p> Khaled Mirzae</p>"
-                 "<p>"
-                    "<a href=\"mailto:khaled.mirzayi@gmail.com\"><img src=\":/about/email.png\"></a>"
-                    "<a href=\"http://www.linkedin.com/pub/khaled-mirzaei/54/a54/a3b\"><img src=\":/about/linkedin.png\"></a>"
-                 "</p>"
-                 "<p>(C) 2013 </p>")   );
+                       tr("<p><b>Master Measure</b> v0.9 </p>"
+                          "<p>Dariush Zandi </p>"
+                          "<p>"
+                          "<a href=\"mailto:dariush.zandi.n@gmail.com\"><img src=\":/about/email.png\"></a>"
+                          "<a href=\"http://twitter.com/dariushzandi\"><img src=\":/about/twitter.png\"></a>"
+                          "<a href=\"http://ir.linkedin.com/pub/dariush-zandi/19/789/31b\"><img src=\":/about/linkedin.png\"></a>"
+                          "<a href=\"http://dariushzandi.ir\"><img src=\":/about/www.png\"></a>"
+                          "</p>""<p>Ghader Mirzaghaderi </p>"
+                          "<p>"
+                          "<a href=\"mailto:gh.mirzaghaderi@uok.ac.ir\"><img src=\":/about/email.png\"></a>"
+                          "<a href=\"https://www.facebook.com/ghader.mirzaghaderi\"><img src=\":/about/facebook.png\"></a>"
+                          "<a href=\"http://agri.uok.ac.ir/mirzaghaderi/\"><img src=\":/about/www.png\"></a>"
+                          "</p>""<p> Khaled Mirzae</p>"
+                          "<p>"
+                          "<a href=\"mailto:khaled.mirzayi@gmail.com\"><img src=\":/about/email.png\"></a>"
+                          "<a href=\"http://www.linkedin.com/pub/khaled-mirzaei/54/a54/a3b\"><img src=\":/about/linkedin.png\"></a>"
+                          "</p>"
+                          "<p>(C) 2013 </p>")   );
 }
 
 // change the color of lines that is drawn
@@ -1243,7 +1293,7 @@ void MainWindow::on_actionScale_Bar_Color_triggered()
     QColor newColor = QColorDialog::getColor(tabView->getScaleBarPenColor());
     if (newColor.isValid())
         tabView->setScaleBarPenColor(newColor);
-//    tabView->removeScaleBar();
+    //    tabView->removeScaleBar();
     tabView->drawScaleBar(micro);
 }
 
@@ -1277,27 +1327,27 @@ void MainWindow::on_actionSave_Tab_triggered()
         return;
 
     for (;;) {
-//        QString fileName = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
+        //        QString fileName = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
         QString fileName = QFileDialog::getSaveFileName(this, "Save Tab", ui->tabWidget->tabText(ui->tabWidget->currentIndex()), "master measure tab (*.mmt)");
 
-//        if (fileName.isEmpty())
-//            fileName = QFileDialog::getSaveFileName(this);
+        //        if (fileName.isEmpty())
+        //            fileName = QFileDialog::getSaveFileName(this);
         if (fileName.isEmpty())
             break;
 
         QFile file(fileName);
         if (!file.open(QIODevice::WriteOnly)) {
             QMessageBox::warning(this,
-                                tr("File error"),
-                                tr("Failed to open\n%1").arg(fileName));
-//            tab->setFileName(QString());
+                                 tr("File error"),
+                                 tr("Failed to open\n%1").arg(fileName));
+            //            tab->setFileName(QString());
         } else {
             QDataStream stream(&file);
             tab->save(stream);
-//            tab->setFileName(fileName);
+            //            tab->setFileName(fileName);
 
             int index = ui->tabWidget->indexOf(tab);
-//            Q_ASSERT(index != -1);
+            //            Q_ASSERT(index != -1);
             ui->tabWidget->setTabText(index, fileName);
 
             break;
@@ -1316,22 +1366,22 @@ TabView* MainWindow::currentTabView()const
 void MainWindow::on_actionOpen_Saved_Tab_triggered()
 {
 
-//    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
-//    if (!fileName.isEmpty()) {
+    //    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+    //    if (!fileName.isEmpty()) {
 
-//        tabView = new TabView(fileName, micro);
+    //        tabView = new TabView(fileName, micro);
 
-//        ui->tabWidget->addTab(tabView,"someTab");
+    //        ui->tabWidget->addTab(tabView,"someTab");
 
-//        QFileInfo fileInfo = fileName;
-//        ui->tabWidget->setTabText(ui->tabWidget->count()-1,fileInfo.baseName());
+    //        QFileInfo fileInfo = fileName;
+    //        ui->tabWidget->setTabText(ui->tabWidget->count()-1,fileInfo.baseName());
 
-//        ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
+    //        ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
 
-//        tabView->setManualFlag(manualFlag);
+    //        tabView->setManualFlag(manualFlag);
 
-//    }
-//    =========================================
+    //    }
+    //    =========================================
     QString fileName = QFileDialog::getOpenFileName(this, "Open Saved Tab","","master measure tab (*.mmt)");
     if (fileName.isEmpty())
         return;
@@ -1339,8 +1389,8 @@ void MainWindow::on_actionOpen_Saved_Tab_triggered()
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
         QMessageBox::warning(this,
-                            tr("File error"),
-                            tr("Failed to open\n%1").arg(fileName));
+                             tr("File error"),
+                             tr("Failed to open\n%1").arg(fileName));
         return;
     }
     QDataStream stream(&file);
@@ -1349,14 +1399,48 @@ void MainWindow::on_actionOpen_Saved_Tab_triggered()
     ui->tabWidget->addTab(tabView,"someTab");
     ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
 
-//    if (!tab->load(stream)) {
-//        QMessageBox::warning(this,
-//                            tr("Parse error"),
-//                            tr("Failed to parse\n%1").arg(fileName));
-//        delete tab;
-//        return;
-//    }
-//    ============================================
+    //    if (!tab->load(stream)) {
+    //        QMessageBox::warning(this,
+    //                            tr("Parse error"),
+    //                            tr("Failed to parse\n%1").arg(fileName));
+    //        delete tab;
+    //        return;
+    //    }
+    //    ============================================
 
 }
 
+
+void MainWindow::on_comboBox_currentIndexChanged(int index)
+{
+    on_showButton_clicked(index+1);
+}
+
+void MainWindow::on_showButton_clicked()
+{
+    on_showButton_clicked(5);
+}
+
+void MainWindow::on_horizontalSlider_valueChanged(int value)
+{
+    on_showButton_clicked(value,ui->checkBox_errorBar->isChecked(),ui->checkBox_measures->isChecked());
+}
+
+void MainWindow::on_checkBox_errorBar_clicked()
+{
+    if(!ui->checkBox_errorBar->isChecked()){
+//        QMessageBox::warning(this, tr("checkbox"), tr("test"));
+        on_showButton_clicked(ui->horizontalSlider->value(),false,ui->checkBox_measures->isChecked());
+    }
+    else
+        on_showButton_clicked(ui->horizontalSlider->value(),true,ui->checkBox_measures->isChecked());
+}
+
+void MainWindow::on_checkBox_measures_clicked()
+{
+    if(!ui->checkBox_measures->isChecked()){
+        on_showButton_clicked(ui->horizontalSlider->value(),ui->checkBox_errorBar->isChecked(),false);
+    }
+    else
+        on_showButton_clicked(ui->horizontalSlider->value(),ui->checkBox_errorBar->isChecked(),true);
+}

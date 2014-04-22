@@ -25,7 +25,8 @@ void TabView::drawScaleBar(double micro)
     QGraphicsLineItem *vLine1;
     QGraphicsLineItem *vLine2;
     QGraphicsTextItem *text;
-    text = scene->addText("10 micrometer");
+
+    text = scene->addText(QString::number(getScale())+" micrometer");
     text->setPos(10,5);
 
     text->setDefaultTextColor(scaleBarPenColor);
@@ -47,7 +48,8 @@ void TabView::drawScaleBar(double micro)
 
 // remove scale-bar
 void TabView::removeScaleBar(){
-    //    scene->destroyItemGroup(cliGroup);
+//        scene->destroyItemGroup(cliGroup);
+
     //    scene->removeItem();
 }
 
@@ -55,7 +57,7 @@ void TabView::removeScaleBar(){
 TabView::TabView(QString fileName, double micro)
 {
     scene = new QGraphicsScene;
-
+    scale = 10;
     QImage image(fileName);
 
     if (image.isNull()) {
@@ -108,6 +110,8 @@ TabView::TabView(QString fileName, double micro, QDataStream &stream)
 
     // we need to save number of chromosomes draw before
     // we should save color and other thing and load it
+
+    scale=10;
 
     maxNumberOfChromosomes = 100; //danger
     numberOfChromosomes = 0;
@@ -247,6 +251,9 @@ void TabView::mousePressEvent(QMouseEvent *event)
         QBrush brush(linePenColor.darker(200));
         penDot.setWidth(6);
         penLine.setWidth(linePenWidth);
+
+//        if()
+
         if(isDraw){
             if(isEndPoint){
                 endPoint = event->pos();
@@ -807,6 +814,16 @@ bool TabView::getManualFlag() const
 void TabView::setManualFlag(bool value)
 {
     manualFlag = value;
+}
+
+double TabView::getScale() const
+{
+    return scale;
+}
+
+void TabView::setScale(double &value)
+{
+    scale = value;
 }
 
 //============================== save & load ============================
