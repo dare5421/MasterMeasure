@@ -1099,8 +1099,8 @@ void MainWindow::on_actionCalibrate_triggered()
 
 //        tabView->setScale(micro);
 
-        QMessageBox::information(this, tr("Ideokar"),"each micron is " +QString::number(micro)+" pixels.");
-
+//        QMessageBox::information(this, tr("Ideokar"),"each micron is " +QString::number(micro)+" pixels.");
+        QMessageBox::information(this, tr("Ideokar"),"Calibration is done.");
 //        tabView->drawScaleBar(micro);
         //        QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
     }

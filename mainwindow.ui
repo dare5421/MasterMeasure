@@ -228,6 +228,9 @@
         <property name="cursor" stdset="0">
          <cursorShape>ArrowCursor</cursorShape>
         </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
         <attribute name="horizontalHeaderVisible">
          <bool>false</bool>
         </attribute>
@@ -239,7 +242,7 @@
         </attribute>
         <column>
          <property name="text">
-          <string/>
+          <string>Chromosome Name</string>
          </property>
         </column>
         <column>

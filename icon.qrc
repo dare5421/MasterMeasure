@@ -14,6 +14,7 @@
         <file>hand.png</file>
         <file>auto.png</file>
         <file>unit.png</file>
+        <file>ideokar.png</file>
     </qresource>
     <qresource prefix="/about">
         <file>email.png</file>
