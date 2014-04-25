@@ -69,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QMessageBox::information(this, tr("Master Measure"),"Please Open an Image and Calibrate The Application.");
 
+
 }
 
 // destructor
@@ -1100,7 +1101,7 @@ void MainWindow::on_actionCalibrate_triggered()
 
         QMessageBox::information(this, tr("Master Measure"),"each micron is " +QString::number(micro)+" pixels.");
 
-        tabView->drawScaleBar(micro);
+//        tabView->drawScaleBar(micro);
         //        QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
     }
 
