@@ -67,7 +67,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->calibrateButton->setHidden(true);
 
-    QMessageBox::information(this, tr("Master Measure"),"Please Open an Image and Calibrate The Application.");
+    QMessageBox::information(this, tr("Ideokar"),"Please Open an Image and Calibrate The Application.");
 
 
 }
@@ -107,7 +107,7 @@ void MainWindow::on_actionOpen_triggered()
 // closeEvent overrided to show a properiate message before close
 void MainWindow::closeEvent(QCloseEvent *event){
     QMessageBox::StandardButton msg;
-    msg = QMessageBox::warning(this,"Master Measure","Are you sure you want to close?"
+    msg = QMessageBox::warning(this,"Ideokar","Are you sure you want to close?"
                                ,QMessageBox::Yes | QMessageBox::No);
     if (msg == QMessageBox::Yes){
         event->accept();
@@ -189,7 +189,7 @@ void MainWindow::on_showButton_clicked(double zSize=5,bool showErrorBar=true ,bo
         double **avgWing2;
         createArray(avgWing2, max_size, genome_size);
 
-        //        QMessageBox::information(this, tr("Master Measure"),QString::number(avgWing1[0][0]));
+        //        QMessageBox::information(this, tr("Ideokar"),QString::number(avgWing1[0][0]));
 
         //        double standardErrorTotalLength[genome_size][max_size]={0};
         //        double standardErrorWing1[genome_size][max_size]={0};
@@ -637,7 +637,7 @@ void MainWindow::on_showButton_clicked(double zSize=5,bool showErrorBar=true ,bo
 
 
             int genomeLine = -1;
-            //            QMessageBox::information(this, tr("Master Measure"),QString::number(numberOfGenome)
+            //            QMessageBox::information(this, tr("Ideokar"),QString::number(numberOfGenome)
             //                                     +"  "+QString::number(numChro)
             //                                      +"  "+QString::number(topIndex)
             //                                     );
@@ -649,13 +649,13 @@ void MainWindow::on_showButton_clicked(double zSize=5,bool showErrorBar=true ,bo
                     if(avgWing1[i][j]+avgWing2[i][j]){
                         //                genome = (tabsChromosomes[0][j].getIndex())/1000-1;
 
-                        //                    QMessageBox::information(this, tr("Master Measure"),QString::number(i)+"  "+QString::number(j));
+                        //                    QMessageBox::information(this, tr("Ideokar"),QString::number(i)+"  "+QString::number(j));
                         if (j>0)
                             //                if((tabsChromosomes[0][j].getIndex())%1000 > 1)
                             scene->addLine((j-1)*70+15,genomeLine * 300,j*70+5,genomeLine * 300);
                         else genomeLine++;
 
-//                        QMessageBox::information(this, tr("Master Measure"),"errorbar1 = "+QString::number(microToPix(standardErrorWing1[i][j]))+
+//                        QMessageBox::information(this, tr("Ideokar"),"errorbar1 = "+QString::number(microToPix(standardErrorWing1[i][j]))+
 //                                                 "\nerrorbar2 = "+QString::number(microToPix(standardErrorWing2[i][j]))+
 //                                                 "\nerrorbar1 micron = "+QString::number((standardErrorWing1[i][j]))+
 //                                                 "\nerrorbar2 micron = "+QString::number((standardErrorWing2[i][j]))+
@@ -840,7 +840,7 @@ void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,
                                 double errorWing1,double errorWing2,
                                 double satellite, bool isSatUp, bool showErrorBar, bool showMeasures){
 
-    //    QMessageBox::information(this, tr("Master Measure"),"errorbar1 = "+QString::number(errorWing1)+
+    //    QMessageBox::information(this, tr("Ideokar"),"errorbar1 = "+QString::number(errorWing1)+
     //                             "\nerrorbar2 = "+QString::number(errorWing2)
     //                             );
 
@@ -1011,7 +1011,7 @@ void MainWindow::on_calibrateButton_clicked()
         micro = temp/numberOfChromosomes;
         micro /= scale; // each micron is about ? pixel
         //        if (!flag)
-        //            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
+        //            QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
 
 
 
@@ -1019,7 +1019,7 @@ void MainWindow::on_calibrateButton_clicked()
 
     if(isCalibratePressed){
         if (!flag)
-            QMessageBox::information(this, tr("Master Measure"),"The scale is set.");
+            QMessageBox::information(this, tr("Ideokar"),"The scale is set.");
 
         ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
 
@@ -1072,7 +1072,7 @@ void MainWindow::on_actionCalibrate_triggered()
             //            micro = temp/numberOfChromosomes;
 
             //            micro/=scale;
-            //            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
+            //            QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
 
         }
 
@@ -1099,10 +1099,10 @@ void MainWindow::on_actionCalibrate_triggered()
 
 //        tabView->setScale(micro);
 
-        QMessageBox::information(this, tr("Master Measure"),"each micron is " +QString::number(micro)+" pixels.");
+        QMessageBox::information(this, tr("Ideokar"),"each micron is " +QString::number(micro)+" pixels.");
 
 //        tabView->drawScaleBar(micro);
-        //        QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
+        //        QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
     }
 
     //    ui->actionCalibrate->setChecked(true);
@@ -1141,18 +1141,18 @@ void MainWindow::on_actionCalibrate_triggered()
     //                temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
     //            }
     //            micro = temp/numberOfChromosomes;
-    //            QMessageBox::information(this, tr("Master Measure"),QString::number(temp));
+    //            QMessageBox::information(this, tr("Ideokar"),QString::number(temp));
     //            //        micro /= scale; // each micron is about ? pixel
     //            //        if (!flag)
-    //            //            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
+    //            //            QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
 
     //            isCalibratePressed = true;
 
 
     //        }else if(isCalibratePressed){
     //            //        if (!flag)
-    //            QMessageBox::information(this, tr("Master Measure"),QString::number(micro));
-    //            QMessageBox::information(this, tr("Master Measure"),"The scale is set.");
+    //            QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
+    //            QMessageBox::information(this, tr("Ideokar"),"The scale is set.");
 
     //            scaleDialog->show();
     //            int scale  = scaleDialog->getScale();
@@ -1176,7 +1176,7 @@ void MainWindow::on_actionCalibrate_triggered()
 // save ideogram as a .svg file (Scalable Vector Graphics) and also save raw data in a .csv file (Comma-separated values)
 void MainWindow::on_actionSave_triggered()
 {
-    //    QMessageBox::information(this, tr("Master Measure"),QString::number(ui->tableWidget->columnCount()));
+    //    QMessageBox::information(this, tr("Ideokar"),QString::number(ui->tableWidget->columnCount()));
 
     QString fileName = QFileDialog::getSaveFileName(this, "Save Scene", "", "vector image (*.svg)");
     //    QPixmap pixMap = QPixmap::grabWidget(ui->graphicsView);
@@ -1252,8 +1252,8 @@ void MainWindow::setMicro(double value)
 void MainWindow::on_actionAbout_triggered()
 {
     //    QMessageBox::about(this,"About MasterMeasure", "MasterMeasure v0.9\n\n(c) 2013 Dariush Zandi");
-    QMessageBox::about(this, tr("About Master Measure"),
-                       tr("<p><b>Master Measure</b> v0.9 </p>"
+    QMessageBox::about(this, tr("About Ideokar"),
+                       tr("<p><b>Ideokar</b> v0.9 </p>"
                           "<p>Dariush Zandi </p>"
                           "<p>"
                           "<a href=\"mailto:dariush.zandi.n@gmail.com\"><img src=\":/about/email.png\"></a>"
@@ -1334,7 +1334,7 @@ void MainWindow::on_actionSave_Tab_triggered()
 
     for (;;) {
         //        QString fileName = ui->tabWidget->tabText(ui->tabWidget->currentIndex());
-        QString fileName = QFileDialog::getSaveFileName(this, "Save Tab", ui->tabWidget->tabText(ui->tabWidget->currentIndex()), "master measure tab (*.mmt)");
+        QString fileName = QFileDialog::getSaveFileName(this, "Save Tab", ui->tabWidget->tabText(ui->tabWidget->currentIndex()), "Ideokar tab (*.mmt)");
 
         //        if (fileName.isEmpty())
         //            fileName = QFileDialog::getSaveFileName(this);
@@ -1388,7 +1388,7 @@ void MainWindow::on_actionOpen_Saved_Tab_triggered()
 
     //    }
     //    =========================================
-    QString fileName = QFileDialog::getOpenFileName(this, "Open Saved Tab","","master measure tab (*.mmt)");
+    QString fileName = QFileDialog::getOpenFileName(this, "Open Saved Tab","","Ideokar tab (*.mmt)");
     if (fileName.isEmpty())
         return;
 

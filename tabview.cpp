@@ -61,7 +61,7 @@ TabView::TabView(QString fileName, double micro)
     QImage image(fileName);
 
     if (image.isNull()) {
-        QMessageBox::information(this, tr("Master Measure"),
+        QMessageBox::information(this, tr("Ideokar"),
                                  tr("Cannot load %1.").arg(fileName));
         return;
     }
@@ -529,7 +529,7 @@ void TabView::keyPressEvent(QKeyEvent * event){
             chromosomes[numberOfChromosomes-1].
                     setIndex(indexDialog->getPairIndex()+ 1000*(indexDialog->getGenome().toLatin1()- ch.toLatin1()+1));
 
-//            QMessageBox::information(this, tr("Master Measure"),QString::number(1000*(indexDialog->getGenome().toLatin1()- ch.toLatin1()+1)));
+//            QMessageBox::information(this, tr("Ideokar"),QString::number(1000*(indexDialog->getGenome().toLatin1()- ch.toLatin1()+1)));
         }
 
         isDraw = false;
@@ -564,7 +564,7 @@ void TabView::keyPressEvent(QKeyEvent * event){
 
     case Qt::Key_P:
     {
-        QMessageBox::information(this, tr("Master Measure"),
+        QMessageBox::information(this, tr("Ideokar"),
                                  QString::number(numberOfChromosomes)+"\nlenght:"+
                                  QString::number(chromosomes[numberOfChromosomes-1].getChromosomeLength())+"\nhead:"+
                 QString::number(chromosomes[numberOfChromosomes-1].getChromosomeHeadLength())+"\nwing1:"+
@@ -583,7 +583,7 @@ void TabView::keyPressEvent(QKeyEvent * event){
             str += QString::number(i)+" "+
                     QString::number(chromosomes[i].getChromosomeLength())+"\n";
         }
-        QMessageBox::information(this, tr("Master Measure"),str);
+        QMessageBox::information(this, tr("Ideokar"),str);
         break;
     }
 
