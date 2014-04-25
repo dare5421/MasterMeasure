@@ -299,13 +299,16 @@
           <number>1</number>
          </property>
          <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="pageStep">
           <number>10</number>
          </property>
          <property name="value">
-          <number>5</number>
+          <number>50</number>
          </property>
          <property name="sliderPosition">
-          <number>5</number>
+          <number>50</number>
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>

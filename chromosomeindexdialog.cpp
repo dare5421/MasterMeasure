@@ -39,7 +39,9 @@ void ChromosomeIndexDialog::setGenome(QChar value)
 
 void ChromosomeIndexDialog::on_pushButton_clicked()
 {
-    setPairIndex(ui->lineEdit->text().toInt());
+//    setPairIndex(ui->lineEdit->text().toInt());
+
+    setPairIndex(ui->comboBox_2->currentIndex()+1);
 
     setGenome(ui->comboBox->currentText().at(0));
 

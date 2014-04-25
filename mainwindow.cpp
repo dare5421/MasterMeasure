@@ -67,6 +67,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->calibrateButton->setHidden(true);
 
+    QMessageBox::information(this, tr("Master Measure"),"Please Open an Image and Calibrate The Application.");
+
 }
 
 // destructor
@@ -158,6 +160,9 @@ void MainWindow::deleteArray(double **&array, int genome_size)
 void MainWindow::on_showButton_clicked(double zSize=5,bool showErrorBar=true ,bool showMeasures=true)
 {
     zSize/=5;
+
+    ui->dockWidget->setVisible(true);
+
     int max_size = 100;
     int genome_size = 26;
     scale = scaleDialog->getScale();
@@ -1259,7 +1264,7 @@ void MainWindow::on_actionAbout_triggered()
                           "<a href=\"mailto:gh.mirzaghaderi@uok.ac.ir\"><img src=\":/about/email.png\"></a>"
                           "<a href=\"https://www.facebook.com/ghader.mirzaghaderi\"><img src=\":/about/facebook.png\"></a>"
                           "<a href=\"http://agri.uok.ac.ir/mirzaghaderi/\"><img src=\":/about/www.png\"></a>"
-                          "</p>""<p> Khaled Mirzae</p>"
+                          "</p>""<p> Khaled Mirzaei</p>"
                           "<p>"
                           "<a href=\"mailto:khaled.mirzayi@gmail.com\"><img src=\":/about/email.png\"></a>"
                           "<a href=\"http://www.linkedin.com/pub/khaled-mirzaei/54/a54/a3b\"><img src=\":/about/linkedin.png\"></a>"
@@ -1423,7 +1428,8 @@ void MainWindow::on_showButton_clicked()
 
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
-    on_showButton_clicked(value,ui->checkBox_errorBar->isChecked(),ui->checkBox_measures->isChecked());
+    double newValue = value/10.0;
+    on_showButton_clicked(newValue,ui->checkBox_errorBar->isChecked(),ui->checkBox_measures->isChecked());
 }
 
 void MainWindow::on_checkBox_errorBar_clicked()
