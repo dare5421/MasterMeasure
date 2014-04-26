@@ -1042,136 +1042,141 @@ void MainWindow::on_calibrateButton_clicked()
 void MainWindow::on_actionCalibrate_triggered()
 {
 
-    tabsChromosomes[0] = ((TabView*)ui->tabWidget->widget(0))->getSortedChromosomes(false);
-    int numberOfChromosomes =
-            ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
-    double scale;
+    if(ui->tabWidget->count()){
+        tabsChromosomes[0] = ((TabView*)ui->tabWidget->widget(0))->getSortedChromosomes(false);
+        int numberOfChromosomes =
+                ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
+        double scale;
 
-    //first click on calibration
-    if(ui->actionCalibrate->isChecked()){
+        //first click on calibration
+        if(ui->actionCalibrate->isChecked()){
 
-        ui->actionAuto->setChecked(true);
-        ui->actionManual->setChecked(false);
+            ui->actionAuto->setChecked(true);
+            ui->actionManual->setChecked(false);
 
-        manualFlag = false;
-        tabView->setManualFlag(manualFlag);
-
-
-        if( ui->tabWidget->count() == 1 ){
+            manualFlag = false;
+            tabView->setManualFlag(manualFlag);
 
 
-            scaleDialog->show();
+            if( ui->tabWidget->count() == 1 ){
 
-            scale = scaleDialog->getScale();
-//            tabsChromosomes[0] = ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getSortedChromosomes(false);
 
-//            tabView->setScale(scale);
-            //            double temp=0;
-            //            for(int j=0; j< numberOfChromosomes; j++)
-            //                temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
+                scaleDialog->show();
 
-            //            micro = temp/numberOfChromosomes;
+                scale = scaleDialog->getScale();
+    //            tabsChromosomes[0] = ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getSortedChromosomes(false);
 
-            //            micro/=scale;
-            //            QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
+    //            tabView->setScale(scale);
+                //            double temp=0;
+                //            for(int j=0; j< numberOfChromosomes; j++)
+                //                temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
+
+                //            micro = temp/numberOfChromosomes;
+
+                //            micro/=scale;
+                //            QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
+
+            }
 
         }
+        //second click on calibration
+        else{
+            ui->actionAuto->setChecked(false);
+            ui->actionManual->setChecked(true);
+
+            manualFlag = true;
+            tabView->setManualFlag(manualFlag);
+
+            scale = scaleDialog->getScale();
+            tabsChromosomes[0] = ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getSortedChromosomes(false);
+
+            double temp=0;
+            for(int j=0; j< numberOfChromosomes; j++)
+                temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
+
+            micro = temp/numberOfChromosomes;
+
+            micro/=scale;
+
+
+    //        tabView->setScale(micro);
+
+    //        QMessageBox::information(this, tr("Ideokar"),"each micron is " +QString::number(micro)+" pixels.");
+            QMessageBox::information(this, tr("Ideokar"),"Calibration is done.");
+    //        tabView->drawScaleBar(micro);
+            //        QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
+        }
+
+        //    ui->actionCalibrate->setChecked(true);
+
+
+
+
+        //    manualFlag = false;
+        //    ui->actionAuto->setChecked(true);
+        //    ui->actionManual->setChecked(false);
+
+        ////    bool flag = false;
+        //    double temp = 0;
+        //    if (ui->tabWidget->count()== 0){
+
+        //        this->on_actionOpen_triggered();
+        ////        flag = true;
+
+        //    }else if( ui->tabWidget->count() == 1 ){
+
+
+        //        if( !isCalibratePressed ){
+
+        //            for (int i=0; i< ui->tabWidget->count();i++){
+        //                tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes(false);
+        //            }
+
+        ////            QString str="";
+        //            int numberOfChromosomes =
+        //                    ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
+
+        //            for(int j=0; j< numberOfChromosomes; j++){
+        ////                str += "chromosome length"+QString::number(j)+": \n"+
+        ////                        QString::number((tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength()))+"\n";
+
+        //                temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
+        //            }
+        //            micro = temp/numberOfChromosomes;
+        //            QMessageBox::information(this, tr("Ideokar"),QString::number(temp));
+        //            //        micro /= scale; // each micron is about ? pixel
+        //            //        if (!flag)
+        //            //            QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
+
+        //            isCalibratePressed = true;
+
+
+        //        }else if(isCalibratePressed){
+        //            //        if (!flag)
+        //            QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
+        //            QMessageBox::information(this, tr("Ideokar"),"The scale is set.");
+
+        //            scaleDialog->show();
+        //            int scale  = scaleDialog->getScale();
+
+        //            micro /= scale; // each micron is about ? pixel
+
+        //            ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
+
+        //            manualFlag = true;
+        //            ui->actionAuto->setChecked(false);
+        //            ui->actionManual->setChecked(true);
+        //            ui->calibrateButton->setDisabled(true);
+        //            ui->actionCalibrate->setDisabled(true);
+        //        }
+
+        //    }
 
     }
-    //second click on calibration
     else{
-        ui->actionAuto->setChecked(false);
-        ui->actionManual->setChecked(true);
-
-        manualFlag = true;
-        tabView->setManualFlag(manualFlag);
-
-        scale = scaleDialog->getScale();
-        tabsChromosomes[0] = ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getSortedChromosomes(false);
-
-        double temp=0;
-        for(int j=0; j< numberOfChromosomes; j++)
-            temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
-
-        micro = temp/numberOfChromosomes;
-
-        micro/=scale;
-
-
-//        tabView->setScale(micro);
-
-//        QMessageBox::information(this, tr("Ideokar"),"each micron is " +QString::number(micro)+" pixels.");
-        QMessageBox::information(this, tr("Ideokar"),"Calibration is done.");
-//        tabView->drawScaleBar(micro);
-        //        QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
+        ui->actionCalibrate->setChecked(false);
+        QMessageBox::information(this, tr("Ideokar"),"Please open an image then try again.");
     }
-
-    //    ui->actionCalibrate->setChecked(true);
-
-
-
-
-    //    manualFlag = false;
-    //    ui->actionAuto->setChecked(true);
-    //    ui->actionManual->setChecked(false);
-
-    ////    bool flag = false;
-    //    double temp = 0;
-    //    if (ui->tabWidget->count()== 0){
-
-    //        this->on_actionOpen_triggered();
-    ////        flag = true;
-
-    //    }else if( ui->tabWidget->count() == 1 ){
-
-
-    //        if( !isCalibratePressed ){
-
-    //            for (int i=0; i< ui->tabWidget->count();i++){
-    //                tabsChromosomes[i] = ((TabView*)ui->tabWidget->widget(i))->getSortedChromosomes(false);
-    //            }
-
-    ////            QString str="";
-    //            int numberOfChromosomes =
-    //                    ((TabView*)ui->tabWidget->widget(ui->tabWidget->currentIndex()))->getNumberOfChromosomes();
-
-    //            for(int j=0; j< numberOfChromosomes; j++){
-    ////                str += "chromosome length"+QString::number(j)+": \n"+
-    ////                        QString::number((tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength()))+"\n";
-
-    //                temp += (tabsChromosomes[ui->tabWidget->currentIndex()][j].getChromosomeLength());
-    //            }
-    //            micro = temp/numberOfChromosomes;
-    //            QMessageBox::information(this, tr("Ideokar"),QString::number(temp));
-    //            //        micro /= scale; // each micron is about ? pixel
-    //            //        if (!flag)
-    //            //            QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
-
-    //            isCalibratePressed = true;
-
-
-    //        }else if(isCalibratePressed){
-    //            //        if (!flag)
-    //            QMessageBox::information(this, tr("Ideokar"),QString::number(micro));
-    //            QMessageBox::information(this, tr("Ideokar"),"The scale is set.");
-
-    //            scaleDialog->show();
-    //            int scale  = scaleDialog->getScale();
-
-    //            micro /= scale; // each micron is about ? pixel
-
-    //            ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
-
-    //            manualFlag = true;
-    //            ui->actionAuto->setChecked(false);
-    //            ui->actionManual->setChecked(true);
-    //            ui->calibrateButton->setDisabled(true);
-    //            ui->actionCalibrate->setDisabled(true);
-    //        }
-
-    //    }
-
-
 }
 
 // save ideogram as a .svg file (Scalable Vector Graphics) and also save raw data in a .csv file (Comma-separated values)
