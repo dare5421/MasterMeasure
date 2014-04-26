@@ -665,7 +665,8 @@ void MainWindow::on_showButton_clicked(double zSize=5,bool showErrorBar=true ,bo
                         drawChromosome(j*70,genomeLine * 300,i,
                                        microToPix(avgWing1[i][j]) * zSize * 150.0 / maxChromosomeLength, microToPix(avgWing2[i][j])* zSize* 150.0 / maxChromosomeLength,
                                        avgWing1[i][j],avgWing2[i][j],
-                                       microToPix(standardErrorWing1[i][j]), microToPix(standardErrorWing2[i][j]),
+                                       microToPix(standardErrorWing1[i][j])* zSize * 150.0 / maxChromosomeLength,
+                                       microToPix(standardErrorWing2[i][j])* zSize * 150.0 / maxChromosomeLength,
                                        ((satellite1[i][j] > satellite2[i][j])?microToPix(satellite1[i][j]):microToPix(satellite2[i][j]))* 150.0 / maxChromosomeLength,
                                        (satellite1[i][j] > satellite2[i][j])?true:false, showErrorBar,showMeasures);
 
