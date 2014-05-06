@@ -234,10 +234,17 @@ TabView::TabView(QString fileName, double micro, QDataStream &stream)
     }
     if(manualFlag ){
         QGraphicsTextItem *text;
-        text = scene->addText(QString::number(chromosomes[numberOfChromosomes-1].getIndex()));
+        QChar ch = 'A';
+        int index = chromosomes[numberOfChromosomes-1].getIndex();
+        ch = ch.toLatin1() + index/1000-1;
+        index = index % 1000;
+        text = scene->addText( QString::number(index) + ch );
         text->setPos(sP.x()-15,sP.y()+15);
         text->setDefaultTextColor(Qt::white);
         text->setFlag(QGraphicsItem::ItemIsMovable, true);
+
+
+
     }
 
 }

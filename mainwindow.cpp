@@ -158,7 +158,7 @@ void MainWindow::deleteArray(double **&array, int genome_size)
 }
 
 // =============================== show bottom things ===========================
-void MainWindow::on_showButton_clicked(double zSize=5,bool showErrorBar=true ,bool showMeasures=true)
+void MainWindow::on_showButton_clicked(double zSize=5,bool showErrorBar=true ,bool showMeasures=true, bool showSeparateLine = true)
 {
     zSize/=5;
 
@@ -381,14 +381,14 @@ void MainWindow::on_showButton_clicked(double zSize=5,bool showErrorBar=true ,bo
 
             //draw in bottom
             for(int j=0; j< numberOfChromosomes/2; j++){
-                if (j>0)
+                if (j>0 && showSeparateLine)
                     scene->addLine((j-1)*70+15,0,j*70+5,0);
                 drawChromosome(j*70,0,0,
                                avgWing1[0][j] * 150 / maxChromosomeLength,avgWing2[0][j]* 150 / maxChromosomeLength,
                         avgWing1[0][j],avgWing2[0][j],
                         standardErrorWing1[0][j], standardErrorWing2[0][j],
                         (satellite1[0][j] > satellite2[0][j])?satellite1[0][j]:satellite2[0][j] ,
-                                                                               (satellite1[0][j] > satellite2[0][j])?true:false,showErrorBar,showMeasures  );
+                        (satellite1[0][j] > satellite2[0][j])?true:false,showErrorBar, showMeasures, showSeparateLine  );
 
                 //============ add chromosomes to table ================
                 myTable->insertRow(myTable->rowCount());
@@ -650,10 +650,10 @@ void MainWindow::on_showButton_clicked(double zSize=5,bool showErrorBar=true ,bo
                         //                genome = (tabsChromosomes[0][j].getIndex())/1000-1;
 
                         //                    QMessageBox::information(this, tr("Ideokar"),QString::number(i)+"  "+QString::number(j));
-                        if (j>0)
+                        if (j>0 && showSeparateLine)
                             //                if((tabsChromosomes[0][j].getIndex())%1000 > 1)
                             scene->addLine((j-1)*70+15,genomeLine * 300,j*70+5,genomeLine * 300);
-                        else genomeLine++;
+                        else if(j<=0) genomeLine++;
 
 //                        QMessageBox::information(this, tr("Ideokar"),"errorbar1 = "+QString::number(microToPix(standardErrorWing1[i][j]))+
 //                                                 "\nerrorbar2 = "+QString::number(microToPix(standardErrorWing2[i][j]))+
@@ -668,7 +668,7 @@ void MainWindow::on_showButton_clicked(double zSize=5,bool showErrorBar=true ,bo
                                        microToPix(standardErrorWing1[i][j])* zSize * 150.0 / maxChromosomeLength,
                                        microToPix(standardErrorWing2[i][j])* zSize * 150.0 / maxChromosomeLength,
                                        ((satellite1[i][j] > satellite2[i][j])?microToPix(satellite1[i][j]):microToPix(satellite2[i][j]))* 150.0 / maxChromosomeLength,
-                                       (satellite1[i][j] > satellite2[i][j])?true:false, showErrorBar,showMeasures);
+                                       (satellite1[i][j] > satellite2[i][j])?true:false, showErrorBar,showMeasures, showSeparateLine);
 
 
 
@@ -839,7 +839,7 @@ double MainWindow::standardError(int n, QList<double> x){
 // draw ideogram on the bottem of application
 void MainWindow::drawChromosome(int x, int y,int yy, double wing1, double wing2,double wing1Micro, double wing2Micro,
                                 double errorWing1,double errorWing2,
-                                double satellite, bool isSatUp, bool showErrorBar, bool showMeasures){
+                                double satellite, bool isSatUp, bool showErrorBar, bool showMeasures, bool showSeparateLine){
 
     //    QMessageBox::information(this, tr("Ideokar"),"errorbar1 = "+QString::number(errorWing1)+
     //                             "\nerrorbar2 = "+QString::number(errorWing2)
@@ -1295,8 +1295,10 @@ void MainWindow::on_actionLine_Width_triggered()
                                         tr("Select pen width:"),
                                         tabView->getLinePenWidth(),
                                         1, 50, 1, &ok);
-    if (ok)
+    if (ok){
         tabView->setLinePenWidth(newWidth);
+
+    }
 }
 
 // change the color of scaleBar
@@ -1436,24 +1438,33 @@ void MainWindow::on_showButton_clicked()
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
     double newValue = value/10.0;
-    on_showButton_clicked(newValue,ui->checkBox_errorBar->isChecked(),ui->checkBox_measures->isChecked());
+    on_showButton_clicked(newValue,ui->checkBox_errorBar->isChecked(),ui->checkBox_measures->isChecked(),ui->checkBox->isChecked());
 }
 
 void MainWindow::on_checkBox_errorBar_clicked()
 {
     if(!ui->checkBox_errorBar->isChecked()){
 //        QMessageBox::warning(this, tr("checkbox"), tr("test"));
-        on_showButton_clicked(ui->horizontalSlider->value(),false,ui->checkBox_measures->isChecked());
+        on_showButton_clicked(ui->horizontalSlider->value()/10.0,false,ui->checkBox_measures->isChecked(),ui->checkBox->isChecked());
     }
     else
-        on_showButton_clicked(ui->horizontalSlider->value(),true,ui->checkBox_measures->isChecked());
+        on_showButton_clicked(ui->horizontalSlider->value()/10.0,true,ui->checkBox_measures->isChecked(),ui->checkBox->isChecked());
 }
 
 void MainWindow::on_checkBox_measures_clicked()
 {
     if(!ui->checkBox_measures->isChecked()){
-        on_showButton_clicked(ui->horizontalSlider->value(),ui->checkBox_errorBar->isChecked(),false);
+        on_showButton_clicked(ui->horizontalSlider->value()/10.0,ui->checkBox_errorBar->isChecked(),false, ui->checkBox->isChecked());
     }
     else
-        on_showButton_clicked(ui->horizontalSlider->value(),ui->checkBox_errorBar->isChecked(),true);
+        on_showButton_clicked(ui->horizontalSlider->value()/10.0,ui->checkBox_errorBar->isChecked(),true, ui->checkBox->isChecked());
+}
+
+void MainWindow::on_checkBox_clicked()
+{
+    if(!ui->checkBox->isChecked()){
+        on_showButton_clicked(ui->horizontalSlider->value()/10.0,ui->checkBox_errorBar->isChecked(),ui->checkBox_measures->isChecked(), false);
+    }
+    else
+        on_showButton_clicked(ui->horizontalSlider->value()/10.0,ui->checkBox_errorBar->isChecked(),ui->checkBox_measures->isChecked() , true);
 }
